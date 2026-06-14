@@ -1,0 +1,34 @@
+[
+  {
+    "slug": "frozen",
+    "name_en": "Frozen Selection",
+    "name_ar": "تشكيلة مجمدات",
+    "sub_en": "Quick-frozen premium goods",
+    "sub_ar": "منتجات مجمدة بجودة فاخرة",
+    "image_file": "WhatsApp Image 2026-06-14 at 10.19.34 AM.jpeg"
+  },
+  {
+    "slug": "poultry",
+    "name_en": "Fresh Poultry",
+    "name_ar": "دواجن طازجة",
+    "sub_en": "Saudi-made · farm fresh",
+    "sub_ar": "صناعة سعودية · طازج من المزرعة",
+    "image_file": "WhatsApp Image 2026-06-14 at 11.06.56 AM (2).jpeg"
+  },
+  {
+    "slug": "oils",
+    "name_en": "Oils & Pantry",
+    "name_ar": "زيوت ومعلبات",
+    "sub_en": "Pure oils and daily essentials",
+    "sub_ar": "زيوت صافية ومستلزمات يومية",
+    "image_file": "WhatsApp Image 2026-06-14 at 11.06.56 AM (1).jpeg"
+  },
+  {
+    "slug": "sauces",
+    "name_en": "Sauces & Grains",
+    "name_ar": "صلصات وحبوب",
+    "sub_en": "Authentic table flavours",
+    "sub_ar": "نكهات أصيلة للمائدة",
+    "image_file": "WhatsApp Image 2026-06-14 at 10.19.38 AM (1).jpeg"
+  }
+]

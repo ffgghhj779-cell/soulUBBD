@@ -32,6 +32,8 @@ export type ShowcaseProduct = {
   price: number;
   category_en: string;
   category_ar: string;
+  badge_en: string;
+  badge_ar: string;
 };
 
 /** Shape consumed by cart / checkout */

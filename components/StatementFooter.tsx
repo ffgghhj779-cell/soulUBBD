@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Send, Instagram, Twitter, Facebook, Phone, Mail } from 'lucide-react';
+import { Send, Instagram, Twitter, Facebook, Mail } from 'lucide-react';
 import BrandLogo from '@/components/BrandLogo';
+import { COMPANY } from '@/lib/company';
 
 type Lang = 'ar' | 'en';
 
@@ -11,9 +12,10 @@ type FooterDict = {
   footerDesc: string;
   quickLinks: string; contactUs: string; newsletter: string;
   newsletterDesc: string; emailPlaceholder: string;
-  allRights: string; tollFree: string; support: string;
+  allRights: string; contactPhoneLabel: string; contactLocationLabel: string; support: string;
   shopAll: string; soulPlus: string; aboutUs: string; trackOrder: string;
   newsletterSuccess: string;
+  companyRegTitle: string; crLabel: string;
 };
 
 type StatementFooterProps = {
@@ -27,9 +29,68 @@ const socials = [
   { href: 'https://facebook.com',  Icon: Facebook,  label: 'Facebook'  },
 ];
 
+function CompanyRegistration({ lang }: { lang: Lang }) {
+  const rtl = lang === 'ar';
+  const { registration: reg } = COMPANY;
+
+  return (
+    <div className="rounded-sm border border-[#C9A03D]/25 bg-gradient-to-br from-[#FEF7ED]/[0.04] to-transparent p-6 md:p-8">
+      <div className="flex items-start gap-4 mb-6">
+        <div className="w-11 h-11 rounded-full border border-[#C9A03D]/35 flex items-center justify-center text-[#C9A03D] shrink-0">
+          <i className="fa-solid fa-building-columns text-[15px]" aria-hidden="true" />
+        </div>
+        <div>
+          <p className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-[#C9A03D]/80 mb-1">
+            {rtl ? 'السجل التجاري' : 'Company Registration'}
+          </p>
+          <h4 className="text-lg text-[#FEF7ED] font-medium"
+            style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}>
+            {rtl ? 'صول الذهبية للتجارة' : 'Soul Gold Trading'}
+          </h4>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
+            {rtl ? 'رقم السجل' : 'CR Number'}
+          </p>
+          <p className="text-[#FEF7ED] font-semibold tracking-wide" dir="ltr">{reg.number}</p>
+        </div>
+        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
+            {rtl ? 'نوع الشركة' : 'Entity Type'}
+          </p>
+          <p className="text-[#FEF7ED]/90 text-sm leading-snug">
+            {rtl ? reg.type.ar : reg.type.en}
+          </p>
+        </div>
+        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
+            {rtl ? 'الحالة' : 'Status'}
+          </p>
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#C9A03D]">
+            <span className="w-2 h-2 rounded-full bg-[#C9A03D] animate-pulse" aria-hidden="true" />
+            {rtl ? reg.status.ar : reg.status.en}
+          </p>
+        </div>
+        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
+            {rtl ? 'الضريبة' : 'Tax Status'}
+          </p>
+          <p className="text-[#FEF7ED]/90 text-sm leading-snug">
+            {rtl ? reg.vat.ar : reg.vat.en}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function StatementFooter({ lang, dict }: StatementFooterProps) {
   const [email,     setEmail]     = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const rtl = lang === 'ar';
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,8 +99,8 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
     setEmail('');
   };
 
-  const brandName = lang === 'ar' ? 'صول الذهبية' : 'Soul Gold';
-  const tagline   = lang === 'ar'
+  const brandName = rtl ? 'صول الذهبية' : 'Soul Gold';
+  const tagline   = rtl
     ? 'ذهب المائدة السعودية'
     : 'The Gold of the Saudi Table';
 
@@ -47,7 +108,7 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
     { label: dict.shopAll,    href: '#products'      },
     { label: dict.soulPlus,   href: '#ai-consultant' },
     { label: dict.aboutUs,    href: '#quality'       },
-    { label: dict.trackOrder, href: 'tel:920012345'  },
+    { label: dict.trackOrder, href: `tel:${COMPANY.phoneTel}` },
   ];
 
   return (
@@ -67,7 +128,6 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
       <div className="relative px-4 md:px-10 pt-24 pb-14 border-b border-white/[0.07]">
         <div className="max-w-7xl mx-auto">
 
-          {/* Eyebrow */}
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -75,10 +135,9 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
             transition={{ duration: 0.6 }}
             className="text-[11px] font-extrabold tracking-[0.38em] uppercase text-primary-gold mb-7"
           >
-            {lang === 'ar' ? 'منذ ٢٠٢٠' : 'Est. 2020'}
+            {rtl ? 'منذ ٢٠٢٠' : 'Est. 2020'}
           </motion.p>
 
-          {/* Giant brand name — clips to container width */}
           <div className="overflow-hidden">
             <motion.h2
               initial={{ y: '105%' }}
@@ -92,7 +151,6 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
             </motion.h2>
           </div>
 
-          {/* Tagline + logo lockup */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -120,7 +178,7 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
       </div>
 
       {/* ── Three-column utility grid ── */}
-      <div className="relative max-w-7xl mx-auto px-4 md:px-10 pb-16">
+      <div className="relative max-w-7xl mx-auto px-4 md:px-10 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10">
 
           {/* Quick links */}
@@ -150,20 +208,35 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
             </h3>
             <ul className="space-y-5">
               <li>
-                <a href="tel:920012345" className="flex items-center gap-4 group min-h-[44px]">
+                <a href={`tel:${COMPANY.phoneTel}`} className="flex items-center gap-4 group min-h-[44px]">
                   <div className="w-10 h-10 rounded-full border border-white/12 flex items-center justify-center text-primary-gold group-hover:border-primary-gold/60 smooth-transition shrink-0">
-                    <Phone size={15} />
+                    <i className="fa-solid fa-phone text-[14px]" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
-                      {dict.tollFree}
+                      {dict.contactPhoneLabel}
                     </p>
-                    <p className="text-white font-bold tracking-wide" dir="ltr">9200 12345</p>
+                    <p className="text-white font-bold tracking-wide" dir="ltr">{COMPANY.phone}</p>
                   </div>
                 </a>
               </li>
               <li>
-                <a href="mailto:support@soul.sa" className="flex items-center gap-4 group min-h-[44px]">
+                <div className="flex items-center gap-4 min-h-[44px]">
+                  <div className="w-10 h-10 rounded-full border border-white/12 flex items-center justify-center text-primary-gold shrink-0">
+                    <i className="fa-solid fa-location-dot text-[14px]" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
+                      {dict.contactLocationLabel}
+                    </p>
+                    <p className="text-white font-bold leading-snug">
+                      {rtl ? COMPANY.location.ar : COMPANY.location.en}
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-4 group min-h-[44px]">
                   <div className="w-10 h-10 rounded-full border border-white/12 flex items-center justify-center text-primary-gold group-hover:border-primary-gold/60 smooth-transition shrink-0">
                     <Mail size={15} />
                   </div>
@@ -171,7 +244,7 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
                     <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
                       {dict.support}
                     </p>
-                    <p className="text-white font-bold">support@soul.sa</p>
+                    <p className="text-white font-bold">{COMPANY.email}</p>
                   </div>
                 </a>
               </li>
@@ -196,13 +269,18 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
               />
               <button
                 type="submit"
-                aria-label={lang === 'ar' ? 'اشترك في النشرة البريدية' : 'Subscribe to newsletter'}
+                aria-label={rtl ? 'اشترك في النشرة البريدية' : 'Subscribe to newsletter'}
                 className="min-w-[48px] min-h-[48px] rounded bg-[#C9A03D] hover:bg-[#C9A03D]/80 text-[#1A1612] flex items-center justify-center smooth-transition active:scale-95 touch-manipulation shrink-0"
               >
-                <Send size={17} className={lang === 'ar' ? 'rotate-180' : ''} />
+                <Send size={17} className={rtl ? 'rotate-180' : ''} />
               </button>
             </form>
           </div>
+        </div>
+
+        {/* Company registration trust block */}
+        <div className="mt-14">
+          <CompanyRegistration lang={lang} />
         </div>
       </div>
 
@@ -213,7 +291,6 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
           © {new Date().getFullYear()} {dict.allRights}
         </p>
 
-        {/* Social icons */}
         <div className="flex items-center gap-3">
           {socials.map(({ href, Icon, label }) => (
             <a
@@ -229,7 +306,6 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
           ))}
         </div>
 
-        {/* Payment badges */}
         <div className="flex items-center gap-2">
           {['VISA', 'MASTERCARD', 'MADA'].map((p) => (
             <div

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import { useMediaQuery } from '@/lib/useMediaQuery';
+import { CATEGORY_TILES, categoryImageUrl } from '@/lib/categories';
 
 type Lang = 'ar' | 'en';
 
@@ -13,36 +14,13 @@ type BentoCategoriesProps = {
   dict: { discover: string; discoverDesc: string };
 };
 
-const tiles = [
-  {
-    name_ar: 'تونة فاخرة',
-    name_en: 'Premium Tuna',
-    sub_ar: 'مختارة من أجود المصادر',
-    sub_en: 'Sourced from the finest waters',
-    img: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=1200&q=85',
-  },
-  {
-    name_ar: 'صلصات عضوية',
-    name_en: 'Organic Sauces',
-    sub_ar: 'نكهات أصيلة',
-    sub_en: 'Authentic flavors',
-    img: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85',
-  },
-  {
-    name_ar: 'سمن أصيل',
-    name_en: 'Authentic Ghee',
-    sub_ar: 'من مزارع محلية',
-    sub_en: 'From local farms',
-    img: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=900&q=85',
-  },
-  {
-    name_ar: 'طبيعة نقية',
-    name_en: 'Pure Organics',
-    sub_ar: 'نقاء لا مثيل له',
-    sub_en: 'Uncompromised purity',
-    img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=85',
-  },
-];
+const tiles = CATEGORY_TILES.map((tile) => ({
+  name_ar: tile.name_ar,
+  name_en: tile.name_en,
+  sub_ar: tile.sub_ar,
+  sub_en: tile.sub_en,
+  img: categoryImageUrl(tile.image_file),
+}));
 
 // On desktop: slide + fade. On mobile: fade only (no Y repaints = 120fps smooth).
 const reveal = {
@@ -91,10 +69,8 @@ function BentoTile({
         src={tile.img}
         alt={lang === 'ar' ? tile.name_ar : tile.name_en}
         fill
-        priority={isHero}
-        loading={isHero ? 'eager' : 'lazy'}
-        decoding={isHero ? 'sync' : 'async'}
-        {...(isHero ? { fetchPriority: 'high' as const } : {})}
+        loading="lazy"
+        decoding="async"
         className="object-cover object-center group-hover:scale-105 will-change-transform [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
         referrerPolicy="no-referrer"
         sizes={isHero

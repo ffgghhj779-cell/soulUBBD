@@ -589,25 +589,59 @@ html[lang='en'] button {
     }
   }
 
-  /* Center-out variant for tall editorial tiles */
-  .sg-reveal-center {
-    clip-path: inset(0 50% 0 50%);
-    opacity: 0.7;
-    will-change: clip-path, opacity;
-    transition:
-      clip-path 1.5s cubic-bezier(0.16, 1, 0.3, 1),
-      opacity   0.7s ease;
-  }
-  .sg-reveal-center.in-view {
-    clip-path: inset(0 0% 0 0%);
-    opacity: 1;
-  }
-
   /* Stagger delay helpers */
   .sg-reveal-d1 { transition-delay: 0.08s; }
   .sg-reveal-d2 { transition-delay: 0.18s; }
   .sg-reveal-d3 { transition-delay: 0.28s; }
   .sg-reveal-d4 { transition-delay: 0.38s; }
+
+  /* Inertial horizontal scroll — native iOS/Android momentum */
+  .sg-momentum-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    overscroll-behavior-y: auto;
+    touch-action: pan-x pan-y;
+  }
+  .sg-momentum-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* GPU layer for animated cards, drawers, menus */
+  .sg-animate-layer {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .sg-product-card.sg-animate-layer,
+  .group.sg-animate-layer {
+    will-change: transform;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .sg-product-card.sg-animate-layer:hover,
+    .group.sg-animate-layer:hover {
+      will-change: transform, box-shadow;
+    }
+  }
+
+  /* Sub-100ms touch feedback — eliminates perceived tap lag */
+  .sg-touch-fast {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (hover: none) and (pointer: coarse) {
+    .sg-touch-fast:active {
+      transform: scale(0.92) !important;
+      transition: transform 0.08s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+  }
+
+  /* Mobile menu backdrop — solid overlay, no expensive blur */
+  .sg-menu-backdrop {
+    will-change: opacity;
+  }
+  .sg-drawer-panel {
+    will-change: transform;
+  }
 
   /* Section heading clip reveal (reusable) */
   .sg-heading-reveal {
@@ -743,14 +777,45 @@ html[lang='en'] button {
     filter: brightness(1.06);
   }
 
+  /* ── Premium product card (magazine editorial) ─────────────────── */
+  .sg-product-card {
+    border: 1px solid rgba(234, 225, 215, 0.95);
+    border-radius: 2px;
+    box-shadow: 0 4px 20px rgba(26, 22, 18, 0.06);
+    transition:
+      transform 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+      box-shadow 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, box-shadow;
+  }
+  .sg-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 22px 50px rgba(26, 22, 18, 0.13);
+  }
+
+  /* ── Ken Burns lifestyle hero ──────────────────────────────────── */
+  @keyframes sg-ken-burns {
+    0%   { transform: scale(1.02); }
+    100% { transform: scale(1.1); }
+  }
+  .sg-ken-burns {
+    animation: sg-ken-burns 28s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sg-ken-burns {
+      animation: none;
+    }
+  }
+
   /* ── 8. Mobile touch premium feedback ──────────────────────────── */
   @media (hover: none) and (pointer: coarse) {
     .touch-premium {
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .touch-premium:active {
-      transform: scale(0.96) !important;
-      transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1) !important;
+      transform: scale(0.94) !important;
+      transition: transform 0.08s cubic-bezier(0.25, 1, 0.5, 1) !important;
     }
   }
 
@@ -780,6 +845,26 @@ html[lang='en'] button {
 
   /* ── 9. Mobile performance guards ──────────────────────────────── */
   @media (max-width: 768px) {
+    .sg-menu-backdrop {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(26, 22, 18, 0.88) !important;
+    }
+    .sg-ken-burns {
+      animation: none !important;
+      will-change: auto !important;
+    }
+    .sg-luxury-img {
+      will-change: auto;
+      transition: none;
+    }
+    .sg-product-card {
+      will-change: auto;
+    }
+    .sg-product-card:hover {
+      transform: none;
+      box-shadow: 0 4px 20px rgba(26, 22, 18, 0.06);
+    }
     .sg-ambient-glow       { animation: none !important; opacity: 0.7 !important; }
     .sg-icon-shimmer       { animation-duration: 14s !important; }
     .sg-trust-border-sweep { animation-duration: 5s  !important; }

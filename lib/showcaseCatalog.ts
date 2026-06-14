@@ -5,6 +5,20 @@ type SeedRow = Omit<ProductRecord, 'id' | 'image_url'>;
 
 const LOCAL_PREFIX = '/products/';
 
+const FARM_FRESH_CATEGORIES = new Set([
+  'Poultry', 'Meat', 'Seafood', 'Dairy', 'Frozen',
+]);
+
+function resolveBadge(p: ProductRecord): { badge_en: string; badge_ar: string } {
+  if (p.badge_en?.trim() && p.badge_ar?.trim()) {
+    return { badge_en: p.badge_en, badge_ar: p.badge_ar };
+  }
+  if (FARM_FRESH_CATEGORIES.has(p.category_en)) {
+    return { badge_en: 'Farm Fresh', badge_ar: 'طازج من المزرعة' };
+  }
+  return { badge_en: 'Premium Quality', badge_ar: 'جودة فاخرة' };
+}
+
 function encodeFile(file: string) {
   return `${LOCAL_PREFIX}${file.replace(/ /g, '%20')}`;
 }
@@ -24,6 +38,7 @@ export function seedToRecord(row: SeedRow): ProductRecord {
 export const PRODUCT_CATALOG: ProductRecord[] = (seedData as SeedRow[]).map(seedToRecord);
 
 export function toShowcaseProduct(p: ProductRecord): ShowcaseProduct {
+  const badge = resolveBadge(p);
   return {
     id: p.sku,
     image_url: p.image_url,
@@ -34,6 +49,8 @@ export function toShowcaseProduct(p: ProductRecord): ShowcaseProduct {
     price: p.price,
     category_en: p.category_en,
     category_ar: p.category_ar,
+    badge_en: badge.badge_en,
+    badge_ar: badge.badge_ar,
   };
 }
 

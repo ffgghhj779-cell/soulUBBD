@@ -47,11 +47,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${tajawal.variable} ${ebGaramond.variable} ${hankenGrotesk.variable}`}>
+    <html lang="en" dir="ltr" className={`${cairo.variable} ${tajawal.variable} ${ebGaramond.variable} ${hankenGrotesk.variable}`}>
       <head>
         {/* Preconnect to font CDNs */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         {/* Preconnect to image CDNs — eliminates TCP handshake from LCP critical path */}
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />

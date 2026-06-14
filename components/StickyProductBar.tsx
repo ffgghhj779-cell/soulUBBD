@@ -49,7 +49,7 @@ export default function StickyProductBar({
             
             <button
               onClick={onAddToCart}
-              className="bg-[#C9A03D] text-[#1A1612] px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest active:scale-95 touch-manipulation hardware-accelerated"
+              className="bg-[#C9A03D] text-[#1A1612] px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest touch-manipulation sg-touch-fast hardware-accelerated"
               style={{ fontFamily: 'var(--font-hanken)' }}
             >
               {isRtl ? 'أضف للسلة' : 'Add to Cart'}

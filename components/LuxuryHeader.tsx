@@ -131,14 +131,14 @@ export default function LuxuryHeader({
           {/* Logo — start position, vertically centred with nav */}
           <a
             href="#hero"
-            className="flex items-center gap-2.5 md:gap-3 cursor-pointer min-h-[48px] shrink-0 group pe-2 md:pe-4"
+            className="flex items-center gap-3 md:gap-4 cursor-pointer min-h-[56px] shrink-0 group pe-3 md:pe-6 -ms-1 md:-ms-0.5"
           >
             <motion.div
-              animate={{ scale: isScrolled ? 0.88 : 1 }}
+              animate={{ scale: isScrolled ? 0.94 : 1 }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
               className="origin-[0_50%] will-change-transform"
             >
-              <BrandLogo variant="header" priority />
+              <BrandLogo variant="header" />
             </motion.div>
             <motion.div
               animate={{ opacity: isScrolled ? 0 : 1, maxWidth: isScrolled ? '0px' : '120px' }}
@@ -261,7 +261,7 @@ export default function LuxuryHeader({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 md:hidden hardware-accelerated"
+              className="fixed inset-0 z-40 md:hidden hardware-accelerated sg-menu-backdrop"
               style={{ background: 'rgba(26,22,18,0.7)', backdropFilter: 'blur(12px)' }}
               onClick={onToggleMobileMenu}
             />
@@ -273,7 +273,7 @@ export default function LuxuryHeader({
               animate={{ x: '0%' }}
               exit={{   x: lang === 'ar' ? '-100%' : '100%' }}
               transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] as const }}
-              className="fixed top-0 bottom-0 end-0 z-50 md:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe hardware-accelerated shadow-2xl overflow-hidden overscroll-contain bg-[var(--sg-surface)]"
+              className="fixed top-0 bottom-0 end-0 z-50 md:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe hardware-accelerated sg-drawer-panel shadow-2xl overflow-y-auto sg-momentum-scroll overscroll-contain bg-[var(--sg-surface)]"
               style={{
                 overscrollBehavior: 'contain',
               }}
@@ -283,7 +283,7 @@ export default function LuxuryHeader({
 
               {/* Brand mark */}
               <div className="px-8 pt-12 pb-6 border-b border-[rgba(201,160,61,0.15)]">
-                <BrandLogo variant="drawer" priority />
+                <BrandLogo variant="drawer" />
               </div>
 
               {/* Staggered nav links */}
@@ -296,7 +296,7 @@ export default function LuxuryHeader({
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.12 + i * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     onClick={onToggleMobileMenu}
-                    className="group flex items-center justify-between py-4 border-b border-[rgba(201,160,61,0.1)] touch-manipulation active:scale-[0.98] smooth-transition"
+                    className="group flex items-center justify-between py-4 border-b border-[rgba(201,160,61,0.1)] touch-manipulation sg-touch-fast smooth-transition"
                   >
                     <span className="font-extrabold text-2xl text-soft-charcoal group-hover:text-primary-gold smooth-transition">
                       {item.label}
