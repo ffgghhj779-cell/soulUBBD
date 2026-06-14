@@ -22,7 +22,6 @@ const tiles = CATEGORY_TILES.map((tile) => ({
   img: categoryImageUrl(tile.image_file),
 }));
 
-// On desktop: slide + fade. On mobile: fade only (no Y repaints = 120fps smooth).
 const reveal = {
   hidden: { opacity: 0 },
   visible: (i: number) => ({
@@ -43,73 +42,70 @@ function BentoTile({
   tile,
   idx,
   lang,
-  isHero = false,
+  layout = 'portrait',
   className = '',
 }: {
   tile: (typeof tiles)[0];
   idx: number;
   lang: Lang;
-  isHero?: boolean;
+  layout?: 'portrait' | 'landscape';
   className?: string;
 }) {
   const isMobile = useMediaQuery('(max-width: 767px)');
+  const aspectClass = layout === 'landscape' ? 'aspect-[16/9]' : 'aspect-[4/5]';
+
   return (
     <motion.div
       custom={idx}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
-      /* Use simpler fade-only on mobile (no Y translation = no layout work each frame)
-         and full slide+fade on desktop via CSS media via the variants object trick */
       variants={isMobile ? reveal : revealDesktop}
-      className={`group relative rounded overflow-hidden cursor-pointer touch-manipulation select-none ${isHero ? 'aspect-[4/5] lg:aspect-auto' : 'aspect-[4/3]'} ${className}`}
+      className={`sg-bento-tile group relative rounded overflow-hidden cursor-pointer touch-manipulation select-none ${aspectClass} ${className}`}
     >
-      {/* Image — editorial framing, deliberate magazine crop */}
+      <div className="sg-bento-tile__stage" aria-hidden="true" />
       <Image
         src={tile.img}
         alt={lang === 'ar' ? tile.name_ar : tile.name_en}
         fill
         loading="lazy"
         decoding="async"
-        className="object-cover object-center group-hover:scale-105 will-change-transform [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
+        className="sg-bento-tile__img"
         referrerPolicy="no-referrer"
-        sizes={isHero
-          ? '(max-width:640px) 100vw, (max-width:1024px) 100vw, 44vw'
+        sizes={layout === 'landscape'
+          ? '(max-width:640px) 100vw, 66vw'
           : '(max-width:640px) 50vw, (max-width:1024px) 33vw, 22vw'}
       />
 
-      {/* Gradient — ensures 100% text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+      <div className="sg-bento-tile__veil" aria-hidden="true" />
 
-      {/* Top-left index — editorial numbering */}
-      <div className="absolute top-5 start-5 text-white/30 text-[10px] font-extrabold tracking-[0.35em] tabular-nums">
+      <div className="absolute top-5 start-5 z-[2] text-white/30 text-[10px] font-extrabold tracking-[0.35em] tabular-nums">
         {String(idx + 1).padStart(2, '0')}
       </div>
 
-      {/* Top-right arrow — hidden until hover */}
       <div
         aria-hidden="true"
-        className="absolute top-3 end-3 min-w-[44px] min-h-[44px] rounded bg-[#1A1612]/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-[#C9A03D] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 smooth-transition"
+        className="absolute top-3 end-3 z-[2] min-w-[44px] min-h-[44px] rounded bg-[#1A1612]/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-[#C9A03D] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 smooth-transition"
       >
         <ArrowUpRight size={16} />
       </div>
 
-      {/* Bottom content */}
-      <div className="absolute bottom-0 start-0 w-full p-6 md:p-8">
-        {/* Gold accent bar */}
+      <div className="absolute bottom-0 start-0 w-full p-6 md:p-8 z-[2]">
         <div className="h-[2px] w-8 bg-[#C9A03D] rounded-full mb-4 group-hover:w-14 smooth-transition" />
 
         <h3
           className={`text-white font-medium leading-tight ${
-            isHero ? 'text-2xl md:text-3xl xl:text-4xl' : 'text-lg md:text-xl'
+            layout === 'portrait' && idx === 0 ? 'text-2xl md:text-3xl xl:text-4xl' : 'text-lg md:text-xl'
           }`}
           style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}
         >
           {lang === 'ar' ? tile.name_ar : tile.name_en}
         </h3>
 
-        {/* Sub-label — slides up on hover */}
-        <p className="text-white/0 text-sm mt-1.5 font-medium group-hover:text-white/70 translate-y-2 group-hover:translate-y-0 smooth-transition" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
+        <p
+          className="text-white/0 text-sm mt-1.5 font-medium group-hover:text-white/70 translate-y-2 group-hover:translate-y-0 smooth-transition"
+          style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}
+        >
           {lang === 'ar' ? tile.sub_ar : tile.sub_en}
         </p>
       </div>
@@ -122,7 +118,6 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
     <section id="categories" className="py-24 px-4 bg-[#FEF7ED]">
       <div className="max-w-7xl mx-auto">
 
-        {/* Section header — editorial split */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.32em] uppercase text-[#C9A03D] mb-3" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
@@ -135,41 +130,37 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
           </p>
         </div>
 
-        {/* ── Desktop bento: asymmetric 3-column, 2-row ── */}
+        {/* Desktop bento */}
         <div
-          className="hidden lg:grid gap-4"
+          className="hidden lg:grid gap-4 min-w-0"
           style={{
             gridTemplateColumns: '44% 1fr 1fr',
-            gridTemplateRows:    '380px 260px',
+            gridTemplateRows: '380px 260px',
           }}
         >
-          {/* Hero tile — tall (row-span-2) */}
-          <div className="row-span-2">
-            <BentoTile tile={tiles[0]} idx={0} lang={lang} className="h-full" isHero />
+          <div className="row-span-2 min-w-0 overflow-hidden">
+            <BentoTile tile={tiles[0]} idx={0} lang={lang} layout="portrait" className="h-full !aspect-auto" />
           </div>
-          {/* Tile 2 */}
-          <BentoTile tile={tiles[1]} idx={1} lang={lang} className="h-full" />
-          {/* Tile 3 */}
-          <BentoTile tile={tiles[2]} idx={2} lang={lang} className="h-full" />
-          {/* Tile 4 — wide landscape banner (col-span-2) */}
-          <div className="col-span-2">
-            <BentoTile tile={tiles[3]} idx={3} lang={lang} className="h-full" />
+          <BentoTile tile={tiles[1]} idx={1} lang={lang} layout="portrait" className="h-full !aspect-auto" />
+          <BentoTile tile={tiles[2]} idx={2} lang={lang} layout="portrait" className="h-full !aspect-auto" />
+          <div className="col-span-2 min-w-0 overflow-hidden">
+            <BentoTile tile={tiles[3]} idx={3} lang={lang} layout="landscape" className="h-full !aspect-auto" />
           </div>
         </div>
 
-        {/* ── Mobile: fluid 2-col asymmetric ── */}
-        <div className="grid lg:hidden grid-cols-2 gap-3">
-          <div className="col-span-2 aspect-[16/9] max-h-[260px]">
-            <BentoTile tile={tiles[0]} idx={0} lang={lang} className="h-full" isHero />
+        {/* Mobile bento */}
+        <div className="grid lg:hidden grid-cols-2 gap-3 min-w-0">
+          <div className="col-span-2 aspect-[16/9] max-h-[260px] min-w-0 overflow-hidden">
+            <BentoTile tile={tiles[0]} idx={0} lang={lang} layout="landscape" className="h-full !aspect-auto" />
           </div>
-          <div className="aspect-[4/3] max-h-[180px]">
-            <BentoTile tile={tiles[1]} idx={1} lang={lang} className="h-full" />
+          <div className="aspect-[4/5] max-h-[220px] min-w-0 overflow-hidden">
+            <BentoTile tile={tiles[1]} idx={1} lang={lang} layout="portrait" className="h-full !aspect-auto" />
           </div>
-          <div className="aspect-[4/3] max-h-[180px]">
-            <BentoTile tile={tiles[2]} idx={2} lang={lang} className="h-full" />
+          <div className="aspect-[4/5] max-h-[220px] min-w-0 overflow-hidden">
+            <BentoTile tile={tiles[2]} idx={2} lang={lang} layout="portrait" className="h-full !aspect-auto" />
           </div>
-          <div className="col-span-2 aspect-[21/9] max-h-[160px]">
-            <BentoTile tile={tiles[3]} idx={3} lang={lang} className="h-full" />
+          <div className="col-span-2 aspect-[16/9] max-h-[180px] min-w-0 overflow-hidden">
+            <BentoTile tile={tiles[3]} idx={3} lang={lang} layout="landscape" className="h-full !aspect-auto" />
           </div>
         </div>
       </div>

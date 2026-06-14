@@ -9,7 +9,7 @@ type BrandLogoProps = {
 };
 
 const variantClasses: Record<NonNullable<BrandLogoProps['variant']>, string> = {
-  header: 'sg-brand-logo-img h-[1.625rem] sm:h-7 md:h-8 w-auto max-h-8',
+  header: 'sg-brand-logo-img',
   footer: 'h-10 md:h-12 w-auto max-h-12',
   drawer: 'h-12 sm:h-14 w-auto max-h-14',
   inline: 'h-8 w-auto max-h-8',
@@ -26,7 +26,7 @@ const variantWrapper: Record<NonNullable<BrandLogoProps['variant']>, string> = {
 };
 
 const variantSizes: Record<NonNullable<BrandLogoProps['variant']>, string> = {
-  header: '(max-width: 640px) 120px, (max-width: 1024px) 140px, 160px',
+  header: '(max-width: 640px) 180px, (max-width: 1024px) 220px, 260px',
   footer: '(max-width: 640px) 120px, 180px',
   drawer: '(max-width: 640px) 160px, 200px',
   inline: '96px',
@@ -36,7 +36,7 @@ const variantDimensions: Record<
   NonNullable<BrandLogoProps['variant']>,
   { width: number; height: number }
 > = {
-  header: { width: 320, height: 128 },
+  header: { width: 560, height: 224 },
   footer: { width: 240, height: 96 },
   drawer: { width: 400, height: 160 },
   inline: { width: 160, height: 64 },

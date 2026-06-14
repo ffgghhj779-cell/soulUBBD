@@ -76,20 +76,22 @@ export default function SoulGoldHero({ lang = 'en', onShopClick }: SoulGoldHeroP
       ref={heroRef}
       id="sg-hero"
       aria-label={isRtl ? 'القسم الرئيسي' : 'Hero — The Alchemy of Taste'}
-      className="relative w-full overflow-hidden"
+      className="relative w-full overflow-hidden sg-cover-bleed"
       style={{ height: 'min(100svh, 780px)', minHeight: '520px' }}
     >
       {/* ── Background image — clip-path reveal on load ──────────────── */}
-      <Image
-        src={HERO_IMAGE}
-        alt={isRtl ? 'عسل يسقط على خبز أرتيزاني' : 'Artisan honey dripping on fresh bread'}
-        fill
-        priority
-        fetchPriority="high"
-        sizes="100vw"
-        className={`object-cover object-center sg-hero-img ${imgRevealed ? 'sg-img-revealed' : 'sg-img-hidden'}`}
-        onLoad={handleImageLoad}
-      />
+      <div className="absolute inset-0">
+        <Image
+          src={HERO_IMAGE}
+          alt={isRtl ? 'عسل يسقط على خبز أرتيزاني' : 'Artisan honey dripping on fresh bread'}
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className={`sg-cover-img object-center sg-hero-img ${imgRevealed ? 'sg-img-revealed' : 'sg-img-hidden'}`}
+          onLoad={handleImageLoad}
+        />
+      </div>
 
       {/* ── Ambient glow — breathes slowly for cinematic 3D depth ─────── */}
       <div

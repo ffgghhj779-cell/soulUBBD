@@ -276,44 +276,52 @@ html[lang='en'] button {
 
   /* ── Header brand lockup: emblem + rule + wordmark as one balanced unit ── */
   .sg-brand-lockup {
+    --sg-lockup-height: 2.5rem;
     display: inline-flex;
     align-items: center;
     align-self: center;
     gap: 0;
-    min-height: 2rem;
+    min-height: var(--sg-lockup-height);
     line-height: 1;
   }
-  .sg-brand-lockup__mark {
-    display: inline-flex;
+  /* Fixed-width logo slot — px-4 breathing room, height locked to wordmark */
+  .sg-brand-lockup__logo-box {
+    box-sizing: border-box;
+    display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-shrink: 0;
-    /* Generous breathing room before the vertical rule */
-    margin-inline-end: 1.25rem;
+    width: 6rem;
+    height: var(--sg-lockup-height);
+    padding-inline: 1rem;
+    margin-inline-end: 0.75rem;
     line-height: 0;
   }
   .sg-brand-logo-wrap {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     line-height: 0;
   }
   .sg-brand-logo-img {
     display: block;
+    width: auto;
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
     object-fit: contain;
-    /* Wheat stalk sits high — align calligraphy center with wordmark */
-    object-position: 34% center;
-    transform: translateY(-0.5px);
+    object-position: center center;
   }
   .sg-brand-lockup__rule {
     flex-shrink: 0;
     align-self: center;
     width: 2px;
-    height: 1.375rem;
+    height: var(--sg-lockup-height);
     background: var(--light-gold);
     border-radius: 1px;
     transform-origin: center center;
-    /* Space between rule and SOUL GOLD text */
     margin-inline-end: 0.875rem;
   }
   .sg-brand-lockup__wordmark {
@@ -323,33 +331,160 @@ html[lang='en'] button {
     align-self: center;
     gap: 0.3125rem;
     line-height: 1;
-    min-height: 1.375rem;
+    height: var(--sg-lockup-height);
   }
   .sg-brand-lockup__wordmark span {
-    font-size: 0.625rem;
+    font-size: 0.6875rem;
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--dark-gold);
     white-space: nowrap;
     line-height: 1;
   }
   @media (min-width: 768px) {
-    .sg-brand-lockup__mark {
-      margin-inline-end: 1.5rem;
+    .sg-brand-lockup {
+      --sg-lockup-height: 2.75rem;
     }
-    .sg-brand-lockup__rule {
-      height: 1.5rem;
+    .sg-brand-lockup__logo-box {
+      width: 6.5rem;
       margin-inline-end: 1rem;
     }
-    .sg-brand-lockup__wordmark {
-      gap: 0.375rem;
-      min-height: 1.5rem;
+    .sg-brand-lockup__rule {
+      margin-inline-end: 1rem;
     }
     .sg-brand-lockup__wordmark span {
-      font-size: 0.6875rem;
-      letter-spacing: 0.22em;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
     }
+  }
+
+  /* ── Bento category grid — contain pack shots on luxury cream stage ── */
+  .sg-bento-tile {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .sg-bento-tile__stage {
+    position: absolute;
+    inset: 0;
+    background: #FDFBF7;
+  }
+  .sg-bento-tile__img {
+    object-fit: contain;
+    object-position: center center;
+  }
+  .sg-bento-tile__veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgba(26, 22, 18, 0.52) 0%,
+      rgba(26, 22, 18, 0.14) 38%,
+      transparent 72%
+    );
+  }
+
+  /* ── Lifestyle banner — contain image, light veil, frosted caption ── */
+  .sg-lifestyle-banner {
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    background: #FDFBF7;
+  }
+  .sg-lifestyle-banner__stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 280px;
+    max-height: 640px;
+    background: #FDFBF7;
+  }
+  @media (min-width: 768px) {
+    .sg-lifestyle-banner__stage {
+      aspect-ratio: 21 / 9;
+      min-height: 320px;
+    }
+  }
+  .sg-lifestyle-banner__img {
+    object-fit: contain;
+    object-position: center center;
+  }
+  .sg-lifestyle-banner__veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(26, 22, 18, 0.12) 0%,
+      rgba(26, 22, 18, 0.06) 45%,
+      rgba(26, 22, 18, 0.18) 100%
+    );
+  }
+  .sg-lifestyle-banner__fade {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 5rem;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(to top, #FEF7ED 0%, transparent 100%);
+  }
+  .sg-lifestyle-caption {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 42rem;
+    padding: 1.75rem 2rem;
+    border-radius: 4px;
+    border: 1px solid rgba(201, 160, 61, 0.18);
+    background: rgba(26, 22, 18, 0.22);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* ── Full-bleed hero covers (main hero only — uses cover) ── */
+  .sg-cover-bleed {
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+  }
+  .sg-cover-img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sg-editorial-grid > * {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* ── Editorial bento tiles — cover crop, no pack-shot letterboxing ── */
+  .sg-editorial-tile {
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .sg-editorial-tile__img {
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  /* ── Product grid pack shots — contained inside stage ── */
+  .sg-product-stage {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #FEF7ED;
+  }
+  .sg-product-stage__img {
+    object-fit: contain;
+    object-position: center center;
   }
 
   /* ── Fluid typography — tuned for iPhone SE (375px) → 4K desktop ── */

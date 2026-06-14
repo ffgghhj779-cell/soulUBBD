@@ -133,7 +133,7 @@ export default function LuxuryHeader({
             <motion.div
               animate={{ scale: isScrolled ? 0.94 : 1 }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-              className="sg-brand-lockup__mark origin-[0_50%] will-change-transform"
+              className="sg-brand-lockup__logo-box origin-[0_50%] will-change-transform"
             >
               <BrandLogo variant="header" />
             </motion.div>

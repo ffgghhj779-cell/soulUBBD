@@ -44,15 +44,15 @@ const ProductCard = memo(function ProductCard({
     <>
       <article className="sg-product-card group relative flex flex-col bg-[#FEF7ED] overflow-hidden touch-premium sg-animate-layer">
         {/* Image stage — fixed aspect prevents CLS */}
-        <div className={`relative w-full aspect-[4/5] overflow-hidden bg-[#FEF7ED] sg-reveal-clip ${STAGGER[staggerIdx]}`}>
-          <div className="absolute inset-0 p-7 md:p-9">
+        <div className={`relative w-full aspect-[4/5] sg-product-stage sg-reveal-clip ${STAGGER[staggerIdx]}`}>
+          <div className="absolute inset-3 sm:inset-4 md:inset-5">
             <Image
               src={product.image_url}
               alt={rtl ? product.name_ar : product.name_en}
               fill
               loading="lazy"
               sizes="(max-width:640px) 72vw, (max-width:1024px) 33vw, 25vw"
-              className="object-contain object-center sg-luxury-img"
+              className="sg-product-stage__img"
             />
           </div>
 
@@ -214,26 +214,22 @@ const EditorialTile = memo(function EditorialTile({
 
   return (
     <article
-      className={`group relative overflow-hidden cursor-pointer select-none touch-premium h-full min-h-[240px] sg-animate-layer ${className}`}
+      className={`group relative overflow-hidden cursor-pointer select-none touch-premium h-full min-h-[240px] sg-animate-layer sg-editorial-tile ${className}`}
       style={{ borderRadius: 2 }}
     >
-      <div className={`absolute inset-0 sg-reveal-clip ${staggerCls}`}>
-        <div className="absolute inset-0 bg-[#FEF7ED] p-5 md:p-8">
-          <div className="relative w-full h-full">
-            <Image
-              src={product.image_url}
-              alt={rtl ? product.name_ar : product.name_en}
-              fill
-              loading="lazy"
-              sizes="(max-width:640px) 100vw, 50vw"
-              className="object-contain object-center sg-luxury-img"
-            />
-          </div>
-        </div>
+      <div className={`absolute inset-0 overflow-hidden sg-reveal-clip ${staggerCls}`}>
+        <Image
+          src={product.image_url}
+          alt={rtl ? product.name_ar : product.name_en}
+          fill
+          loading="lazy"
+          sizes="(max-width:640px) 100vw, 50vw"
+          className="sg-editorial-tile__img"
+        />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 z-[2] bg-gradient-to-t from-black/85 via-black/35 to-black/10 pointer-events-none" />
 
-      <div className="absolute bottom-0 start-0 w-full p-5 md:p-7">
+      <div className="absolute bottom-0 start-0 w-full p-5 md:p-7 z-[3]">
         <span
           className="inline-block text-[9px] uppercase tracking-[0.3em] mb-2 font-semibold sg-gold-sweep-text"
           style={{ fontFamily: 'var(--font-hanken,sans-serif)' }}
@@ -372,15 +368,15 @@ function SoulGoldShowcase({
           </div>
 
           {editorialProducts.length >= 4 ? (
-            <div
-              className="hidden md:grid gap-3"
-              style={{ gridTemplateColumns: '44% 1fr 1fr', gridTemplateRows: '400px 280px' }}
-            >
-              <div className="row-span-2">
+          <div
+            className="hidden md:grid gap-3 min-w-0 sg-editorial-grid"
+            style={{ gridTemplateColumns: '44% 1fr 1fr', gridTemplateRows: '400px 280px' }}
+          >
+              <div className="row-span-2 min-w-0 overflow-hidden">
                 <EditorialTile product={editorialProducts[0]} lang={lang} onAddToCart={onAddToCart} staggerCls="sg-reveal-d1" className="h-full" />
               </div>
               <EditorialTile product={editorialProducts[1]} lang={lang} onAddToCart={onAddToCart} staggerCls="sg-reveal-d2" className="h-full" />
-              <div className="row-span-2">
+              <div className="row-span-2 min-w-0 overflow-hidden">
                 <EditorialTile product={editorialProducts[2]} lang={lang} onAddToCart={onAddToCart} staggerCls="sg-reveal-d3" className="h-full" />
               </div>
               <EditorialTile product={editorialProducts[3]} lang={lang} onAddToCart={onAddToCart} staggerCls="sg-reveal-d4" className="h-full" />
