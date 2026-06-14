@@ -257,7 +257,19 @@ html[lang='en'] button {
     transform: scale(1.08);
   }
 
-  /* Text obsidian colour */
+  /* Obsidian helpers */
   .text-obsidian { color: var(--obsidian); }
   .bg-obsidian   { background-color: var(--obsidian); }
+
+  /* ── Statement footer giant brand lockup ── */
+  .statement-brand {
+    font-size: clamp(4rem, 14vw, 12rem);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+  }
+  html[lang='ar'] .statement-brand {
+    font-size: clamp(3.5rem, 12vw, 10rem);
+    line-height: 1.0;
+    letter-spacing: 0;
+  }
 }

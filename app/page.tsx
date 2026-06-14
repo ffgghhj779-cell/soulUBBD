@@ -13,20 +13,15 @@ import {
   Bot,
   Heart,
   Droplets,
-  ChevronRight,
-  Phone,
-  Mail,
-  Instagram,
-  Twitter,
-  Facebook,
-  CreditCard,
   X,
   ChefHat,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import LuxuryHero    from '@/components/LuxuryHero';
-import LuxuryHeader  from '@/components/LuxuryHeader';
-import ProductRunway from '@/components/ProductRunway';
+import LuxuryHero       from '@/components/LuxuryHero';
+import LuxuryHeader     from '@/components/LuxuryHeader';
+import ProductRunway    from '@/components/ProductRunway';
+import BentoCategories  from '@/components/BentoCategories';
+import StatementFooter  from '@/components/StatementFooter';
 
 const t = {
   ar: {
@@ -185,13 +180,6 @@ const t = {
 
 type Lang = 'ar' | 'en';
 
-const categoriesVisuals = [
-  { name_ar: 'تونة فاخرة', name_en: 'Premium Tuna', img: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80' },
-  { name_ar: 'صلصات عضوية', name_en: 'Organic Sauces', img: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80' },
-  { name_ar: 'سمن أصيل', name_en: 'Authentic Ghee', img: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=800&q=80' },
-  { name_ar: 'طبيعة نقية', name_en: 'Pure Organics', img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80' },
-];
-
 type CustomProduct = {
   id: number;
   categoryKey: string;
@@ -227,8 +215,6 @@ export default function SoulGoldApp() {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
   const productsRef = React.useRef<HTMLDivElement>(null);
 
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -332,13 +318,6 @@ export default function SoulGoldApp() {
     }
   };
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newsletterEmail.trim()) return;
-    setNewsletterSubmitted(true);
-    setNewsletterEmail('');
-  };
-
   const scrollToProducts = () => {
     productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -433,37 +412,8 @@ export default function SoulGoldApp() {
         </div>
       </div>
 
-      {/* ---------- Categories Visuals ---------- */}
-      <section id="categories" className="py-24 px-4 bg-white smooth-transition hardware-accelerated">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="text-fluid-h2 font-bold text-soft-charcoal mb-4 smooth-transition">{dict.discover}</h3>
-            <p className="text-soft-charcoal/60 max-w-xl mx-auto text-lg smooth-transition">{dict.discoverDesc}</p>
-          </div>
-          
-          <div className="flex gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-4">
-            {categoriesVisuals.map((cat, idx) => (
-              <div 
-                key={idx} 
-                className="group relative aspect-[4/5] min-w-[260px] md:min-w-0 rounded-[32px] overflow-hidden cursor-pointer shadow-md luxury-shadow-hover smooth-transition snap-center shrink-0 active:scale-[0.98] touch-manipulation hardware-accelerated"
-              >
-                <Image 
-                  src={cat.img} 
-                  alt={lang === 'ar' ? cat.name_ar : cat.name_en} 
-                  fill 
-                  className="object-cover transition-transform duration-700 group-hover:scale-105 will-change-transform"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-soft-charcoal/80 via-soft-charcoal/30 to-transparent opacity-80" />
-                <div className="absolute bottom-0 start-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h4 className="text-white text-2xl font-bold mb-2">{lang === 'ar' ? cat.name_ar : cat.name_en}</h4>
-                  <div className="w-12 h-1 bg-primary-gold rounded-full w-0 group-hover:w-16 transition-all duration-500" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ---------- Bento Categories ---------- */}
+      <BentoCategories lang={lang} dict={dict} />
 
       {/* ---------- Product Runway Carousel ---------- */}
       <div ref={productsRef}>
@@ -478,123 +428,148 @@ export default function SoulGoldApp() {
         />
       </div>
 
-      {/* ---------- AI Consultant (Soul Plus) ---------- */}
-      <section id="ai-consultant" className="py-24 px-4 bg-white overflow-hidden relative smooth-transition hardware-accelerated">
-        <div className="absolute -start-64 -bottom-64 w-[500px] h-[500px] bg-primary-gold/5 rounded-full blur-[100px] pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            
-            {/* Left side: Features */}
-            <div>
-              <div className="inline-flex items-center gap-2 bg-cream text-terracotta px-4 py-2 rounded-full font-bold text-sm mb-6 border border-terracotta/10 smooth-transition">
+      {/* ---------- AI Consultant — Sticky Split-Screen ---------- */}
+      <section id="ai-consultant" className="bg-white relative overflow-hidden">
+        {/* Atmospheric blobs */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          <div className="absolute -start-48 top-1/4 w-[400px] h-[400px] rounded-full bg-primary-gold/5 blur-[100px]" />
+          <div className="absolute -end-32 bottom-1/4 w-[320px] h-[320px] rounded-full bg-terracotta/5 blur-[80px]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          {/* On desktop: items-start so sticky side doesn't stretch to match scrollable side */}
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start py-24">
+
+            {/* ── LEFT — Scrollable feature narrative ── */}
+            <div className="flex flex-col">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-cream text-terracotta px-4 py-2 rounded-full font-bold text-sm mb-8 border border-terracotta/10 self-start">
                 <Bot size={16} />
                 <span>{dict.aiBadge}</span>
               </div>
-              <h3 className="text-fluid-h3 md:text-5xl font-bold text-soft-charcoal mb-6 leading-tight smooth-transition">
-                {dict.aiTitle1} <br/><span className="text-primary-gold">{dict.aiTitle2}</span>
+
+              {/* Headline */}
+              <h3 className="text-fluid-h3 md:text-5xl font-extrabold text-soft-charcoal mb-6 leading-tight">
+                {dict.aiTitle1}
+                <br />
+                <span className="text-primary-gold">{dict.aiTitle2}</span>
               </h3>
-              <p className="text-lg text-soft-charcoal/70 mb-10 leading-relaxed smooth-transition">
+
+              <p className="text-lg text-soft-charcoal/65 mb-12 leading-relaxed max-w-lg">
                 {dict.aiDesc}
               </p>
-              
-              <div className="flex flex-col gap-6">
-                <div className="flex gap-4 items-start">
-                  <div className="w-12 h-12 rounded-2xl bg-primary-gold/10 text-primary-gold flex items-center justify-center shrink-0">
-                    <ChefHat size={24} />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-soft-charcoal mb-1 smooth-transition">{dict.aiFeature1}</h4>
-                    <p className="text-soft-charcoal/60 smooth-transition">{dict.aiFeature1Desc}</p>
-                  </div>
-                </div>
-                
-                <div className="flex gap-4 items-start">
-                  <div className="w-12 h-12 rounded-2xl bg-terracotta/10 text-terracotta flex items-center justify-center shrink-0">
-                    <ActivityIcon />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-soft-charcoal mb-1 smooth-transition">{dict.aiFeature2}</h4>
-                    <p className="text-soft-charcoal/60 smooth-transition">{dict.aiFeature2Desc}</p>
-                  </div>
-                </div>
-                
-                <div className="flex gap-4 items-start">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
-                    <StarsIcon />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-soft-charcoal mb-1 smooth-transition">{dict.aiFeature3}</h4>
-                    <p className="text-soft-charcoal/60 smooth-transition">{dict.aiFeature3Desc}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right side: Chatbox Mockup */}
-            <div className="glass-card backdrop-blur-xl rounded-[32px] p-2 md:p-4 luxury-shadow relative h-[550px] flex flex-col smooth-transition hardware-accelerated">
-              <div className="bg-white/80 backdrop-blur-md rounded-t-[28px] p-4 flex items-center gap-4 sticky top-0 shrink-0 z-10">
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-primary-gold to-terracotta flex items-center justify-center text-white">
-                    <Bot size={24} />
-                  </div>
-                  <div className="absolute bottom-0 end-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
-                </div>
-                <div>
-                  <h4 className="font-bold text-soft-charcoal smooth-transition">{dict.aiChatName}</h4>
-                  <p className="text-xs text-soft-charcoal/50 font-medium smooth-transition">{dict.aiChatStatus}</p>
-                </div>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white/40">
-                {chatMessages.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div 
-                      className={`max-w-[85%] p-4 rounded-[24px] text-sm leading-relaxed ${
-                        msg.role === 'user' 
-                          ? 'bg-soft-charcoal text-white rounded-ee-none' 
-                          : 'bg-white text-soft-charcoal shadow-sm border border-gray-50 rounded-es-none'
-                      }`}
-                    >
-                      {lang === 'ar' ? msg.text_ar : msg.text_en}
-                    </div>
-                  </div>
-                ))}
-                {isTyping && (
-                  <div className={`flex justify-start`}>
-                    <div className="max-w-[85%] rounded-[24px] px-6 py-4 text-[15px] bg-white text-soft-charcoal shadow-sm border border-gray-50 rounded-es-none flex gap-2 items-center">
-                      <span className="w-2 h-2 bg-primary-gold rounded-full animate-bounce"></span>
-                      <span className="w-2 h-2 bg-primary-gold rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                      <span className="w-2 h-2 bg-primary-gold rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              <div className="bg-white p-3 rounded-b-[28px] rounded-t-xl shrink-0 mt-2 shadow-sm border border-gray-100">
-                <form onSubmit={handleSendMessage} className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    disabled={isTyping}
-                    placeholder={dict.aiChatInput}
-                    className="flex-1 bg-cream rounded-full px-5 py-3 outline-none text-sm placeholder:text-soft-charcoal/40 font-medium text-soft-charcoal transition-all disabled:opacity-60"
-                  />
-                  <button
-                    type="submit"
-                    disabled={!chatInput.trim() || isTyping}
-                    className={`min-w-[48px] min-h-[48px] rounded-full bg-primary-gold text-white flex items-center justify-center hover:bg-dark-gold smooth-transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 shadow-md touch-manipulation ${lang === 'ar' ? 'rotate-180' : ''}`}
+
+              {/* Feature list — staggered */}
+              <div className="flex flex-col gap-8">
+                {[
+                  { icon: <ChefHat size={22} />, color: 'bg-primary-gold/10 text-primary-gold', title: dict.aiFeature1, desc: dict.aiFeature1Desc },
+                  { icon: <ActivityIcon />,       color: 'bg-terracotta/10 text-terracotta',     title: dict.aiFeature2, desc: dict.aiFeature2Desc },
+                  { icon: <StarsIcon />,          color: 'bg-blue-50 text-blue-500',             title: dict.aiFeature3, desc: dict.aiFeature3Desc },
+                ].map((f, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: lang === 'ar' ? 24 : -24 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ delay: i * 0.12, duration: 0.65, ease: [0.22, 1, 0.36, 1] as const }}
+                    className="flex gap-5 items-start group"
                   >
-                    <Send size={18} className="translate-x-[-1px] translate-y-[1px]" />
-                  </button>
-                </form>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 smooth-transition ${f.color}`}>
+                      {f.icon}
+                    </div>
+                    <div className="pt-1">
+                      <h4 className="text-lg font-extrabold text-soft-charcoal mb-1">{f.title}</h4>
+                      <p className="text-soft-charcoal/55 leading-relaxed">{f.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-              
-              {/* Floating aesthetic elements */}
-              <div className="absolute -top-6 -end-6 w-24 h-24 bg-terracotta/20 rounded-full blur-[20px] -z-10" />
+
+              {/* Extra scroll space so the right side sticks while scrolling */}
+              <div className="hidden md:block h-16" />
             </div>
 
+            {/* ── RIGHT — Sticky chat interface ── */}
+            <div className="md:sticky md:top-28">
+              <div className="glass-card backdrop-blur-xl rounded-[32px] p-2 md:p-3 luxury-shadow relative flex flex-col hardware-accelerated"
+                   style={{ height: 'min(580px, 80svh)' }}>
+
+                {/* Chat header */}
+                <div className="bg-white/85 backdrop-blur-md rounded-t-[28px] px-5 py-4 flex items-center gap-4 shrink-0 border-b border-[rgba(201,160,61,0.1)]">
+                  <div className="relative shrink-0">
+                    <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-primary-gold to-terracotta flex items-center justify-center text-white shadow-md">
+                      <Bot size={22} />
+                    </div>
+                    <div className="absolute bottom-0 end-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-soft-charcoal text-sm">{dict.aiChatName}</h4>
+                    <p className="text-xs text-green-500 font-semibold">{dict.aiChatStatus}</p>
+                  </div>
+                  {/* Decorative typing dots in header */}
+                  <div className="ms-auto flex gap-1.5">
+                    {[0, 1, 2].map((d) => (
+                      <div key={d} className="w-1.5 h-1.5 rounded-full bg-primary-gold/30"
+                           style={{ animationDelay: `${d * 0.2}s` }} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {chatMessages.map((msg, i) => (
+                    <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      {msg.role === 'ai' && (
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-gold to-terracotta flex items-center justify-center text-white shrink-0 me-2 mt-1">
+                          <Bot size={14} />
+                        </div>
+                      )}
+                      <div className={`max-w-[78%] px-4 py-3 rounded-[20px] text-sm leading-relaxed ${
+                        msg.role === 'user'
+                          ? 'bg-soft-charcoal text-white rounded-ee-none'
+                          : 'bg-white text-soft-charcoal shadow-sm border border-[rgba(201,160,61,0.1)] rounded-es-none'
+                      }`}>
+                        {lang === 'ar' ? msg.text_ar : msg.text_en}
+                      </div>
+                    </div>
+                  ))}
+                  {isTyping && (
+                    <div className="flex justify-start">
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-gold to-terracotta flex items-center justify-center text-white shrink-0 me-2">
+                        <Bot size={14} />
+                      </div>
+                      <div className="bg-white rounded-[20px] rounded-es-none px-5 py-4 shadow-sm border border-[rgba(201,160,61,0.1)] flex gap-1.5 items-center">
+                        {[0, 0.18, 0.36].map((d, i) => (
+                          <span key={i} className="w-2 h-2 bg-primary-gold rounded-full animate-bounce"
+                                style={{ animationDelay: `${d}s` }} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Input */}
+                <div className="p-3 rounded-b-[28px] shrink-0 border-t border-[rgba(201,160,61,0.08)]">
+                  <form onSubmit={handleSendMessage} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      disabled={isTyping}
+                      placeholder={dict.aiChatInput}
+                      className="flex-1 bg-cream rounded-full px-5 py-3 outline-none text-sm placeholder:text-soft-charcoal/35 font-medium text-soft-charcoal smooth-transition disabled:opacity-50"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!chatInput.trim() || isTyping}
+                      className={`min-w-[48px] min-h-[48px] rounded-full bg-primary-gold text-white flex items-center justify-center hover:bg-dark-gold smooth-transition active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-md touch-manipulation ${lang === 'ar' ? 'rotate-180' : ''}`}
+                    >
+                      <Send size={17} />
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -641,106 +616,8 @@ export default function SoulGoldApp() {
         </div>
       </section>
 
-      {/* ---------- Footer ---------- */}
-      <footer className="bg-cream pt-20 pb-16 pb-safe px-4 border-t border-primary-gold/20 smooth-transition hardware-accelerated">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-            
-            <div>
-               <div className="flex items-center gap-2 mb-6">
-                <Image
-                  unoptimized
-                  src="https://i.ibb.co/DfsWCMyW/edited-photo.png"
-                  alt="Soul Gold Logo"
-                  width={160}
-                  height={64}
-                  className="h-16 w-auto object-contain object-center smooth-transition"
-                />
-              </div>
-              <p className="text-soft-charcoal/70 mb-6 max-w-sm leading-relaxed smooth-transition">
-                {dict.footerDesc}
-              </p>
-              <div className="flex gap-4">
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="min-w-[48px] min-h-[48px] rounded-full bg-white flex items-center justify-center text-soft-charcoal hover:bg-primary-gold hover:text-white shadow-sm smooth-transition border border-[rgba(201,160,61,0.15)] touch-manipulation active:scale-95">
-                  <Instagram size={18} />
-                </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="min-w-[48px] min-h-[48px] rounded-full bg-white flex items-center justify-center text-soft-charcoal hover:bg-primary-gold hover:text-white shadow-sm smooth-transition border border-[rgba(201,160,61,0.15)] touch-manipulation active:scale-95">
-                  <Twitter size={18} />
-                </a>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="min-w-[48px] min-h-[48px] rounded-full bg-white flex items-center justify-center text-soft-charcoal hover:bg-primary-gold hover:text-white shadow-sm smooth-transition border border-[rgba(201,160,61,0.15)] touch-manipulation active:scale-95">
-                  <Facebook size={18} />
-                </a>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="text-xl font-bold text-soft-charcoal mb-6 smooth-transition">{dict.quickLinks}</h4>
-              <ul className="space-y-3">
-                <li><a href="#categories" className="text-soft-charcoal/70 hover:text-primary-gold smooth-transition flex items-center gap-2 min-h-[48px] touch-manipulation active:scale-95"><ChevronRight size={14} className={lang === 'ar' ? 'rotate-180' : ''} /> {dict.shopAll}</a></li>
-                <li><a href="#ai-consultant" className="text-soft-charcoal/70 hover:text-primary-gold smooth-transition flex items-center gap-2 min-h-[48px] touch-manipulation active:scale-95"><ChevronRight size={14} className={lang === 'ar' ? 'rotate-180' : ''} /> {dict.soulPlus}</a></li>
-                <li><a href="#quality" className="text-soft-charcoal/70 hover:text-primary-gold smooth-transition flex items-center gap-2 min-h-[48px] touch-manipulation active:scale-95"><ChevronRight size={14} className={lang === 'ar' ? 'rotate-180' : ''} /> {dict.aboutUs}</a></li>
-                <li><a href="tel:920012345" className="text-soft-charcoal/70 hover:text-primary-gold smooth-transition flex items-center gap-2 min-h-[48px] touch-manipulation active:scale-95"><ChevronRight size={14} className={lang === 'ar' ? 'rotate-180' : ''} /> {dict.trackOrder}</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-xl font-bold text-soft-charcoal mb-6 smooth-transition">{dict.contactUs}</h4>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary-gold shadow-sm shrink-0 border border-gray-100">
-                    <Phone size={18} className={lang === 'ar' ? '[transform:scaleX(-1)]' : ''} />
-                  </div>
-                  <div>
-                    <span className="block text-xs font-bold text-soft-charcoal/50 uppercase tracking-wider mb-1 smooth-transition">{dict.tollFree}</span>
-                    <a href="tel:920012345" className="font-bold text-soft-charcoal hover:text-primary-gold dir-ltr text-start inline-block smooth-transition">9200 12345</a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary-gold shadow-sm shrink-0 border border-gray-100">
-                    <Mail size={18} />
-                  </div>
-                  <div>
-                    <span className="block text-xs font-bold text-soft-charcoal/50 uppercase tracking-wider mb-1 smooth-transition">{dict.support}</span>
-                    <a href="mailto:support@soul.sa" className="font-bold text-soft-charcoal hover:text-primary-gold smooth-transition">support@soul.sa</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-xl font-bold text-soft-charcoal mb-6 smooth-transition">{dict.newsletter}</h4>
-              <p className="text-soft-charcoal/70 mb-4 text-sm smooth-transition">
-                {newsletterSubmitted ? dict.newsletterSuccess : dict.newsletterDesc}
-              </p>
-              <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
-                <input
-                  type="email"
-                  value={newsletterEmail}
-                  onChange={(e) => setNewsletterEmail(e.target.value)}
-                  placeholder={dict.emailPlaceholder}
-                  className="glass-panel border-[rgba(201,160,61,0.15)] px-4 py-3 min-h-[48px] rounded-xl flex-1 outline-none text-sm focus:border-primary-gold smooth-transition"
-                />
-                <button
-                  type="submit"
-                  className={`glass-panel bg-soft-charcoal/90 hover:bg-primary-gold text-white min-w-[48px] min-h-[48px] px-4 py-3 rounded-xl smooth-transition shrink-0 active:scale-95 touch-manipulation ${lang === 'ar' ? 'rotate-180' : ''}`}
-                >
-                  <Send size={18} />
-                </button>
-              </form>
-            </div>
-            
-          </div>
-          
-          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-primary-gold/10 gap-4 mt-8">
-            <p className="text-soft-charcoal/50 text-sm font-medium smooth-transition">© {new Date().getFullYear()} {dict.allRights}</p>
-            <div className="flex items-center gap-3">
-              <div className="h-8 px-3 bg-white border border-gray-200 rounded-md flex items-center justify-center font-bold text-xs text-soft-charcoal/60">VISA</div>
-              <div className="h-8 px-3 bg-white border border-gray-200 rounded-md flex items-center justify-center font-bold text-xs text-soft-charcoal/60">MASTERCARD</div>
-              <div className="h-8 px-3 bg-white border border-gray-200 rounded-md flex items-center justify-center font-bold text-xs text-soft-charcoal/60 items-center gap-1">APP<CreditCard size={12}/></div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* ---------- Statement Footer ---------- */}
+      <StatementFooter lang={lang} dict={dict} />
 
       {/* ---------- Checkout Modal ---------- */}
       <AnimatePresence>
