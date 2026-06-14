@@ -4,13 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
   ShoppingCart,
-  Search,
-  Menu,
   ShieldCheck,
   Leaf,
   Users,
   Clock,
-  X,
   Send,
   Sparkles,
   Bot,
@@ -23,10 +20,13 @@ import {
   Twitter,
   Facebook,
   CreditCard,
-  Globe,
-  ChefHat
+  X,
+  ChefHat,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import LuxuryHero    from '@/components/LuxuryHero';
+import LuxuryHeader  from '@/components/LuxuryHeader';
+import ProductRunway from '@/components/ProductRunway';
 
 const t = {
   ar: {
@@ -101,7 +101,9 @@ const t = {
     emptyCart: "السلة فارغة",
     noProducts: "لا توجد منتجات حالياً",
     newsletterSuccess: "شكراً! تم الاشتراك بنجاح.",
-    searchHint: "تصفح منتجاتنا الحصرية أدناه"
+    searchHint: "تصفح منتجاتنا الحصرية أدناه",
+    heroScroll: "اكتشف المجموعة",
+    heroEditorial: "مجموعة ٢٠٢٦"
   },
   en: {
     topBar: "✨ Free Delivery over 200 SAR | Discover our Organic Selection | Join the Exclusive Loyalty Program ✨",
@@ -175,7 +177,9 @@ const t = {
     emptyCart: "Your cart is empty",
     noProducts: "No products available",
     newsletterSuccess: "Thank you! You are subscribed.",
-    searchHint: "Browse our exclusive products below"
+    searchHint: "Browse our exclusive products below",
+    heroScroll: "Discover the Collection",
+    heroEditorial: "Collection 2026"
   }
 } as const;
 
@@ -225,7 +229,7 @@ export default function SoulGoldApp() {
   const [customerAddress, setCustomerAddress] = useState('');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
-  const productsRef = React.useRef<HTMLElement>(null);
+  const productsRef = React.useRef<HTMLDivElement>(null);
 
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
   const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.qty, 0);
@@ -372,191 +376,29 @@ export default function SoulGoldApp() {
 
   return (
     <div className="min-h-screen relative font-sans overflow-x-hidden transition-all duration-300 ease-out px-safe">
-      {/* ---------- Top Bar ---------- */}
-      <div className="bg-primary-gold text-white text-xs md:text-sm py-2 px-4 text-center font-medium transition-all duration-300">
+      {/* ---------- Top Promo Bar ---------- */}
+      <div className="bg-primary-gold text-white text-xs md:text-sm py-2.5 px-4 text-center font-medium">
         <span>{dict.topBar}</span>
       </div>
 
-      {/* ---------- Header / Navbar ---------- */}
-      <div className="sticky top-4 pt-safe z-50 px-4 md:px-8 w-full max-w-7xl mx-auto transition-all duration-300">
-        <header className="glass-panel px-6 py-4 rounded-[32px] smooth-transition hardware-accelerated w-full shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer min-h-[48px]">
-            <Image
-              unoptimized
-              src="https://i.ibb.co/DfsWCMyW/edited-photo.png"
-              alt="Soul Gold Logo"
-              width={160}
-              height={64}
-              priority
-              className="h-16 w-auto object-contain object-center smooth-transition"
-            />
-            <div className="hidden sm:flex flex-col justify-center text-dark-gold border-s-2 border-light-gold ps-2 ms-2 smooth-transition">
-              <span className="text-[10px] font-bold uppercase tracking-widest leading-none">{dict.brandTitle}</span>
-              <span className="text-[10px] font-bold uppercase tracking-widest leading-none mt-1">{dict.brandSubtitle}</span>
-            </div>
-          </div>
+      {/* ---------- Scroll-Aware Header ---------- */}
+      <LuxuryHeader
+        lang={lang}
+        dict={dict}
+        cartCount={cartCount}
+        isCheckingOut={isCheckingOut}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onOpenCheckout={openCheckout}
+        onToggleLanguage={toggleLanguage}
+        onScrollToProducts={scrollToProducts}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(prev => !prev)}
+      />
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8 font-medium text-soft-charcoal">
-            <a href="#hero" className="hover:text-primary-gold smooth-transition">{dict.home}</a>
-            <a href="#categories" className="hover:text-primary-gold smooth-transition">{dict.shop}</a>
-            <a href="#ai-consultant" className="relative hover:text-primary-gold smooth-transition flex items-center gap-1">
-              {dict.soulPlus} <Sparkles size={14} className="text-terracotta" />
-            </a>
-            <a href="#quality" className="hover:text-primary-gold smooth-transition">{dict.whyUs}</a>
-          </nav>
-
-          <div className="flex items-center gap-3 md:gap-5">
-            <button 
-              onClick={toggleLanguage}
-              className="hidden sm:flex items-center justify-center gap-1.5 cursor-pointer hover:bg-cream min-w-[48px] min-h-[48px] px-3 rounded-full smooth-transition text-soft-charcoal touch-manipulation active:scale-95"
-            >
-              <Globe size={16} className={lang === 'ar' ? 'rotate-180' : ''} />
-              <span className="text-sm font-bold text-primary-gold">{dict.language}</span>
-            </button>
-            
-            <button
-              onClick={scrollToProducts}
-              aria-label="Search products"
-              className="min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-cream rounded-full smooth-transition text-soft-charcoal touch-manipulation active:scale-95"
-            >
-              <Search size={20} />
-            </button>
-            <button
-              onClick={openCheckout}
-              disabled={isCheckingOut}
-              className={`relative min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-cream rounded-full smooth-transition text-soft-charcoal touch-manipulation active:scale-95 ${isCheckingOut ? 'opacity-50' : ''}`}
-            >
-              <ShoppingCart size={20} />
-              <AnimatePresence>
-                {cartCount > 0 && (
-                  <motion.span 
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute top-1 end-1 bg-terracotta text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-md"
-                  >
-                    {cartCount}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
-            
-            {/* Mobile Menu Toggle */}
-            <button 
-              className="md:hidden min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-cream rounded-full smooth-transition text-soft-charcoal touch-manipulation active:scale-95 relative z-50 hardware-accelerated"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-
-        {/* Mobile Side Drawer */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="fixed inset-0 bg-soft-charcoal/40 backdrop-blur-sm z-40 md:hidden hardware-accelerated"
-                onClick={() => setIsMobileMenuOpen(false)}
-              />
-              <motion.div
-                initial={{ x: lang === 'ar' ? '-100%' : '100%', opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: lang === 'ar' ? '-100%' : '100%', opacity: 0 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="fixed top-0 bottom-0 end-0 w-[min(100vw,320px)] h-[100dvh] glass-panel backdrop-blur-xl z-50 md:hidden flex flex-col pt-safe pb-safe px-6 justify-between overflow-y-auto hardware-accelerated shadow-2xl"
-              >
-                <div className="flex flex-col gap-2 pt-24">
-                  <a href="#hero" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 min-h-[48px] font-bold text-2xl text-soft-charcoal active:scale-95 touch-manipulation smooth-transition">{dict.home}</a>
-                  <a href="#categories" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 min-h-[48px] font-bold text-2xl text-soft-charcoal active:scale-95 touch-manipulation smooth-transition">{dict.shop}</a>
-                  <a href="#ai-consultant" onClick={() => setIsMobileMenuOpen(false)} className="py-4 min-h-[48px] font-bold text-2xl text-soft-charcoal active:scale-95 touch-manipulation smooth-transition flex items-center gap-3">
-                    {dict.soulPlus} <Bot size={28} className="text-primary-gold" />
-                  </a>
-                  <a href="#quality" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 min-h-[48px] font-bold text-2xl text-soft-charcoal active:scale-95 touch-manipulation smooth-transition">{dict.whyUs}</a>
-                </div>
-
-                <div className="mt-8 pb-8">
-                  <button
-                    onClick={() => {
-                      toggleLanguage();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="bg-cream rounded-full w-full min-h-[48px] py-4 flex items-center justify-center gap-2 font-bold text-xl text-primary-gold smooth-transition active:scale-95 touch-manipulation hardware-accelerated"
-                  >
-                    <Globe size={20} className={lang === 'ar' ? 'rotate-180' : ''} />
-                    <span>{dict.language} / {lang === 'ar' ? 'English' : 'العربية'}</span>
-                  </button>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-        </header>
-      </div>
-
-      {/* ---------- Hero Section ---------- */}
-      <section id="hero" className="relative pt-20 pb-32 px-4 overflow-hidden flex items-center justify-center min-h-[85vh]">
-        {/* Background Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cream via-[#FDF0DE] to-[#FAE1BC] -z-10 transition-all duration-500" />
-        <div className="absolute top-0 end-0 w-[500px] h-[500px] bg-primary-gold/15 rounded-full blur-[120px] -z-10" />
-        <div className="absolute top-1/2 start-0 w-[400px] h-[400px] bg-terracotta/10 rounded-full blur-[100px] -z-10" />
-
-        <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 glass-panel text-dark-gold px-5 py-2.5 rounded-full font-bold text-sm mb-8 shadow-sm smooth-transition hardware-accelerated"
-          >
-            <Sparkles size={16} />
-            <span>{dict.heroBadge}</span>
-          </motion.div>
-          
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-fluid-hero font-bold text-soft-charcoal mb-6 transition-all duration-300 hardware-accelerated"
-          >
-            {dict.heroTitle1} <span className="text-primary-gold relative whitespace-nowrap">
-              {dict.heroTitle2}
-              <span className="absolute bottom-2 start-0 w-full h-[8px] bg-light-gold/40 rounded-full -z-10 transition-all duration-300"></span>
-            </span> {dict.heroTitle3}
-          </motion.h2>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-soft-charcoal/70 mb-10 max-w-2xl leading-relaxed smooth-transition hardware-accelerated"
-          >
-            {dict.heroDesc}
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto smooth-transition hardware-accelerated"
-          >
-            <button
-              onClick={scrollToProducts}
-              className="bg-primary-gold hover:bg-dark-gold text-white px-8 py-4 min-h-[48px] rounded-full font-extrabold text-lg luxury-shadow smooth-transition hover:scale-105 active:scale-95 w-full sm:w-auto hardware-accelerated touch-manipulation"
-            >
-              {dict.shopNow}
-            </button>
-            <a href="#ai-consultant" className="glass-panel hover:bg-white text-soft-charcoal px-8 py-4 min-h-[48px] rounded-full font-extrabold text-lg shadow-sm smooth-transition hover:scale-105 active:scale-95 flex items-center justify-center gap-2 w-full sm:w-auto hardware-accelerated touch-manipulation">
-              <Bot size={22} className="text-primary-gold" />
-              {dict.tryAi}
-            </a>
-          </motion.div>
-        </div>
-      </section>
+      {/* ---------- Hero Section — Cinematic Editorial ---------- */}
+      <LuxuryHero lang={lang} dict={dict} onShopNow={scrollToProducts} />
 
       {/* ---------- Trust Indicators ---------- */}
-      <div className="max-w-7xl mx-auto px-4 -mt-16 relative z-10 smooth-transition hardware-accelerated">
+      <div className="max-w-7xl mx-auto px-4 -mt-8 md:-mt-12 relative z-10 smooth-transition hardware-accelerated">
         <div className="glass-card rounded-[32px] p-6 flex flex-nowrap overflow-x-auto gap-8 justify-between items-center hide-scrollbar snap-x snap-mandatory">
           <div className="flex flex-col items-center min-w-[140px] px-4 gap-3 text-center text-soft-charcoal smooth-transition snap-center">
             <div className="w-14 h-14 bg-cream rounded-full flex items-center justify-center text-primary-gold shadow-sm">
@@ -623,104 +465,18 @@ export default function SoulGoldApp() {
         </div>
       </section>
 
-      {/* ---------- Products Section ---------- */}
-      <section ref={productsRef} className="py-20 px-4 bg-cream smooth-transition hardware-accelerated">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
-            <h3 className="text-fluid-h2 font-bold text-soft-charcoal smooth-transition">{dict.exclusive}</h3>
-            
-            <div className="flex flex-wrap justify-center gap-2 glass-panel p-1.5 rounded-full shadow-sm smooth-transition">
-              {['All', 'Tuna', 'Sauces', 'Ghee', 'Organics'].map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-5 py-2 min-h-[48px] min-w-[48px] rounded-full font-bold text-sm smooth-transition touch-manipulation active:scale-95 ${
-                    activeCategory === cat 
-                      ? 'bg-primary-gold text-white shadow-md' 
-                      : 'text-soft-charcoal/60 hover:text-soft-charcoal hover:bg-white/80'
-                  }`}
-                >
-                  {cat === 'All' ? dict.filterAll :
-                   cat === 'Tuna' ? dict.filterTuna :
-                   cat === 'Sauces' ? dict.filterSauces :
-                   cat === 'Ghee' ? dict.filterGhee : dict.filterOrganics}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-8 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8">
-            {isLoadingProducts ? (
-              <div className="col-span-full py-12 flex justify-center">
-                <div className="w-8 h-8 border-4 border-primary-gold border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            ) : products.length === 0 ? (
-              <div className="col-span-full py-12 text-center text-soft-charcoal/60 font-medium">
-                {dict.noProducts}
-              </div>
-            ) : (
-              <AnimatePresence mode="popLayout">
-                {products.map(product => (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3 }}
-                  key={product.id}
-                  className="bg-white min-w-[280px] sm:min-w-0 rounded-[32px] p-6 shadow-sm luxury-shadow-hover smooth-transition flex flex-col group border border-[rgba(201,160,61,0.15)] snap-center shrink-0 hardware-accelerated active:scale-[0.98] touch-manipulation"
-                >
-                  <div className={`w-full aspect-[4/3] ${product.bgColor} rounded-[24px] flex items-center justify-center mb-6 relative overflow-hidden group-hover:bg-opacity-80 smooth-transition`}>
-                    <Image
-                      src={product.image}
-                      alt={lang === 'ar' ? product.title_ar : product.title_en}
-                      fill
-                      className="object-cover transform group-hover:scale-105 transition-transform duration-500 will-change-transform"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute top-4 start-4 z-10 glass-card px-3 py-1.5 rounded-full text-xs font-bold text-dark-gold flex items-center gap-1 smooth-transition">
-                      <Sparkles size={12} />
-                      {lang === 'ar' ? product.badge_ar : product.badge_en}
-                    </div>
-                  </div>
-                  
-                  <div className="mb-2">
-                    <span className="text-xs font-bold text-primary-gold uppercase tracking-wider transition-all">
-                      {lang === 'ar' ? 
-                        (product.categoryKey === 'Tuna' ? 'تونة' : 
-                         product.categoryKey === 'Sauces' ? 'صلصات' : 
-                         product.categoryKey === 'Ghee' ? 'سمن' : 'عضوي')
-                        : product.categoryKey}
-                    </span>
-                  </div>
-                  <h4 className="text-xl font-bold text-soft-charcoal mb-2 leading-tight transition-all">
-                    {lang === 'ar' ? product.title_ar : product.title_en}
-                  </h4>
-                  <p className="text-soft-charcoal/60 text-sm leading-relaxed mb-2 transition-all line-clamp-2">
-                    {lang === 'ar' ? product.desc_ar : product.desc_en}
-                  </p>
-                  <p className="text-soft-charcoal/50 text-sm font-medium mb-6 transition-all">
-                    {lang === 'ar' ? product.weight_ar : product.weight_en}
-                  </p>
-                  
-                  <div className="mt-auto flex items-center justify-between">
-                    <div className="font-bold text-2xl text-soft-charcoal smooth-transition">
-                      SAR {product.price}
-                    </div>
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      className="min-w-[48px] min-h-[48px] rounded-full bg-cream text-primary-gold flex items-center justify-center hover:bg-primary-gold hover:text-white hover:shadow-lg smooth-transition active:scale-95 touch-manipulation hardware-accelerated"
-                    >
-                      <ShoppingCart size={20} />
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-              </AnimatePresence>
-            )}
-          </div>
-        </div>
-      </section>
+      {/* ---------- Product Runway Carousel ---------- */}
+      <div ref={productsRef}>
+        <ProductRunway
+          lang={lang}
+          products={products}
+          isLoading={isLoadingProducts}
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+          onAddToCart={handleAddToCart}
+          dict={dict}
+        />
+      </div>
 
       {/* ---------- AI Consultant (Soul Plus) ---------- */}
       <section id="ai-consultant" className="py-24 px-4 bg-white overflow-hidden relative smooth-transition hardware-accelerated">
