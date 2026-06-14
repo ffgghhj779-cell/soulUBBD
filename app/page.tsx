@@ -233,20 +233,12 @@ export default function SoulGoldApp() {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  // Lock body scroll while mobile drawer is open — prevents background jitter
-  // on iOS Safari's elastic scroll model
+  // Lock body scroll while mobile drawer is open
+  // IMPORTANT: only overflow, never touchAction — touchAction:none on body
+  // prevents ALL touch events even after the menu closes on some iOS versions.
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow      = 'hidden';
-      document.body.style.touchAction   = 'none';
-    } else {
-      document.body.style.overflow      = '';
-      document.body.style.touchAction   = '';
-    }
-    return () => {
-      document.body.style.overflow    = '';
-      document.body.style.touchAction = '';
-    };
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [isMobileMenuOpen]);
 
   useEffect(() => {

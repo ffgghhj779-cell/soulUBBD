@@ -45,8 +45,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
-  /* Stop iOS rubber-band bounce — gives native app feel */
-  overscroll-behavior-y: none;
 }
 
 /* Respect user's OS-level reduced-motion preference */
