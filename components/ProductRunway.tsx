@@ -78,63 +78,77 @@ export default function ProductRunway({
   lang, products, isLoading, activeCategory,
   onCategoryChange, onAddToCart, dict,
 }: ProductRunwayProps) {
-  const containerRef  = useRef<HTMLDivElement>(null);
-  const cardRefs      = useRef<(HTMLDivElement | null)[]>([]);
-  const rafRef        = useRef<number>(0);
-  const [centeredIdx, setCenteredIdx] = useState(0);
+  const containerRef       = useRef<HTMLDivElement>(null);
+  const cardRefs           = useRef<(HTMLDivElement | null)[]>([]);
+  // Separate overlay refs — rAF dims ONLY the image overlay, never the text
+  const imageOverlayRefs   = useRef<(HTMLDivElement | null)[]>([]);
+  const rafRef             = useRef<number>(0);
+  const centeredIdxRef     = useRef(0);                    // mutable, no re-render
+  const [centeredIdx, setCenteredIdx] = useState(0);       // for dot UI only
   const isRtl = lang === 'ar';
 
-  // Cache each card's left offset + width so the rAF loop reads ZERO layout
-  // properties (getBoundingClientRect triggers layout — we avoid it per-frame)
-  type CardMeta = { cx: number }; // center relative to container start
+  type CardMeta = { cx: number };
   const cardMetaRef = useRef<CardMeta[]>([]);
 
   const cacheCardPositions = useCallback(() => {
-    // One-time layout read batch — happens only on mount / data change, not scroll
     const metas: CardMeta[] = [];
     cardRefs.current.forEach((card) => {
       if (!card) { metas.push({ cx: 0 }); return; }
-      // offsetLeft is relative to offsetParent (the container), zero reflow
       metas.push({ cx: card.offsetLeft + card.offsetWidth / 2 });
     });
     cardMetaRef.current = metas;
   }, []);
 
-  /* ── Per-frame DOM update — zero layout reads during scroll ─────── */
+  /* ── Per-frame DOM update ────────────────────────────────────────────
+     KEY FIX: rAF never touches card wrapper opacity.
+     Framer Motion owns wrapper opacity (entrance: 0→1, done).
+     rAF owns: card scale, card shadow, and imageOverlay opacity.
+     This eliminates the FM↔rAF race condition that washed out the text.
+  ─────────────────────────────────────────────────────────────────── */
   const updateCards = useCallback(() => {
     rafRef.current = 0;
     const container = containerRef.current;
     if (!container) return;
 
-    // These two properties never trigger layout (they're compositor values)
-    const scrollLeft      = container.scrollLeft;
-    const containerWidth  = container.clientWidth;
-    const centerX         = scrollLeft + containerWidth / 2;
-    const halfRange       = containerWidth * 0.7;
+    const scrollLeft     = container.scrollLeft;
+    const containerWidth = container.clientWidth;
+    const centerX        = scrollLeft + containerWidth / 2;
+    const halfRange      = containerWidth * 0.7;
 
     let closestDist = Infinity;
     let closestIdx  = 0;
 
-    // All reads first (card metas are pre-cached) → then all writes
+    // Read phase — only pre-cached values, zero DOM queries
     const updates = cardMetaRef.current.map((meta, i) => {
-      const dist  = Math.abs(centerX - meta.cx);
-      const norm  = Math.max(0, 1 - dist / halfRange);
+      const dist = Math.abs(centerX - meta.cx);
+      const norm = Math.max(0, 1 - dist / halfRange);
       if (dist < closestDist) { closestDist = dist; closestIdx = i; }
-      return { i, norm, dist };
+      return { i, norm };
     });
 
-    // Write phase — no reads here, avoids forced reflow
+    // Write phase — no reads, pure writes
     updates.forEach(({ i, norm }) => {
-      const card = cardRefs.current[i];
+      const card    = cardRefs.current[i];
+      const overlay = imageOverlayRefs.current[i];
       if (!card) return;
-      card.style.transform  = `scale(${(0.88 + norm * 0.20).toFixed(4)})`;
-      card.style.opacity    = `${(0.48 + norm * 0.52).toFixed(4)}`;
-      // box-shadow is compositor-layer on Webkit/Blink, acceptable per-frame cost
-      const sA = (0.04 + norm * 0.14).toFixed(3);
-      card.style.boxShadow  = `0 ${(8 + norm * 32).toFixed(1)}px ${(24 + norm * 48).toFixed(1)}px rgba(44,44,44,${sA})`;
+
+      // Scale the entire card (0.88 → 1.08) — compositor-only, no repaint
+      card.style.transform = `scale(${(0.88 + norm * 0.20).toFixed(4)})`;
+
+      // Dim the image overlay (0 = center/vivid, 0.52 = edges/dimmed)
+      // Text is OUTSIDE this overlay so it always stays at full opacity
+      if (overlay) overlay.style.opacity = `${((1 - norm) * 0.52).toFixed(4)}`;
+
+      // Shadow depth grows as card approaches center
+      const sA = (0.03 + norm * 0.14).toFixed(3);
+      card.style.boxShadow = `0 ${(6 + norm * 28).toFixed(1)}px ${(20 + norm * 44).toFixed(1)}px rgba(44,44,44,${sA})`;
     });
 
-    setCenteredIdx(closestIdx);
+    // Only commit React state when centered index actually changes
+    if (closestIdx !== centeredIdxRef.current) {
+      centeredIdxRef.current = closestIdx;
+      setCenteredIdx(closestIdx);
+    }
   }, []);
 
   const scheduleUpdate = useCallback(() => {
@@ -260,15 +274,18 @@ export default function ProductRunway({
         {!isLoading && products.length > 0 && (
           <div
             ref={containerRef}
-            dir="ltr"                      /* force LTR scroll model */
-            className="flex gap-5 md:gap-7 overflow-x-auto hide-scrollbar snap-x snap-mandatory py-10 overscroll-x-contain"
+            dir="ltr"
+            className="flex gap-5 md:gap-7 overflow-x-auto hide-scrollbar snap-x snap-mandatory py-10"
             style={{
-              paddingLeft:        runwayPadding,
-              paddingRight:       runwayPadding,
-              scrollPaddingLeft:  runwayPadding,
-              scrollPaddingRight: runwayPadding,
+              paddingLeft:         runwayPadding,
+              paddingRight:        runwayPadding,
+              scrollPaddingLeft:   runwayPadding,
+              scrollPaddingRight:  runwayPadding,
               overscrollBehaviorX: 'contain',
-              WebkitOverflowScrolling: 'touch', // momentum scroll on iOS
+              WebkitOverflowScrolling: 'touch',
+              /* pan-x: lets browser handle horizontal swipe natively at 120fps,
+                 blocks vertical scroll capture — critical for runway feel */
+              touchAction: 'pan-x pinch-zoom',
             }}
           >
             <AnimatePresence mode="popLayout">
@@ -277,85 +294,95 @@ export default function ProductRunway({
                   key={product.id}
                   ref={(el) => { cardRefs.current[idx] = el; }}
                   layout
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 0.55, y: 0 }}   /* CSS will override opacity */
-                  exit={{ opacity: 0, scale: 0.88, transition: { duration: 0.25 } }}
-                  transition={{ duration: 0.45, delay: idx * 0.055, ease: [0.22, 1, 0.36, 1] }}
-                  className="shrink-0 w-[min(78vw,320px)] md:w-[340px] snap-center"
+                  /* FM handles entrance (y slide + fade to full opacity) and exit.
+                     It does NOT maintain opacity after the entrance — rAF takes over
+                     via imageOverlayRefs, so there is ZERO FM↔rAF conflict. */
+                  initial={{ opacity: 0, y: 36 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.22 } }}
+                  transition={{ duration: 0.42, delay: idx * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  className="shrink-0 w-[min(80vw,320px)] md:w-[340px] snap-center"
                   style={{
-                    willChange: 'transform, opacity',
-                    /* JS overrides transform + opacity — transition set here for smoothness */
-                    transition: 'transform 0.28s cubic-bezier(0.25,1,0.5,1), opacity 0.28s ease, box-shadow 0.28s ease',
+                    willChange: 'transform',
+                    /* rAF owns transform + shadow. Only these two in the CSS transition. */
+                    transition: 'transform 0.26s cubic-bezier(0.25,1,0.5,1), box-shadow 0.26s ease',
                   }}
                 >
-                  {/* Card shell — no border-radius interference from parent motion.div */}
                   <div
-                    className="bg-white rounded-[32px] p-5 border border-[rgba(201,160,61,0.15)] flex flex-col overflow-hidden"
-                    /* dir flipped back inside card so text renders correctly */
+                    className="bg-white rounded-[32px] p-5 border border-[rgba(201,160,61,0.18)] flex flex-col overflow-hidden h-full"
                     dir={isRtl ? 'rtl' : 'ltr'}
                   >
-                    {/* ── Image ── */}
+                    {/* ── Image with isolated dim overlay ── */}
                     <div className={`relative w-full aspect-[3/4] ${product.bgColor} rounded-[24px] overflow-hidden mb-5 group`}>
                       <Image
                         src={product.image}
                         alt={isRtl ? product.title_ar : product.title_en}
                         fill
-                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                        loading="lazy"
+                        decoding="async"
+                        className="object-cover [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
                         referrerPolicy="no-referrer"
-                        sizes="(max-width: 768px) 80vw, 340px"
+                        sizes="(max-width: 768px) 82vw, 340px"
                       />
-                      {/* Subtle bottom vignette — reduced from /60 to /35 so image
-                          stays vivid and doesn't bleed into the white card below */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian/35 via-transparent to-transparent" />
 
-                      {/* Badge */}
+                      {/* Subtle bottom-to-transparent label gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian/40 via-transparent to-transparent pointer-events-none" />
+
+                      {/* ═══ Museum vitrine dim overlay ═══
+                          rAF sets this element's opacity (0 = vivid, 0.52 = dim).
+                          It sits on top of the image but BELOW badge/index so they stay
+                          readable. Text area is outside this div entirely. */}
+                      <div
+                        ref={(el) => { imageOverlayRefs.current[idx] = el; }}
+                        className="absolute inset-0 bg-[#1A1612] rounded-[24px] pointer-events-none"
+                        style={{ opacity: 0 }}
+                        aria-hidden="true"
+                      />
+
+                      {/* Badge — above overlay (z-10) */}
                       <div className="absolute top-4 start-4 z-10 glass-card px-3 py-1.5 rounded-full text-xs font-bold text-dark-gold flex items-center gap-1">
                         <Sparkles size={11} />
                         {isRtl ? product.badge_ar : product.badge_en}
                       </div>
 
-                      {/* Card index */}
+                      {/* Index number */}
                       <div className="absolute bottom-4 end-4 z-10">
-                        <span className="text-[10px] font-extrabold text-white/60 tracking-widest">
+                        <span className="text-[10px] font-extrabold text-white/70 tracking-widest">
                           {String(idx + 1).padStart(2, '0')}
                         </span>
                       </div>
                     </div>
 
-                    {/* ── Text ── */}
-                    <span className="text-[11px] font-extrabold text-primary-gold uppercase tracking-widest mb-1.5">
+                    {/* ── Text — lives entirely outside the dim overlay, always 100% visible ── */}
+                    <span className="text-[11px] font-extrabold text-primary-gold uppercase tracking-widest mb-2">
                       {isRtl ? (AR_LABELS[product.categoryKey] ?? product.categoryKey) : product.categoryKey}
                     </span>
 
-                    {/* Title — explicit charcoal, no opacity fraction */}
-                    <h4 className="text-[1.15rem] font-extrabold text-[#2C2C2C] mb-1.5 leading-snug">
+                    <h4 className="text-[1.1rem] font-extrabold text-slate-900 mb-2 leading-snug">
                       {isRtl ? product.title_ar : product.title_en}
                     </h4>
 
-                    {/* Description — dark readable gray instead of charcoal/55 */}
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 mb-3 flex-1">
+                    <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 mb-3 flex-1">
                       {isRtl ? product.desc_ar : product.desc_en}
                     </p>
 
-                    {/* Weight — upgraded from /35 to visible mid-gray */}
-                    <p className="text-gray-400 text-xs font-semibold tracking-wide mb-5">
+                    <p className="text-slate-400 text-xs font-semibold tracking-wide mb-4">
                       {isRtl ? product.weight_ar : product.weight_en}
                     </p>
 
                     {/* ── Price + Cart ── */}
                     <div className="flex items-center justify-between mt-auto pt-3 border-t border-[rgba(201,160,61,0.15)]">
                       <div className="flex items-baseline gap-1">
-                        {/* Price — explicit charcoal for maximum readability */}
-                        <span className="font-extrabold text-2xl text-[#2C2C2C]">
+                        <span className="font-extrabold text-2xl text-slate-900 leading-none">
                           {product.price}
                         </span>
-                        <span className="text-xs font-bold text-gray-400">SAR</span>
+                        <span className="text-xs font-bold text-slate-400">SAR</span>
                       </div>
-                      {/* Cart button — charcoal icon on subtle charcoal tint;
-                          fills to gold on hover */}
+                      {/* Cart — solid gold fill, white icon — maximum visibility */}
                       <button
                         onClick={() => onAddToCart(product)}
-                        className="min-w-[48px] min-h-[48px] rounded-full bg-[rgba(44,44,44,0.06)] text-[#2C2C2C] flex items-center justify-center hover:bg-primary-gold hover:text-white hover:shadow-lg smooth-transition active:scale-95 touch-manipulation hardware-accelerated"
+                        className="min-w-[52px] min-h-[52px] rounded-full bg-primary-gold text-white flex items-center justify-center hover:bg-dark-gold shadow-md hover:shadow-lg smooth-transition active:scale-90 touch-manipulation hardware-accelerated"
+                        aria-label={isRtl ? 'أضف للسلة' : 'Add to cart'}
                       >
                         <ShoppingCart size={20} />
                       </button>

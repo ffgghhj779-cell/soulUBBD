@@ -43,12 +43,20 @@ const tiles = [
   },
 ];
 
+// On desktop: slide + fade. On mobile: fade only (no Y repaints = 120fps smooth).
 const reveal = {
-  hidden: { opacity: 0, y: 36 },
+  hidden: { opacity: 0 },
+  visible: (i: number) => ({
+    opacity: 1,
+    transition: { delay: i * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+  }),
+};
+const revealDesktop = {
+  hidden: { opacity: 0, y: 28 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.09, duration: 0.75, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { delay: i * 0.09, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
@@ -70,8 +78,10 @@ function BentoTile({
       custom={idx}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.12 }}
-      variants={reveal}
+      viewport={{ once: true, amount: 0.1 }}
+      /* Use simpler fade-only on mobile (no Y translation = no layout work each frame)
+         and full slide+fade on desktop via CSS media via the variants object trick */
+      variants={typeof window !== 'undefined' && window.innerWidth < 768 ? reveal : revealDesktop}
       className={`group relative rounded-[32px] overflow-hidden cursor-pointer touch-manipulation select-none ${className}`}
     >
       {/* Image */}
@@ -80,9 +90,12 @@ function BentoTile({
         alt={lang === 'ar' ? tile.name_ar : tile.name_en}
         fill
         loading={isHero ? 'eager' : 'lazy'}
+        decoding={isHero ? 'sync' : 'async'}
         className="object-cover group-hover:scale-105 will-change-transform [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
         referrerPolicy="no-referrer"
-        sizes={isHero ? '(max-width:640px) 100vw, (max-width:1024px) 100vw, 44vw' : '(max-width:640px) 50vw, 28vw'}
+        sizes={isHero
+          ? '(max-width:640px) 100vw, (max-width:1024px) 100vw, 44vw'
+          : '(max-width:640px) 50vw, (max-width:1024px) 33vw, 22vw'}
       />
 
       {/* Multi-layer gradient — dark cinematic bottom, subtle top vignette */}
