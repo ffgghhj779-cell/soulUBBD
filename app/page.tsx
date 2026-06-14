@@ -459,11 +459,11 @@ export default function SoulGoldApp() {
               </div>
 
               {/* Headline */}
-              <h3 className="text-fluid-h3 md:text-5xl font-extrabold text-soft-charcoal mb-6 leading-tight">
+              <h2 className="text-fluid-h3 md:text-5xl font-extrabold text-soft-charcoal mb-6 leading-tight">
                 {dict.aiTitle1}
                 <br />
                 <span className="text-primary-gold">{dict.aiTitle2}</span>
-              </h3>
+              </h2>
 
               <p className="text-lg text-soft-charcoal/65 mb-12 leading-relaxed max-w-lg">
                 {dict.aiDesc}
@@ -488,7 +488,7 @@ export default function SoulGoldApp() {
                       {f.icon}
                     </div>
                     <div className="pt-1">
-                      <h4 className="text-lg font-extrabold text-soft-charcoal mb-1">{f.title}</h4>
+                      <h3 className="text-lg font-extrabold text-soft-charcoal mb-1">{f.title}</h3>
                       <p className="text-soft-charcoal/55 leading-relaxed">{f.desc}</p>
                     </div>
                   </motion.div>
@@ -572,6 +572,7 @@ export default function SoulGoldApp() {
                     <button
                       type="submit"
                       disabled={!chatInput.trim() || isTyping}
+                      aria-label={lang === 'ar' ? 'إرسال رسالة' : 'Send message'}
                       className={`min-w-[48px] min-h-[48px] rounded-full bg-primary-gold text-white flex items-center justify-center hover:bg-dark-gold smooth-transition active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-md touch-manipulation ${lang === 'ar' ? 'rotate-180' : ''}`}
                     >
                       <Send size={17} />
@@ -588,7 +589,7 @@ export default function SoulGoldApp() {
       <section id="quality" className="py-24 px-4 bg-soft-charcoal text-white smooth-transition hardware-accelerated">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h3 className="text-fluid-h2 md:text-5xl font-bold mb-4 text-white smooth-transition">{dict.qualityTitle}</h3>
+            <h2 className="text-fluid-h2 md:text-5xl font-bold mb-4 text-white smooth-transition">{dict.qualityTitle}</h2>
             <p className="text-white/60 max-w-xl mx-auto text-lg hover:text-white/80 smooth-transition uppercase-none">{dict.qualityDesc}</p>
           </div>
           
@@ -597,7 +598,7 @@ export default function SoulGoldApp() {
               <div className="w-16 h-16 rounded-[24px] bg-primary-gold/20 flex items-center justify-center text-primary-gold mb-6 group-hover:bg-primary-gold group-hover:text-white smooth-transition">
                 <Heart size={32} />
               </div>
-              <h4 className="text-2xl font-bold mb-4 smooth-transition">{dict.quality1}</h4>
+              <h3 className="text-2xl font-bold mb-4 smooth-transition">{dict.quality1}</h3>
               <p className="text-white/60 leading-relaxed group-hover:text-white/80 smooth-transition">
                 {dict.quality1Desc}
               </p>
@@ -607,7 +608,7 @@ export default function SoulGoldApp() {
               <div className="w-16 h-16 rounded-[24px] bg-light-gold/20 flex items-center justify-center text-light-gold mb-6 group-hover:bg-light-gold group-hover:text-white smooth-transition">
                 <Droplets size={32} />
               </div>
-              <h4 className="text-2xl font-bold mb-4 smooth-transition">{dict.quality2}</h4>
+              <h3 className="text-2xl font-bold mb-4 smooth-transition">{dict.quality2}</h3>
               <p className="text-white/60 leading-relaxed group-hover:text-white/80 smooth-transition">
                 {dict.quality2Desc}
               </p>
@@ -617,7 +618,7 @@ export default function SoulGoldApp() {
               <div className="w-16 h-16 rounded-[24px] bg-green-500/20 flex items-center justify-center text-green-400 mb-6 group-hover:bg-green-500 group-hover:text-white smooth-transition">
                 <Leaf size={32} />
               </div>
-              <h4 className="text-2xl font-bold mb-4 smooth-transition">{dict.quality3}</h4>
+              <h3 className="text-2xl font-bold mb-4 smooth-transition">{dict.quality3}</h3>
               <p className="text-white/60 leading-relaxed group-hover:text-white/80 smooth-transition">
                 {dict.quality3Desc}
               </p>
@@ -717,6 +718,7 @@ export default function SoulGoldApp() {
         href="https://wa.me/966500000000" 
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={lang === 'ar' ? 'تواصل عبر واتساب' : 'Contact us on WhatsApp'}
         className="fixed bottom-safe end-6 min-w-[48px] min-h-[48px] w-16 h-16 bg-[#25D366] text-white rounded-full shadow-[0_10px_30px_rgb(37,211,102,0.4)] flex items-center justify-center smooth-transition z-50 group hover:shadow-[0_15px_40px_rgb(37,211,102,0.6)] hover:scale-105 active:scale-95 touch-manipulation hardware-accelerated"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">

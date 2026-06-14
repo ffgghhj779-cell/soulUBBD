@@ -154,6 +154,7 @@ export default function LuxuryHeader({
           <div className="flex items-center gap-1.5 md:gap-2.5">
             <button
               onClick={onToggleLanguage}
+              aria-label={lang === 'ar' ? 'Switch to English' : 'تغيير إلى العربية'}
               className="hidden sm:flex items-center justify-center gap-1.5 min-w-[48px] min-h-[48px] px-3 rounded-full hover:bg-cream smooth-transition text-soft-charcoal touch-manipulation active:scale-95"
             >
               <Globe size={16} className={lang === 'ar' ? 'rotate-180' : ''} />
@@ -171,6 +172,7 @@ export default function LuxuryHeader({
             <button
               onClick={onOpenCheckout}
               disabled={isCheckingOut}
+              aria-label={lang === 'ar' ? `عربة التسوق${cartCount > 0 ? ` (${cartCount})` : ''}` : `Shopping cart${cartCount > 0 ? ` (${cartCount} items)` : ''}`}
               className={`relative min-w-[48px] min-h-[48px] flex items-center justify-center rounded-full hover:bg-cream smooth-transition text-soft-charcoal touch-manipulation active:scale-95 ${isCheckingOut ? 'opacity-50' : ''}`}
             >
               <ShoppingCart size={20} />
@@ -192,7 +194,11 @@ export default function LuxuryHeader({
             <button
               className="md:hidden min-w-[48px] min-h-[48px] flex items-center justify-center rounded-full hover:bg-cream smooth-transition text-soft-charcoal touch-manipulation active:scale-95 hardware-accelerated"
               onClick={onToggleMobileMenu}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen
+                ? (lang === 'ar' ? 'إغلاق القائمة' : 'Close menu')
+                : (lang === 'ar' ? 'فتح القائمة' : 'Open menu')
+              }
+              aria-expanded={isMobileMenuOpen}
             >
               <AnimatePresence mode="wait" initial={false}>
                 {isMobileMenuOpen ? (
@@ -302,6 +308,7 @@ export default function LuxuryHeader({
               >
                 <button
                   onClick={() => { onToggleLanguage(); onToggleMobileMenu(); }}
+                  aria-label={lang === 'ar' ? 'Switch to English' : 'تغيير إلى العربية'}
                   className="w-full min-h-[52px] rounded-full bg-soft-charcoal text-white flex items-center justify-center gap-2 font-bold text-base smooth-transition active:scale-95 touch-manipulation"
                 >
                   <Globe size={18} className={lang === 'ar' ? 'rotate-180' : ''} />
@@ -309,6 +316,7 @@ export default function LuxuryHeader({
                 </button>
                 <button
                   onClick={() => { onOpenCheckout(); onToggleMobileMenu(); }}
+                  aria-label={lang === 'ar' ? `عربة التسوق${cartCount > 0 ? ` (${cartCount})` : ''}` : `Shopping cart${cartCount > 0 ? ` (${cartCount} items)` : ''}`}
                   className="w-full min-h-[52px] rounded-full glass-panel border border-[rgba(201,160,61,0.3)] text-soft-charcoal flex items-center justify-center gap-2 font-bold text-base smooth-transition active:scale-95 touch-manipulation"
                 >
                   <ShoppingCart size={18} />

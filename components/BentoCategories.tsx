@@ -89,8 +89,10 @@ function BentoTile({
         src={tile.img}
         alt={lang === 'ar' ? tile.name_ar : tile.name_en}
         fill
+        priority={isHero}
         loading={isHero ? 'eager' : 'lazy'}
         decoding={isHero ? 'sync' : 'async'}
+        {...(isHero ? { fetchPriority: 'high' as const } : {})}
         className="object-cover group-hover:scale-105 will-change-transform [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
         referrerPolicy="no-referrer"
         sizes={isHero
@@ -119,13 +121,13 @@ function BentoTile({
         {/* Gold accent bar */}
         <div className="h-[3px] w-8 bg-primary-gold rounded-full mb-4 group-hover:w-14 smooth-transition" />
 
-        <h4
+        <h3
           className={`text-white font-extrabold leading-tight ${
             isHero ? 'text-2xl md:text-3xl xl:text-4xl' : 'text-lg md:text-xl'
           }`}
         >
           {lang === 'ar' ? tile.name_ar : tile.name_en}
-        </h4>
+        </h3>
 
         {/* Sub-label — slides up on hover */}
         <p className="text-white/0 text-sm mt-1.5 font-medium group-hover:text-white/60 translate-y-2 group-hover:translate-y-0 smooth-transition">
@@ -147,7 +149,7 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
             <p className="text-[11px] font-extrabold tracking-[0.32em] uppercase text-primary-gold mb-3">
               {lang === 'ar' ? 'مجموعاتنا الحصرية' : 'Our Collections'}
             </p>
-            <h3 className="text-fluid-h2 font-extrabold text-soft-charcoal">{dict.discover}</h3>
+            <h2 className="text-fluid-h2 font-extrabold text-soft-charcoal">{dict.discover}</h2>
           </div>
           <p className="text-soft-charcoal/50 max-w-xs text-base leading-relaxed md:text-end">
             {dict.discoverDesc}

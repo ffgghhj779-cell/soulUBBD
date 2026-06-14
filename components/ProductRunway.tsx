@@ -42,8 +42,8 @@ const CATEGORIES = ['All', 'Tuna', 'Sauces', 'Ghee', 'Organics'] as const;
 
 /* ── Magnetic Arrow ─────────────────────────────────────────────────── */
 function MagneticArrow({
-  onClick, disabled, children,
-}: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
+  onClick, disabled, children, ariaLabel,
+}: { onClick: () => void; disabled?: boolean; children: React.ReactNode; ariaLabel: string }) {
   const [delta, setDelta] = useState({ x: 0, y: 0 });
 
   const onMove = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -58,6 +58,7 @@ function MagneticArrow({
     <button
       onClick={onClick}
       disabled={disabled}
+      aria-label={ariaLabel}
       onMouseMove={onMove}
       onMouseLeave={() => setDelta({ x: 0, y: 0 })}
       style={{ transform: `translate(${delta.x}px, ${delta.y}px)` }}
@@ -217,9 +218,9 @@ export default function ProductRunway({
             <p className="text-[11px] font-extrabold tracking-[0.32em] uppercase text-primary-gold mb-2">
               {isRtl ? 'منتجات مختارة بعناية' : 'Curated Selection'}
             </p>
-            <h3 className="text-fluid-h2 font-extrabold text-soft-charcoal">
+            <h2 className="text-fluid-h2 font-extrabold text-soft-charcoal">
               {dict.exclusive}
-            </h3>
+            </h2>
           </div>
 
           {/* Category pills */}
@@ -355,15 +356,15 @@ export default function ProductRunway({
                       {isRtl ? (AR_LABELS[product.categoryKey] ?? product.categoryKey) : product.categoryKey}
                     </span>
 
-                    <h4 className="text-[1.1rem] font-extrabold text-slate-900 mb-2 leading-snug">
+                    <h3 className="text-[1.1rem] font-extrabold text-slate-900 mb-2 leading-snug">
                       {isRtl ? product.title_ar : product.title_en}
-                    </h4>
+                    </h3>
 
-                    <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 mb-3 flex-1">
+                    <p className="text-slate-700 text-sm leading-relaxed line-clamp-2 mb-3 flex-1">
                       {isRtl ? product.desc_ar : product.desc_en}
                     </p>
 
-                    <p className="text-slate-400 text-xs font-semibold tracking-wide mb-4">
+                    <p className="text-slate-600 text-xs font-semibold tracking-wide mb-4">
                       {isRtl ? product.weight_ar : product.weight_en}
                     </p>
 
@@ -424,10 +425,18 @@ export default function ProductRunway({
 
           {/* Arrows — direction-aware for RTL */}
           <div className="flex items-center gap-3">
-            <MagneticArrow onClick={() => navigate('prev')} disabled={!canPrev}>
+            <MagneticArrow
+              onClick={() => navigate('prev')}
+              disabled={!canPrev}
+              ariaLabel={isRtl ? 'المنتج السابق' : 'Previous product'}
+            >
               {isRtl ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
             </MagneticArrow>
-            <MagneticArrow onClick={() => navigate('next')} disabled={!canNext}>
+            <MagneticArrow
+              onClick={() => navigate('next')}
+              disabled={!canNext}
+              ariaLabel={isRtl ? 'المنتج التالي' : 'Next product'}
+            >
               {isRtl ? <ChevronLeft size={22} /> : <ChevronRight size={22} />}
             </MagneticArrow>
           </div>

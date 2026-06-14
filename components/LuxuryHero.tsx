@@ -366,9 +366,10 @@ export default function LuxuryHero({
                         priority={idx === 0}
                         loading={idx === 0 ? 'eager' : 'lazy'}
                         decoding={idx === 0 ? 'sync' : 'async'}
+                        {...(idx === 0 ? { fetchPriority: 'high' as const } : {})}
                         className="object-cover scale-105 group-hover:scale-110 [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
                         referrerPolicy="no-referrer"
-                        sizes="(max-width: 1280px) 40vw, 30vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 42vw, 30vw"
                       />
 
                       <div className="absolute inset-0 bg-gradient-to-t from-obsidian/75 via-obsidian/10 to-transparent" />
@@ -439,9 +440,10 @@ export default function LuxuryHero({
                     priority={idx === 0}
                     loading={idx === 0 ? 'eager' : 'lazy'}
                     decoding={idx === 0 ? 'sync' : 'async'}
+                    {...(idx === 0 ? { fetchPriority: 'high' as const } : {})}
                     className="object-cover"
                     referrerPolicy="no-referrer"
-                    sizes="68vw"
+                    sizes="(max-width: 768px) 70vw, 40vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-obsidian/70 via-transparent to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
@@ -466,6 +468,7 @@ export default function LuxuryHero({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
+        aria-label={lang === 'ar' ? 'انتقل للأسفل' : 'Scroll down'}
         className="absolute bottom-8 start-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-soft-charcoal/40 hover:text-primary-gold smooth-transition group"
       >
         <span className="text-[10px] font-bold tracking-[0.3em] uppercase">{dict.heroScroll}</span>

@@ -32,6 +32,12 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className={`${cairo.variable} ${tajawal.variable}`}>
+      <head>
+        {/* Preconnect to image CDNs — eliminates TCP handshake from LCP critical path */}
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://i.ibb.co" />
+      </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

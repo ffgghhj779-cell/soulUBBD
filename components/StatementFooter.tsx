@@ -131,9 +131,9 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
 
           {/* Quick links */}
           <div>
-            <h5 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/35 mb-7">
+            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/50 mb-7">
               {dict.quickLinks}
-            </h5>
+            </h3>
             <ul className="space-y-4">
             {navLinks.map((link) => (
               <li key={link.href}>
@@ -151,9 +151,9 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
 
           {/* Contact */}
           <div>
-            <h5 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/35 mb-7">
+            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/50 mb-7">
               {dict.contactUs}
-            </h5>
+            </h3>
             <ul className="space-y-5">
               <li>
                 <a href="tel:920012345" className="flex items-center gap-4 group min-h-[44px]">
@@ -186,9 +186,9 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
 
           {/* Newsletter */}
           <div>
-            <h5 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/35 mb-7">
+            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/50 mb-7">
               {dict.newsletter}
-            </h5>
+            </h3>
             <p className="text-white/45 text-sm mb-5 leading-relaxed">
               {submitted ? dict.newsletterSuccess : dict.newsletterDesc}
             </p>
@@ -202,6 +202,7 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
               />
               <button
                 type="submit"
+                aria-label={lang === 'ar' ? 'اشترك في النشرة البريدية' : 'Subscribe to newsletter'}
                 className="min-w-[48px] min-h-[48px] rounded-xl bg-primary-gold hover:bg-light-gold text-obsidian flex items-center justify-center smooth-transition active:scale-95 touch-manipulation shrink-0"
               >
                 <Send size={17} className={lang === 'ar' ? 'rotate-180' : ''} />
