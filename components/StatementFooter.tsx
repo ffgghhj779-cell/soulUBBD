@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { motion } from 'motion/react';
 import { Send, Instagram, Twitter, Facebook, Phone, Mail } from 'lucide-react';
+import BrandLogo from '@/components/BrandLogo';
 
 type Lang = 'ar' | 'en';
 
@@ -103,15 +103,8 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
             <p className="text-[#FEF7ED]/50 text-lg md:text-xl font-light italic tracking-wide">
               {tagline}
             </p>
-            <div className="sm:ms-auto shrink-0">
-              <Image
-                unoptimized
-                src="https://i.ibb.co/DfsWCMyW/edited-photo.png"
-                alt="Soul Gold"
-                width={100}
-                height={40}
-                className="h-10 w-auto object-contain brightness-0 invert opacity-25"
-              />
+            <div className="sm:ms-auto shrink-0 will-change-transform">
+              <BrandLogo variant="footer" className="opacity-90" />
             </div>
           </motion.div>
         </div>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Cairo, Tajawal, EB_Garamond, Hanken_Grotesk } from 'next/font/google';
 import './globals.css';
+import { BRAND_LOGO_SRC } from '@/lib/brand';
 
 const cairo = Cairo({
   weight: ['700', '800'],
@@ -54,7 +55,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preconnect to image CDNs — eliminates TCP handshake from LCP critical path */}
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://i.ibb.co" />
+        {/* Preload brand logo — LCP-critical header asset */}
+        <link rel="preload" as="image" href={BRAND_LOGO_SRC} fetchPriority="high" />
       </head>
       <body suppressHydrationWarning>{children}</body>
     </html>

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ShoppingCart, Search, Menu, X, Globe, Sparkles, Bot,
 } from 'lucide-react';
+import BrandLogo from '@/components/BrandLogo';
 
 type Lang = 'ar' | 'en';
 
@@ -128,22 +128,17 @@ export default function LuxuryHeader({
             }
             [transition:padding_0.35s_cubic-bezier(0.25,1,0.5,1),background-color_0.35s_cubic-bezier(0.25,1,0.5,1),box-shadow_0.35s_cubic-bezier(0.25,1,0.5,1)]`}
         >
-          {/* Logo */}
-          <a href="#hero" className="flex items-center gap-2 cursor-pointer min-h-[48px] shrink-0 group">
+          {/* Logo — start position, vertically centred with nav */}
+          <a
+            href="#hero"
+            className="flex items-center gap-2.5 md:gap-3 cursor-pointer min-h-[48px] shrink-0 group pe-2 md:pe-4"
+          >
             <motion.div
-              animate={{ scale: isScrolled ? 0.8 : 1 }}
+              animate={{ scale: isScrolled ? 0.88 : 1 }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-              className="origin-[0_50%]"
+              className="origin-[0_50%] will-change-transform"
             >
-              <Image
-                unoptimized
-                src="https://i.ibb.co/DfsWCMyW/edited-photo.png"
-                alt="Soul Gold Logo"
-                width={160}
-                height={64}
-                priority
-                className="h-16 w-auto object-contain object-center"
-              />
+              <BrandLogo variant="header" priority />
             </motion.div>
             <motion.div
               animate={{ opacity: isScrolled ? 0 : 1, maxWidth: isScrolled ? '0px' : '120px' }}
@@ -288,14 +283,7 @@ export default function LuxuryHeader({
 
               {/* Brand mark */}
               <div className="px-8 pt-12 pb-6 border-b border-[rgba(201,160,61,0.15)]">
-                <Image
-                  unoptimized
-                  src="https://i.ibb.co/DfsWCMyW/edited-photo.png"
-                  alt="Soul Gold Logo"
-                  width={120}
-                  height={48}
-                  className="h-12 w-auto object-contain"
-                />
+                <BrandLogo variant="drawer" priority />
               </div>
 
               {/* Staggered nav links */}

@@ -24,12 +24,15 @@ import BentoCategories  from '@/components/BentoCategories';
 import StatementFooter  from '@/components/StatementFooter';
 import SoulGoldHero     from '@/components/SoulGoldHero';
 import CuratedEssentials from '@/components/CuratedEssentials';
-import SoulGoldShowcase, { ShowcaseProduct } from '@/components/SoulGoldShowcase';
+import SoulGoldShowcase from '@/components/SoulGoldShowcase';
+import type { ShowcaseProduct } from '@/lib/productTypes';
+import { toCartProduct } from '@/lib/showcaseCatalog';
 import SideCartDrawer from '@/components/SideCartDrawer';
 import { ToastProvider, useToast } from '@/lib/useToast';
 import ToastStack from '@/components/ToastStack';
 import EditorialPullQuote from '@/components/EditorialPullQuote';
 import OriginStory from '@/components/OriginStory';
+import BrandFilm from '@/components/BrandFilm';
 import ChefPairings from '@/components/ChefPairings';
 import PressWall from '@/components/PressWall';
 import TrustBar from '@/components/TrustBar';
@@ -194,7 +197,7 @@ const t = {
 type Lang = 'ar' | 'en';
 
 type CustomProduct = {
-  id: number;
+  id: number | string;
   categoryKey: string;
   title_ar: string;
   title_en: string;
@@ -226,8 +229,8 @@ function SoulGoldAppContent() {
   const [lang, setLang] = useState<Lang>('ar');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [products, setProducts] = useState<CustomProduct[]>([]);
+  const [gridProducts, setGridProducts] = useState<ShowcaseProduct[]>([]);
+  const [editorialProducts, setEditorialProducts] = useState<ShowcaseProduct[]>([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -272,19 +275,18 @@ function SoulGoldAppContent() {
     const fetchProducts = async () => {
       setIsLoadingProducts(true);
       try {
-        const res = await fetch(`/api/products?category=${activeCategory}`);
+        const res = await fetch('/api/products');
         const data = await res.json();
-        if (data.products) {
-          setProducts(data.products);
-        }
+        if (data.products) setGridProducts(data.products);
+        if (data.editorial) setEditorialProducts(data.editorial);
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        console.error('Failed to fetch products:', error);
       } finally {
         setIsLoadingProducts(false);
       }
     };
     fetchProducts();
-  }, [activeCategory]);
+  }, []);
 
   const toggleLanguage = () => {
     setLang(prev => prev === 'ar' ? 'en' : 'ar');
@@ -308,24 +310,7 @@ function SoulGoldAppContent() {
   };
 
   const handleShowcaseAddToCart = (p: ShowcaseProduct) => {
-    handleAddToCart({
-      id: p.id as any,
-      title_en: p.name_en,
-      title_ar: p.name_ar,
-      desc_en: p.sub_en,
-      desc_ar: p.sub_ar,
-      price: p.price,
-      image: `/products/${p.file.replace(/ /g, '%20')}`,
-      weight_en: '',
-      weight_ar: '',
-      categoryKey: 'showcase',
-      badge_en: '',
-      badge_ar: '',
-      bgColor: 'bg-cream',
-    });
-    const title = lang === 'ar' ? p.name_ar : p.name_en;
-    const msg = lang === 'ar' ? `تم إضافة ${title} إلى السلة` : `Added ${title} to cart`;
-    toast(msg, 'success');
+    handleAddToCart(toCartProduct(p));
   };
 
   const openCheckout = () => {
@@ -452,12 +437,19 @@ function SoulGoldAppContent() {
       
       {/* ---------- Storytelling / Editorial Sections ---------- */}
       <EditorialPullQuote lang={lang} />
+      <BrandFilm lang={lang} />
       <OriginStory lang={lang} />
       <IngredientMap lang={lang} />
 
       {/* ---------- Soul Gold Showcase (Bento + Grid) ---------- */}
       <div ref={productsRef}>
-        <SoulGoldShowcase lang={lang} onAddToCart={handleShowcaseAddToCart} />
+        <SoulGoldShowcase
+          lang={lang}
+          editorialProducts={editorialProducts}
+          gridProducts={gridProducts}
+          isLoading={isLoadingProducts}
+          onAddToCart={handleShowcaseAddToCart}
+        />
       </div>
       
       {/* ---------- Chef Pairings & Press Wall ---------- */}
