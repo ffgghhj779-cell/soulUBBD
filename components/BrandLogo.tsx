@@ -9,7 +9,7 @@ type BrandLogoProps = {
 };
 
 const variantClasses: Record<NonNullable<BrandLogoProps['variant']>, string> = {
-  header: 'sg-brand-logo-img',
+  header: 'sg-brand-logo-img h-14 sm:h-[3.75rem] md:h-16 max-h-[60px] w-auto',
   footer: 'h-10 md:h-12 w-auto max-h-12',
   drawer: 'h-12 sm:h-14 w-auto max-h-14',
   inline: 'h-8 w-auto max-h-8',

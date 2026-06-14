@@ -129,11 +129,11 @@ export default function LuxuryHeader({
             [transition:padding_0.35s_cubic-bezier(0.25,1,0.5,1),background-color_0.35s_cubic-bezier(0.25,1,0.5,1),box-shadow_0.35s_cubic-bezier(0.25,1,0.5,1)]`}
         >
           {/* Brand lockup — emblem · rule · wordmark */}
-          <a href="#hero" className="sg-brand-lockup cursor-pointer shrink-0 group">
+          <a href="#hero" className="sg-brand-lockup flex items-center gap-3 cursor-pointer shrink-0 group">
             <motion.div
               animate={{ scale: isScrolled ? 0.94 : 1 }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-              className="sg-brand-lockup__logo-box origin-[0_50%] will-change-transform"
+              className="sg-brand-lockup__logo-box flex items-center justify-center shrink-0 origin-[0_50%] will-change-transform"
             >
               <BrandLogo variant="header" />
             </motion.div>
