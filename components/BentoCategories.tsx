@@ -161,10 +161,10 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
 
         {/* ── Desktop bento: asymmetric 3-column, 2-row ── */}
         <div
-          className="hidden lg:grid gap-4 max-h-[640px]"
+          className="hidden lg:grid gap-4"
           style={{
             gridTemplateColumns: '44% 1fr 1fr',
-            gridTemplateRows:    'minmax(280px, 1fr) minmax(200px, 0.65fr)',
+            gridTemplateRows:    '380px 260px',
           }}
         >
           {/* Hero tile — tall (row-span-2) */}
@@ -176,7 +176,7 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
           {/* Tile 3 */}
           <BentoTile tile={tiles[2]} idx={2} lang={lang} className="h-full" />
           {/* Tile 4 — wide landscape banner (col-span-2) */}
-          <div className="col-span-2 aspect-[21/9] max-h-[220px]">
+          <div className="col-span-2">
             <BentoTile tile={tiles[3]} idx={3} lang={lang} className="h-full" />
           </div>
         </div>

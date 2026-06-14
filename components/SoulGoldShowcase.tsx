@@ -62,11 +62,11 @@ function ProductCard({ product, lang, onAdd, priority = false, staggerIdx = 0 }:
   const rtl = lang === 'ar';
   return (
     <article
-      className={`group relative flex flex-col bg-[#FEF7ED] overflow-hidden sg-reveal-clip ${STAGGER[staggerIdx]} touch-premium`}
+      className="group relative flex flex-col bg-[#FEF7ED] overflow-hidden touch-premium"
       style={{ borderRadius: 2 }}
     >
-      {/* Image — full packaging visible on cream product stage */}
-      <div className="relative w-full aspect-[4/5] overflow-hidden bg-[#FEF7ED]">
+      {/* Image — reveal animates image only; card text always visible */}
+      <div className={`relative w-full aspect-[4/5] overflow-hidden bg-[#FEF7ED] sg-reveal-clip ${STAGGER[staggerIdx]}`}>
         <div className="absolute inset-0 p-6 md:p-8">
           <Image
             src={img(product.file)}
@@ -137,19 +137,21 @@ function EditorialTile({ product, lang, onAdd, priority = false, className = '',
   const rtl = lang === 'ar';
   return (
     <article
-      className={`group relative overflow-hidden cursor-pointer select-none sg-reveal-clip ${staggerCls} touch-premium ${className}`}
+      className={`group relative overflow-hidden cursor-pointer select-none touch-premium h-full min-h-[240px] ${className}`}
       style={{ borderRadius: 2 }}
     >
-      {/* Cream product stage — full packaging visible */}
-      <div className="absolute inset-0 bg-[#FEF7ED] p-5 md:p-8">
-        <div className="relative w-full h-full">
-          <Image
-            src={img(product.file)}
-            alt={rtl ? product.name_ar : product.name_en}
-            fill unoptimized priority={priority}
-            sizes="(max-width:640px) 100vw, 50vw"
-            className="object-contain object-center sg-luxury-img"
-          />
+      {/* Image stage — reveal animates product image only */}
+      <div className={`absolute inset-0 sg-reveal-clip ${staggerCls}`}>
+        <div className="absolute inset-0 bg-[#FEF7ED] p-5 md:p-8">
+          <div className="relative w-full h-full">
+            <Image
+              src={img(product.file)}
+              alt={rtl ? product.name_ar : product.name_en}
+              fill unoptimized priority={priority}
+              sizes="(max-width:640px) 100vw, 50vw"
+              className="object-contain object-center sg-luxury-img"
+            />
+          </div>
         </div>
       </div>
       {/* Gradient — legibility behind text */}
@@ -217,23 +219,40 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
   /* Cinematic scroll reveal — fires clip-path transitions as items enter viewport */
   useEffect(() => {
     const root = showcaseRef.current;
-    if (!root || typeof IntersectionObserver === 'undefined') return;
+    if (!root) return;
+
+    const targets = root.querySelectorAll<HTMLElement>('.sg-reveal-clip, .sg-heading-reveal');
+
+    /* No-JS / IO-unavailable fallback — show everything immediately */
+    if (typeof IntersectionObserver === 'undefined') {
+      targets.forEach((el) => el.classList.add('in-view'));
+      return;
+    }
+
+    const reveal = (el: Element) => {
+      el.classList.add('in-view');
+      io.unobserve(el);
+    };
 
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            io.unobserve(entry.target);
-          }
+          if (entry.isIntersecting) reveal(entry.target);
         });
       },
-      { threshold: 0.06, rootMargin: '0px 0px -32px 0px' }
+      { threshold: 0, rootMargin: '80px 0px 80px 0px' }
     );
 
-    root
-      .querySelectorAll('.sg-reveal-clip, .sg-heading-reveal')
-      .forEach((el) => io.observe(el));
+    targets.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const alreadyVisible =
+        rect.top < window.innerHeight + 80 && rect.bottom > -80;
+      if (alreadyVisible) {
+        el.classList.add('in-view');
+      } else {
+        io.observe(el);
+      }
+    });
 
     return () => io.disconnect();
   }, []);
@@ -278,8 +297,8 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
               Cols:  44%  |  1fr  |  1fr
               Rows:  400px | 280px
           */}
-          <div className="hidden md:grid gap-3 max-h-[640px]"
-            style={{ gridTemplateColumns: '44% 1fr 1fr', gridTemplateRows: 'minmax(280px, 1fr) minmax(200px, 0.65fr)' }}>
+          <div className="hidden md:grid gap-3"
+            style={{ gridTemplateColumns: '44% 1fr 1fr', gridTemplateRows: '400px 280px' }}>
 
             {/* Tuna — tall hero left */}
             <div className="row-span-2">

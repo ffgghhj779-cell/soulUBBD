@@ -578,6 +578,16 @@ html[lang='en'] button {
     clip-path: inset(0% 0 0 0);
     opacity: 1;
   }
+  /* Safety net — never leave content permanently hidden if IO fails */
+  .sg-reveal-clip:not(.in-view) {
+    animation: sg-reveal-fallback 0.01s 1.2s forwards;
+  }
+  @keyframes sg-reveal-fallback {
+    to {
+      clip-path: inset(0% 0 0 0);
+      opacity: 1;
+    }
+  }
 
   /* Center-out variant for tall editorial tiles */
   .sg-reveal-center {
@@ -614,6 +624,16 @@ html[lang='en'] button {
     opacity: 1;
     transform: translate3d(0, 0, 0);
     clip-path: inset(0 0 0% 0);
+  }
+  .sg-heading-reveal:not(.in-view) {
+    animation: sg-heading-fallback 0.01s 1.2s forwards;
+  }
+  @keyframes sg-heading-fallback {
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      clip-path: inset(0 0 0% 0);
+    }
   }
 
   /* ── 2. EB Garamond hero title line-by-line stagger reveal ──────── */
