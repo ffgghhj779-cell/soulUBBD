@@ -372,14 +372,37 @@ html[lang='en'] button {
     );
   }
 
-  /* ── Lifestyle banner — CSS background cover + cinematic gradient ── */
-  .sg-lifestyle-banner {
+  /* ── Hero banner — lifestyle image + dark gradient (The Alchemy of Taste) ── */
+  .sg-hero-banner {
+    width: 100%;
+    max-width: 100vw;
+    background: #1A1612;
+  }
+  .sg-hero-banner__bg {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #1A1612;
+  }
+  .sg-hero-banner__gradient {
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.45) 45%,
+      rgba(0, 0, 0, 0.65) 100%
+    );
+  }
+
+  /* ── Lifestyle solid — obsidian only, no image (Where Craft Meets Luxury) ── */
+  .sg-lifestyle-solid {
     width: 100%;
     max-width: 100vw;
     overflow: hidden;
     background: #1A1612;
   }
-  .sg-lifestyle-banner__stage {
+  .sg-lifestyle-solid__stage {
     position: relative;
     width: 100%;
     height: min(52vh, 520px);
@@ -388,31 +411,9 @@ html[lang='en'] button {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    background: #1A1612;
   }
-  .sg-lifestyle-banner__bg {
-    position: absolute;
-    inset: 0;
-    background-color: #1A1612;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transform: translateZ(0);
-  }
-  .sg-lifestyle-banner__gradient {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.6)
-    );
-  }
-  .sg-lifestyle-banner__content {
-    position: relative;
-    z-index: 2;
+  .sg-lifestyle-solid__content {
     display: flex;
     flex-direction: column;
     align-items: center;
