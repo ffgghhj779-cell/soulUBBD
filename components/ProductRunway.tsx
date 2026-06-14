@@ -304,8 +304,9 @@ export default function ProductRunway({
                         referrerPolicy="no-referrer"
                         sizes="(max-width: 768px) 80vw, 340px"
                       />
-                      {/* Top overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian/60 via-transparent to-transparent opacity-80" />
+                      {/* Subtle bottom vignette — reduced from /60 to /35 so image
+                          stays vivid and doesn't bleed into the white card below */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian/35 via-transparent to-transparent" />
 
                       {/* Badge */}
                       <div className="absolute top-4 start-4 z-10 glass-card px-3 py-1.5 rounded-full text-xs font-bold text-dark-gold flex items-center gap-1">
@@ -326,29 +327,35 @@ export default function ProductRunway({
                       {isRtl ? (AR_LABELS[product.categoryKey] ?? product.categoryKey) : product.categoryKey}
                     </span>
 
-                    <h4 className="text-[1.15rem] font-extrabold text-soft-charcoal mb-1.5 leading-snug">
+                    {/* Title — explicit charcoal, no opacity fraction */}
+                    <h4 className="text-[1.15rem] font-extrabold text-[#2C2C2C] mb-1.5 leading-snug">
                       {isRtl ? product.title_ar : product.title_en}
                     </h4>
 
-                    <p className="text-soft-charcoal/55 text-sm leading-relaxed line-clamp-2 mb-3 flex-1">
+                    {/* Description — dark readable gray instead of charcoal/55 */}
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 mb-3 flex-1">
                       {isRtl ? product.desc_ar : product.desc_en}
                     </p>
 
-                    <p className="text-soft-charcoal/35 text-xs font-semibold tracking-wide mb-5">
+                    {/* Weight — upgraded from /35 to visible mid-gray */}
+                    <p className="text-gray-400 text-xs font-semibold tracking-wide mb-5">
                       {isRtl ? product.weight_ar : product.weight_en}
                     </p>
 
                     {/* ── Price + Cart ── */}
-                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-[rgba(201,160,61,0.12)]">
-                      <div>
-                        <span className="font-extrabold text-2xl text-soft-charcoal">
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-[rgba(201,160,61,0.15)]">
+                      <div className="flex items-baseline gap-1">
+                        {/* Price — explicit charcoal for maximum readability */}
+                        <span className="font-extrabold text-2xl text-[#2C2C2C]">
                           {product.price}
                         </span>
-                        <span className="text-xs font-bold text-soft-charcoal/40 ms-1">SAR</span>
+                        <span className="text-xs font-bold text-gray-400">SAR</span>
                       </div>
+                      {/* Cart button — charcoal icon on subtle charcoal tint;
+                          fills to gold on hover */}
                       <button
                         onClick={() => onAddToCart(product)}
-                        className="min-w-[48px] min-h-[48px] rounded-full bg-cream text-primary-gold flex items-center justify-center hover:bg-primary-gold hover:text-white hover:shadow-lg smooth-transition active:scale-95 touch-manipulation hardware-accelerated"
+                        className="min-w-[48px] min-h-[48px] rounded-full bg-[rgba(44,44,44,0.06)] text-[#2C2C2C] flex items-center justify-center hover:bg-primary-gold hover:text-white hover:shadow-lg smooth-transition active:scale-95 touch-manipulation hardware-accelerated"
                       >
                         <ShoppingCart size={20} />
                       </button>

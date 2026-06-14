@@ -167,136 +167,186 @@ export default function LuxuryHero({
         <span className="w-px h-24 bg-gradient-to-b from-primary-gold/60 to-transparent" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 w-full grid lg:grid-cols-12 gap-12 lg:gap-6 items-center relative z-10">
-        {/* Typography column — asymmetrical editorial */}
-        <motion.div style={{ y: textY, opacity: opacityFade }} className="lg:col-span-6 xl:col-span-5 flex flex-col items-start text-start">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10">
+
+        {/* ── Main content row (text + desktop gallery) ── */}
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
+
+          {/* Typography column */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mb-8"
+            style={{ y: textY, opacity: opacityFade }}
+            className="lg:col-span-6 xl:col-span-5 flex flex-col items-start text-start"
           >
-            <div className="absolute -inset-px rounded-full animated-gold-border opacity-80" />
-            <div className="relative inline-flex items-center gap-2 glass-panel px-5 py-2.5 rounded-full text-dark-gold font-bold text-xs md:text-sm tracking-wide">
-              <Sparkles size={14} className="text-primary-gold" />
-              <span>{dict.heroBadge}</span>
-            </div>
-          </motion.div>
-
-          <h1 className="mb-6 w-full">
-            {titleWords.map((word, i) => (
-              <motion.span
-                key={i}
-                custom={i}
-                initial="hidden"
-                animate="visible"
-                variants={titleStagger}
-                className={`block text-editorial-hero font-extrabold ${
-                  i === 1 ? 'text-primary-gold italic-editorial' : 'text-soft-charcoal'
-                }`}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55, duration: 0.8 }}
-            className="text-editorial-body text-soft-charcoal/65 max-w-lg mb-10 leading-relaxed"
-          >
-            {dict.heroDesc}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
-          >
-            <MagneticButton
-              onClick={onShopNow}
-              className="bg-gradient-to-r from-primary-gold via-light-gold to-primary-gold bg-[length:200%_100%] hover:bg-[position:100%_0] text-obsidian luxury-shadow w-full sm:w-auto"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="relative mb-8"
             >
-              {dict.shopNow}
-            </MagneticButton>
-            <MagneticButton
-              href="#ai-consultant"
-              className="glass-panel text-soft-charcoal hover:bg-white/90 w-full sm:w-auto border border-[rgba(201,160,61,0.25)]"
-            >
-              <Bot size={22} className="text-primary-gold" />
-              {dict.tryAi}
-            </MagneticButton>
-          </motion.div>
-        </motion.div>
+              <div className="absolute -inset-px rounded-full animated-gold-border opacity-80" />
+              <div className="relative inline-flex items-center gap-2 glass-panel px-5 py-2.5 rounded-full text-dark-gold font-bold text-xs md:text-sm tracking-wide">
+                <Sparkles size={14} className="text-primary-gold" />
+                <span>{dict.heroBadge}</span>
+              </div>
+            </motion.div>
 
-        {/* Floating jewelry gallery — parallax showcase; will-change pre-promotes layer */}
-        <motion.div
-          style={{ y: smoothGalleryY, rotate: galleryRotate }}
-          className="lg:col-span-6 xl:col-span-7 relative h-[420px] md:h-[520px] lg:h-[600px] flex items-center justify-center hardware-accelerated"
-          initial={false}
-        >
-          <div className="relative w-full max-w-[520px] h-full">
-            {showcaseFrames.map((frame, idx) => {
-              const sizeClass =
-                frame.size === 'lg'
-                  ? 'w-[72%] md:w-[68%] aspect-[3/4]'
-                  : frame.size === 'md'
-                    ? 'w-[52%] md:w-[48%] aspect-[4/5]'
-                    : 'w-[42%] md:w-[38%] aspect-square';
-
-              const positionClass =
-                idx === 0
-                  ? 'top-0 end-0 md:end-4'
-                  : idx === 1
-                    ? 'top-[28%] start-0 md:start-2'
-                    : 'bottom-4 end-[18%] md:end-[22%]';
-
-              return (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 60, rotate: frame.rotate - 12 }}
-                  animate={{ opacity: 1, y: frame.offsetY, rotate: frame.rotate }}
-                  transition={{
-                    delay: 0.35 + idx * 0.18,
-                    duration: 1.1,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  whileHover={{ scale: 1.04, rotate: frame.rotate + (idx % 2 === 0 ? 2 : -2), zIndex: 40 }}
-                  className={`absolute ${positionClass} ${sizeClass} jewelry-frame group cursor-pointer`}
-                  style={{ zIndex: frame.z }}
+            <h1 className="mb-6 w-full">
+              {titleWords.map((word, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  variants={titleStagger}
+                  className={`block text-editorial-hero font-extrabold ${
+                    i === 1 ? 'text-primary-gold italic-editorial' : 'text-soft-charcoal'
+                  }`}
                 >
-                  <div className="absolute -inset-3 rounded-[40px] bg-gradient-to-br from-primary-gold/30 via-transparent to-terracotta/20 blur-xl opacity-0 group-hover:opacity-100 smooth-transition" />
-                  <div className="relative w-full h-full rounded-[36px] overflow-hidden border border-[rgba(201,160,61,0.35)] shadow-[0_25px_60px_rgba(26,22,18,0.18)]">
-                    <Image
-                      src={frame.img}
-                      alt={lang === 'ar' ? frame.label_ar : frame.label_en}
-                      fill
-                      priority={idx === 0}
-                      loading={idx === 0 ? 'eager' : 'lazy'}
-                      className="object-cover scale-105 group-hover:scale-110 [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
-                      referrerPolicy="no-referrer"
-                      sizes="(max-width: 640px) 65vw, (max-width: 1024px) 50vw, 32vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian/75 via-obsidian/10 to-transparent" />
-                    <div className="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between">
-                      <span className="text-white text-sm md:text-base font-bold tracking-wide">
-                        {lang === 'ar' ? frame.label_ar : frame.label_en}
-                      </span>
-                      <span className="w-8 h-px bg-primary-gold group-hover:w-14 smooth-transition" />
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  {word}
+                </motion.span>
+              ))}
+            </h1>
 
-            {/* Decorative orbit ring */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-[85%] h-[85%] rounded-full border border-primary-gold/10 animate-spin-slow" />
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55, duration: 0.8 }}
+              className="text-editorial-body text-soft-charcoal/65 max-w-lg mb-10 leading-relaxed"
+            >
+              {dict.heroDesc}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+            >
+              <MagneticButton
+                onClick={onShopNow}
+                className="bg-gradient-to-r from-primary-gold via-light-gold to-primary-gold bg-[length:200%_100%] hover:bg-[position:100%_0] text-obsidian luxury-shadow w-full sm:w-auto"
+              >
+                {dict.shopNow}
+              </MagneticButton>
+              <MagneticButton
+                href="#ai-consultant"
+                className="glass-panel text-soft-charcoal hover:bg-white/90 w-full sm:w-auto border border-[rgba(201,160,61,0.25)]"
+              >
+                <Bot size={22} className="text-primary-gold" />
+                {dict.tryAi}
+              </MagneticButton>
+            </motion.div>
+          </motion.div>
+
+          {/* ── DESKTOP gallery (lg+): floating parallax frames ── */}
+          <motion.div
+            style={{ y: smoothGalleryY, rotate: galleryRotate }}
+            className="hidden lg:flex lg:col-span-6 xl:col-span-7 relative h-[520px] lg:h-[600px] items-center justify-center hardware-accelerated"
+            initial={false}
+          >
+            <div className="relative w-full max-w-[520px] h-full">
+              {showcaseFrames.map((frame, idx) => {
+                const sizeClass =
+                  frame.size === 'lg'
+                    ? 'w-[68%] aspect-[3/4]'
+                    : frame.size === 'md'
+                      ? 'w-[48%] aspect-[4/5]'
+                      : 'w-[38%] aspect-square';
+
+                const positionClass =
+                  idx === 0
+                    ? 'top-0 end-4'
+                    : idx === 1
+                      ? 'top-[28%] start-2'
+                      : 'bottom-4 end-[22%]';
+
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 60, rotate: frame.rotate - 12 }}
+                    animate={{ opacity: 1, y: frame.offsetY, rotate: frame.rotate }}
+                    transition={{ delay: 0.35 + idx * 0.18, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                    whileHover={{ scale: 1.04, rotate: frame.rotate + (idx % 2 === 0 ? 2 : -2), zIndex: 40 }}
+                    className={`absolute ${positionClass} ${sizeClass} jewelry-frame group cursor-pointer`}
+                    style={{ zIndex: frame.z }}
+                  >
+                    <div className="absolute -inset-3 rounded-[40px] bg-gradient-to-br from-primary-gold/30 via-transparent to-terracotta/20 blur-xl opacity-0 group-hover:opacity-100 smooth-transition" />
+                    <div className="relative w-full h-full rounded-[36px] overflow-hidden border border-[rgba(201,160,61,0.35)] shadow-[0_25px_60px_rgba(26,22,18,0.18)]">
+                      <Image
+                        src={frame.img}
+                        alt={lang === 'ar' ? frame.label_ar : frame.label_en}
+                        fill
+                        priority={idx === 0}
+                        loading={idx === 0 ? 'eager' : 'lazy'}
+                        className="object-cover scale-105 group-hover:scale-110 [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
+                        referrerPolicy="no-referrer"
+                        sizes="(max-width: 1280px) 40vw, 30vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian/75 via-obsidian/10 to-transparent" />
+                      <div className="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between">
+                        <span className="text-white text-sm font-bold tracking-wide">
+                          {lang === 'ar' ? frame.label_ar : frame.label_en}
+                        </span>
+                        <span className="w-8 h-px bg-primary-gold group-hover:w-14 smooth-transition" />
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+
+              {/* Decorative orbit ring */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-[85%] h-[85%] rounded-full border border-primary-gold/10 animate-spin-slow" />
+              </div>
             </div>
+          </motion.div>
+        </div>
+
+        {/* ── MOBILE gallery (< lg): zero-transform horizontal scroll strip ──
+             No absolute positioning, no rotation, no parallax — just a native
+             momentum scroll to keep 60 FPS on all Android/iOS devices.       */}
+        <div className="lg:hidden mt-8 -mx-4">
+          <div
+            className="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory px-4 pb-4 pt-1"
+            style={{ overscrollBehaviorX: 'contain', WebkitOverflowScrolling: 'touch' }}
+          >
+            {showcaseFrames.map((frame, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 + idx * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
+                className="shrink-0 w-[68vw] max-w-[260px] snap-center"
+              >
+                <div className="relative w-full aspect-[3/4] rounded-[28px] overflow-hidden border border-[rgba(201,160,61,0.35)] shadow-[0_12px_32px_rgba(26,22,18,0.14)]">
+                  <Image
+                    src={frame.img}
+                    alt={lang === 'ar' ? frame.label_ar : frame.label_en}
+                    fill
+                    priority={idx === 0}
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                    sizes="68vw"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-obsidian/70 via-transparent to-transparent" />
+                  {/* Label */}
+                  <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
+                    <span className="text-white text-sm font-bold tracking-wide">
+                      {lang === 'ar' ? frame.label_ar : frame.label_en}
+                    </span>
+                    <span className="w-6 h-px bg-primary-gold" />
+                  </div>
+                  {/* Subtle gold top-left corner accent */}
+                  <div className="absolute top-3 start-3 text-[10px] font-bold text-white/50 tracking-widest">
+                    {String(idx + 1).padStart(2, '0')}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll cue */}
