@@ -4,16 +4,9 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
+import type { CartProduct } from '@/lib/productTypes';
 
 type Lang = 'ar' | 'en';
-
-type CartProduct = {
-  id: number;
-  title_ar: string;
-  title_en: string;
-  price: number;
-  image: string;
-};
 
 type CartItem = { product: CartProduct; qty: number };
 
@@ -22,8 +15,8 @@ type Props = {
   isOpen: boolean;
   cart: CartItem[];
   onClose: () => void;
-  onUpdateQty: (productId: number, delta: number) => void;
-  onRemove: (productId: number) => void;
+  onUpdateQty: (productId: number | string, delta: number) => void;
+  onRemove: (productId: number | string) => void;
   onCheckout: () => void;
 };
 

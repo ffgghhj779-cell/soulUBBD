@@ -25,7 +25,7 @@ import StatementFooter  from '@/components/StatementFooter';
 import SoulGoldHero     from '@/components/SoulGoldHero';
 import CuratedEssentials from '@/components/CuratedEssentials';
 import SoulGoldShowcase from '@/components/SoulGoldShowcase';
-import type { ShowcaseProduct } from '@/lib/productTypes';
+import type { ShowcaseProduct, CartProduct } from '@/lib/productTypes';
 import { toCartProduct } from '@/lib/showcaseCatalog';
 import SideCartDrawer from '@/components/SideCartDrawer';
 import { ToastProvider, useToast } from '@/lib/useToast';
@@ -196,24 +196,8 @@ const t = {
 
 type Lang = 'ar' | 'en';
 
-type CustomProduct = {
-  id: number | string;
-  categoryKey: string;
-  title_ar: string;
-  title_en: string;
-  desc_ar: string;
-  desc_en: string;
-  price: number;
-  weight_ar: string;
-  weight_en: string;
-  badge_ar: string;
-  badge_en: string;
-  image: string;
-  bgColor: string;
-};
-
 type CartItem = {
-  product: CustomProduct;
+  product: CartProduct;
   qty: number;
 };
 
@@ -292,7 +276,7 @@ function SoulGoldAppContent() {
     setLang(prev => prev === 'ar' ? 'en' : 'ar');
   };
 
-  const handleAddToCart = (product: CustomProduct) => {
+  const handleAddToCart = (product: CartProduct) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {
