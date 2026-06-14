@@ -248,8 +248,10 @@ export default function LuxuryHeader({
               className="fixed top-0 bottom-0 end-0 z-50 md:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe hardware-accelerated shadow-2xl overflow-hidden overscroll-contain"
               style={{
                 background: 'rgba(254,247,237,0.97)',
-                backdropFilter: 'blur(32px)',
-                WebkitBackdropFilter: 'blur(32px)',
+                /* 32px blur is a full-screen GPU readback on mobile.
+                   6px is imperceptible at 97% background opacity but costs ~5x less. */
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
                 overscrollBehavior: 'contain',
               }}
             >

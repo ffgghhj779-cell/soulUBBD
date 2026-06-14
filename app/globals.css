@@ -45,6 +45,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+  /* Native app feel: stop pull-to-refresh bounce */
+  overscroll-behavior-y: none;
+  /* Momentum scroll for all iOS containers */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Respect user's OS-level reduced-motion preference */
@@ -54,6 +58,84 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE 120 FPS MODE — max-width: 768px
+   Every rule here is focused on a single goal: keep the GPU render
+   thread free so the display subsystem can hit 120 Hz.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 1. BACKDROP-FILTER REDUCTION
+        blur(24-40px) requires the GPU to read back the framebuffer,
+        apply a multi-pass gaussian, then composite — on mobile this
+        alone can drop 60fps → 30fps. We replace it with a nearly-
+        opaque solid background that looks identical but costs ~0.        */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.97) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  /* Tailwind backdrop-blur utilities used on the header */
+  [class*="backdrop-blur"] {
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+  }
+
+  /* 2. SMOOTH-TRANSITION: strip layout-triggering properties
+        width, max-width, and padding cause a full layout reflow every
+        frame they animate. On mobile only compositor-safe properties
+        (transform, opacity, color, box-shadow) are allowed.            */
+  .smooth-transition {
+    transition:
+      color            0.22s cubic-bezier(0.25, 1, 0.5, 1),
+      background-color 0.22s cubic-bezier(0.25, 1, 0.5, 1),
+      border-color     0.22s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity          0.22s cubic-bezier(0.25, 1, 0.5, 1),
+      transform        0.22s cubic-bezier(0.25, 1, 0.5, 1),
+      box-shadow       0.22s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    /* NO width / max-width / padding — they cause layout reflow */
+  }
+
+  /* 3. FORCE translate3d ON EVERY HARDWARE-ACCELERATED ELEMENT
+        translate3d(0,0,0) promotes the element to its own compositor
+        layer in Chrome/Safari, keeping transforms on the GPU thread.   */
+  .hardware-accelerated {
+    transform: translate3d(0, 0, 0) !important;
+    will-change: transform, opacity !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+  }
+
+  /* 4. HIDE GOLD DUST PARTICLES ON MOBILE
+        12 animated compositor layers each need a texture upload.
+        On desktop this is fine; on mobile VRAM is shared with the CPU.
+        Hiding them saves ~12 GPU layers and significant memory BW.     */
+  .gold-particles-layer {
+    display: none !important;
+  }
+
+  /* 5. DISABLE DECORATIVE SPINNING RING ON MOBILE
+        Continuous rotation ticks the compositor every frame even when
+        nothing visible changes. Kill it on mobile.                     */
+  .animate-spin-slow {
+    animation: none !important;
+  }
+
+  /* 6. KILL AURORA BACKGROUND BLUR BLOBS ON MOBILE
+        The 3 radial blurs in the hero bg (blur-[140px], blur-[120px],
+        blur-[100px]) each require a full-screen GPU blur pass.
+        On mobile, replace with a flat color.                           */
+  .animate-aurora,
+  .animate-aurora-delayed {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
 

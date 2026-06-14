@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring } from 'motion/react';
 import { Bot, Sparkles, ArrowDown } from 'lucide-react';
@@ -150,17 +150,32 @@ export default function LuxuryHero({
   onShopNow: () => void;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
+
+  /* ── Detect mobile once on mount — no continuous polling ─────────────────
+     Rules-of-hooks require unconditional hook calls, so useScroll /
+     useTransform / useSpring are always created. Their values are only
+     APPLIED to DOM elements when isMobile is false.  On mobile the
+     MotionValues exist but are disconnected from the DOM, so Framer Motion
+     never drives any repaints from them during scroll.                      */
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
   });
 
-  const bgY         = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
-  const galleryY    = useTransform(scrollYProgress, [0, 1], ['0%', '-18%']);
+  const bgY           = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
+  const galleryY      = useTransform(scrollYProgress, [0, 1], ['0%', '-18%']);
   const galleryRotate = useTransform(scrollYProgress, [0, 1], [0, lang === 'ar' ? -4 : 4]);
-  const textY       = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
-  const opacityFade = useTransform(scrollYProgress, [0, 0.85], [1, 0.35]);
-
+  const textY         = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
+  const opacityFade   = useTransform(scrollYProgress, [0, 0.85], [1, 0.35]);
   const smoothGalleryY = useSpring(galleryY, { stiffness: 90, damping: 22 });
 
   const titleWords = [dict.heroTitle1, dict.heroTitle2, dict.heroTitle3];
@@ -174,7 +189,8 @@ export default function LuxuryHero({
       {/* ════════════════════════════════════════════════════════════════
           LAYER 1 — Background atmosphere (parallax on scroll)
       ════════════════════════════════════════════════════════════════ */}
-      <motion.div style={{ y: bgY }} className="absolute inset-0 -z-20" initial={false}>
+      {/* Desktop: parallax bg scroll. Mobile: static — no scroll listeners driving DOM. */}
+      <motion.div style={isMobile ? undefined : { y: bgY }} className="absolute inset-0 -z-20" initial={false}>
         <div className="absolute inset-0 mesh-hero" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cream/20 to-cream" />
         <div className="absolute top-[-10%] end-[-5%] w-[55vw] h-[55vw] rounded-full bg-primary-gold/20 blur-[140px] animate-aurora" />
@@ -183,11 +199,11 @@ export default function LuxuryHero({
       </motion.div>
 
       {/* ════════════════════════════════════════════════════════════════
-          LAYER 2 — PREMIUM ADDITION: Gold dust particles
-          Fixed positions, CSS-only animation via three keyframe variants.
-          Pure GPU compositor (opacity + transform only) — zero layout cost.
+          LAYER 2 — Gold dust particles (desktop only via CSS class).
+          The `gold-particles-layer` class is display:none on ≤768px,
+          saving 12 GPU compositor layers on mobile.
       ════════════════════════════════════════════════════════════════ */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10" aria-hidden="true">
+      <div className="gold-particles-layer absolute inset-0 pointer-events-none overflow-hidden -z-10" aria-hidden="true">
         {GOLD_PARTICLES.map((p) => (
           <div
             key={p.id}
@@ -232,8 +248,9 @@ export default function LuxuryHero({
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
 
           {/* Typography column */}
+          {/* Text: parallax + fade-on-scroll on desktop. Static on mobile. */}
           <motion.div
-            style={{ y: textY, opacity: opacityFade }}
+            style={isMobile ? undefined : { y: textY, opacity: opacityFade }}
             className="lg:col-span-6 xl:col-span-5 flex flex-col items-start text-start"
           >
             <motion.div
@@ -303,8 +320,10 @@ export default function LuxuryHero({
               (`.card-sweep`) that passes over the image at staggered times,
               making the jewelry look like it's catching real studio light.
           ════════════════════════════════════════════════════════════ */}
+          {/* Gallery: parallax spring on desktop. Static (no style) on mobile.
+               mobile is `hidden lg:flex` anyway, but guard is here for safety. */}
           <motion.div
-            style={{ y: smoothGalleryY, rotate: galleryRotate }}
+            style={isMobile ? undefined : { y: smoothGalleryY, rotate: galleryRotate }}
             className="hidden lg:flex lg:col-span-6 xl:col-span-7 relative h-[520px] lg:h-[600px] items-center justify-center hardware-accelerated"
             initial={false}
           >
@@ -330,7 +349,9 @@ export default function LuxuryHero({
                     initial={{ opacity: 0, y: 60, rotate: frame.rotate - 12 }}
                     animate={{ opacity: 1, y: frame.offsetY, rotate: frame.rotate }}
                     transition={{ delay: 0.35 + idx * 0.18, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-                    whileHover={{ scale: 1.04, rotate: frame.rotate + (idx % 2 === 0 ? 2 : -2), zIndex: 40 }}
+                    /* whileHover registers a pointer listener even on mobile;
+                       on touch devices it never fires but wastes a listener slot */
+                    whileHover={isMobile ? undefined : { scale: 1.04, rotate: frame.rotate + (idx % 2 === 0 ? 2 : -2), zIndex: 40 }}
                     className={`absolute ${positionClass} ${sizeClass} jewelry-frame group cursor-pointer`}
                     style={{ zIndex: frame.z }}
                   >
