@@ -226,10 +226,28 @@ export default function SoulGoldApp() {
 
   const dict = t[lang];
 
+  // Sync html[lang] and html[dir] so all CSS logical properties work correctly
+  // when the user switches language on mobile
   useEffect(() => {
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
   }, [lang]);
+
+  // Lock body scroll while mobile drawer is open — prevents background jitter
+  // on iOS Safari's elastic scroll model
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow      = 'hidden';
+      document.body.style.touchAction   = 'none';
+    } else {
+      document.body.style.overflow      = '';
+      document.body.style.touchAction   = '';
+    }
+    return () => {
+      document.body.style.overflow    = '';
+      document.body.style.touchAction = '';
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const fetchProducts = async () => {

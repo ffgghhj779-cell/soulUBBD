@@ -135,12 +135,12 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
               {dict.quickLinks}
             </h5>
             <ul className="space-y-4">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="group flex items-center gap-3 text-white/55 hover:text-white smooth-transition touch-manipulation min-h-[44px]"
-                  >
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="group flex items-center gap-3 text-white/55 hover:text-white smooth-transition touch-manipulation min-h-[48px]"
+                >
                     <span className="w-5 h-px bg-primary-gold/35 group-hover:w-8 group-hover:bg-primary-gold smooth-transition shrink-0" />
                     <span className="font-medium">{link.label}</span>
                   </a>
@@ -227,9 +227,9 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center text-white/40 hover:border-primary-gold/60 hover:text-primary-gold smooth-transition active:scale-95 touch-manipulation"
+              className="min-w-[48px] min-h-[48px] rounded-full border border-white/[0.1] flex items-center justify-center text-white/40 hover:border-primary-gold/60 hover:text-primary-gold smooth-transition active:scale-95 touch-manipulation"
             >
-              <Icon size={16} />
+              <Icon size={17} />
             </a>
           ))}
         </div>

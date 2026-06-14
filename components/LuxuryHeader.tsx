@@ -94,17 +94,15 @@ export default function LuxuryHeader({
           )}
         </AnimatePresence>
 
-        <motion.header
-          animate={{
-            paddingTop:    isScrolled ? '10px' : '16px',
-            paddingBottom: isScrolled ? '10px' : '16px',
-          }}
-          transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
-          className={`relative pointer-events-auto px-5 md:px-6 rounded-[32px] w-full flex items-center justify-between hardware-accelerated ${
-            isScrolled
+        {/* CSS class-based padding transition avoids JS-driven layout reflow */}
+        <header
+          className={`relative pointer-events-auto px-5 md:px-6 rounded-[32px] w-full flex items-center justify-between hardware-accelerated
+            ${isScrolled ? 'py-2.5' : 'py-4'}
+            ${isScrolled
               ? 'glass-panel shadow-[0_8px_40px_rgba(201,160,61,0.14)]'
               : 'bg-white/55 backdrop-blur-2xl border border-[rgba(201,160,61,0.12)] shadow-sm'
-          }`}
+            }
+            [transition:padding_0.35s_cubic-bezier(0.25,1,0.5,1),background-color_0.35s_cubic-bezier(0.25,1,0.5,1),box-shadow_0.35s_cubic-bezier(0.25,1,0.5,1)]`}
         >
           {/* Logo */}
           <a href="#hero" className="flex items-center gap-2 cursor-pointer min-h-[48px] shrink-0 group">
@@ -221,7 +219,7 @@ export default function LuxuryHeader({
               </AnimatePresence>
             </button>
           </div>
-        </motion.header>
+        </header>
       </motion.div>
 
       {/* ── Mobile full-screen immersive takeover ── */}
@@ -246,9 +244,14 @@ export default function LuxuryHeader({
               initial={{ x: lang === 'ar' ? '-100%' : '100%' }}
               animate={{ x: '0%' }}
               exit={{   x: lang === 'ar' ? '-100%' : '100%' }}
-              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed top-0 bottom-0 end-0 z-50 md:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe hardware-accelerated shadow-2xl overflow-hidden"
-              style={{ background: 'rgba(254,247,237,0.97)', backdropFilter: 'blur(32px)' }}
+              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] as const }}
+              className="fixed top-0 bottom-0 end-0 z-50 md:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe hardware-accelerated shadow-2xl overflow-hidden overscroll-contain"
+              style={{
+                background: 'rgba(254,247,237,0.97)',
+                backdropFilter: 'blur(32px)',
+                WebkitBackdropFilter: 'blur(32px)',
+                overscrollBehavior: 'contain',
+              }}
             >
               {/* Top accent line */}
               <div className="h-1 w-full shimmer-bar" />

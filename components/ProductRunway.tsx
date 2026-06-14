@@ -78,42 +78,60 @@ export default function ProductRunway({
   lang, products, isLoading, activeCategory,
   onCategoryChange, onAddToCart, dict,
 }: ProductRunwayProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardRefs     = useRef<(HTMLDivElement | null)[]>([]);
-  const rafRef       = useRef<number>(0);
+  const containerRef  = useRef<HTMLDivElement>(null);
+  const cardRefs      = useRef<(HTMLDivElement | null)[]>([]);
+  const rafRef        = useRef<number>(0);
   const [centeredIdx, setCenteredIdx] = useState(0);
   const isRtl = lang === 'ar';
 
-  /* ── Per-frame DOM scale/opacity update ─────────────────────────── */
+  // Cache each card's left offset + width so the rAF loop reads ZERO layout
+  // properties (getBoundingClientRect triggers layout — we avoid it per-frame)
+  type CardMeta = { cx: number }; // center relative to container start
+  const cardMetaRef = useRef<CardMeta[]>([]);
+
+  const cacheCardPositions = useCallback(() => {
+    // One-time layout read batch — happens only on mount / data change, not scroll
+    const metas: CardMeta[] = [];
+    cardRefs.current.forEach((card) => {
+      if (!card) { metas.push({ cx: 0 }); return; }
+      // offsetLeft is relative to offsetParent (the container), zero reflow
+      metas.push({ cx: card.offsetLeft + card.offsetWidth / 2 });
+    });
+    cardMetaRef.current = metas;
+  }, []);
+
+  /* ── Per-frame DOM update — zero layout reads during scroll ─────── */
   const updateCards = useCallback(() => {
     rafRef.current = 0;
     const container = containerRef.current;
     if (!container) return;
 
-    const cRect        = container.getBoundingClientRect();
-    const centerX      = cRect.left + cRect.width / 2;
-    const halfRange    = cRect.width * 0.7;
-    let   closestDist  = Infinity;
-    let   closestIdx   = 0;
+    // These two properties never trigger layout (they're compositor values)
+    const scrollLeft      = container.scrollLeft;
+    const containerWidth  = container.clientWidth;
+    const centerX         = scrollLeft + containerWidth / 2;
+    const halfRange       = containerWidth * 0.7;
 
-    cardRefs.current.forEach((card, i) => {
-      if (!card) return;
-      const r        = card.getBoundingClientRect();
-      const cardCx   = r.left + r.width / 2;
-      const dist     = Math.abs(centerX - cardCx);
-      const norm     = Math.max(0, 1 - dist / halfRange); // 1 at center → 0 at edge
+    let closestDist = Infinity;
+    let closestIdx  = 0;
 
-      const scale   = 0.88 + norm * 0.20;  // 0.88 → 1.08
-      const opacity = 0.48 + norm * 0.52;  // 0.48 → 1.00
-
-      card.style.transform = `scale(${scale.toFixed(4)})`;
-      card.style.opacity   = `${opacity.toFixed(4)}`;
-
-      // Custom shadow intensity grows with norm
-      const shadowAlpha = (0.04 + norm * 0.14).toFixed(3);
-      card.style.boxShadow = `0 ${8 + norm * 32}px ${24 + norm * 48}px rgba(44,44,44,${shadowAlpha})`;
-
+    // All reads first (card metas are pre-cached) → then all writes
+    const updates = cardMetaRef.current.map((meta, i) => {
+      const dist  = Math.abs(centerX - meta.cx);
+      const norm  = Math.max(0, 1 - dist / halfRange);
       if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+      return { i, norm, dist };
+    });
+
+    // Write phase — no reads here, avoids forced reflow
+    updates.forEach(({ i, norm }) => {
+      const card = cardRefs.current[i];
+      if (!card) return;
+      card.style.transform  = `scale(${(0.88 + norm * 0.20).toFixed(4)})`;
+      card.style.opacity    = `${(0.48 + norm * 0.52).toFixed(4)}`;
+      // box-shadow is compositor-layer on Webkit/Blink, acceptable per-frame cost
+      const sA = (0.04 + norm * 0.14).toFixed(3);
+      card.style.boxShadow  = `0 ${(8 + norm * 32).toFixed(1)}px ${(24 + norm * 48).toFixed(1)}px rgba(44,44,44,${sA})`;
     });
 
     setCenteredIdx(closestIdx);
@@ -128,12 +146,22 @@ export default function ProductRunway({
     const el = containerRef.current;
     if (!el) return;
     el.addEventListener('scroll', scheduleUpdate, { passive: true });
-    scheduleUpdate(); // initial paint
-    return () => el.removeEventListener('scroll', scheduleUpdate);
-  }, [scheduleUpdate]);
+    // Initial paint after positions are cached
+    const id = setTimeout(() => { cacheCardPositions(); scheduleUpdate(); }, 60);
+    return () => { el.removeEventListener('scroll', scheduleUpdate); clearTimeout(id); };
+  }, [scheduleUpdate, cacheCardPositions]);
 
-  /* ── Re-run on data / lang changes ────────────────────────────── */
-  useEffect(() => { scheduleUpdate(); }, [products, lang, scheduleUpdate]);
+  /* ── Re-cache + re-paint on data / lang / resize ──────────────── */
+  useEffect(() => {
+    const id = setTimeout(() => { cacheCardPositions(); scheduleUpdate(); }, 80);
+    return () => clearTimeout(id);
+  }, [products, lang, cacheCardPositions, scheduleUpdate]);
+
+  useEffect(() => {
+    const onResize = () => { cacheCardPositions(); scheduleUpdate(); };
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => window.removeEventListener('resize', onResize);
+  }, [cacheCardPositions, scheduleUpdate]);
 
   /* ── Arrow navigation ─────────────────────────────────────────── */
   const navigate = useCallback((dir: 'prev' | 'next') => {
@@ -186,7 +214,7 @@ export default function ProductRunway({
               <button
                 key={cat}
                 onClick={() => onCategoryChange(cat)}
-                className={`px-4 md:px-5 py-2.5 min-h-[44px] rounded-full font-bold text-sm smooth-transition touch-manipulation active:scale-95 ${
+                className={`px-4 md:px-5 py-2.5 min-h-[48px] rounded-full font-bold text-sm smooth-transition touch-manipulation active:scale-95 ${
                   activeCategory === cat
                     ? 'bg-soft-charcoal text-cream shadow-md'
                     : 'text-soft-charcoal/55 hover:text-soft-charcoal hover:bg-white/80'
@@ -233,12 +261,14 @@ export default function ProductRunway({
           <div
             ref={containerRef}
             dir="ltr"                      /* force LTR scroll model */
-            className="flex gap-5 md:gap-7 overflow-x-auto hide-scrollbar snap-x snap-mandatory py-10"
+            className="flex gap-5 md:gap-7 overflow-x-auto hide-scrollbar snap-x snap-mandatory py-10 overscroll-x-contain"
             style={{
-              paddingLeft:  runwayPadding,
-              paddingRight: runwayPadding,
+              paddingLeft:        runwayPadding,
+              paddingRight:       runwayPadding,
               scrollPaddingLeft:  runwayPadding,
               scrollPaddingRight: runwayPadding,
+              overscrollBehaviorX: 'contain',
+              WebkitOverflowScrolling: 'touch', // momentum scroll on iOS
             }}
           >
             <AnimatePresence mode="popLayout">
@@ -335,23 +365,29 @@ export default function ProductRunway({
       {!isLoading && products.length > 1 && (
         <div className="max-w-7xl mx-auto px-4 md:px-8 mt-2 flex items-center justify-between">
 
-          {/* Progress dots */}
-          <div className="flex items-center gap-2">
+          {/* Progress dots — outer button is 44×44px tap target,
+                visual dot is the inner span */}
+          <div className="flex items-center gap-0.5">
             {Array.from({ length: dotCount }).map((_, i) => (
               <button
                 key={i}
+                aria-label={`Go to product ${i + 1}`}
                 onClick={() => {
                   cardRefs.current[i]?.scrollIntoView({
                     behavior: 'smooth', block: 'nearest', inline: 'center',
                   });
                 }}
-                className="smooth-transition touch-manipulation rounded-full"
-                style={{
-                  width:      i === centeredIdx ? '24px' : '8px',
-                  height:     '8px',
-                  background: i === centeredIdx ? 'var(--primary-gold)' : 'rgba(44,44,44,0.18)',
-                }}
-              />
+                className="flex items-center justify-center min-w-[44px] min-h-[44px] touch-manipulation"
+              >
+                <span
+                  className="rounded-full block smooth-transition"
+                  style={{
+                    width:      i === centeredIdx ? '24px' : '8px',
+                    height:     '8px',
+                    background: i === centeredIdx ? 'var(--primary-gold)' : 'rgba(44,44,44,0.18)',
+                  }}
+                />
+              </button>
             ))}
           </div>
 

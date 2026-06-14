@@ -71,7 +71,9 @@ function MagneticButton({
 }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+  // Only activate magnetic drift on pointer devices (not touch)
   const handleMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (window.matchMedia('(hover: none)').matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left - rect.width / 2) * 0.18;
     const y = (e.clientY - rect.top - rect.height / 2) * 0.18;
@@ -81,10 +83,12 @@ function MagneticButton({
   const reset = () => setPosition({ x: 0, y: 0 });
 
   const shared =
-    'inline-flex items-center justify-center gap-2 min-h-[52px] px-9 rounded-full font-extrabold text-lg smooth-transition touch-manipulation active:scale-95 hardware-accelerated';
+    'inline-flex items-center justify-center gap-2 min-h-[52px] min-w-[52px] px-9 rounded-full font-extrabold text-lg smooth-transition touch-manipulation active:scale-95 hardware-accelerated';
 
-  const motionStyle = {
-    transform: `translate(${position.x}px, ${position.y}px)`,
+  // Use GPU-composited transform for the magnetic drift
+  const motionStyle: React.CSSProperties = {
+    transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+    willChange: position.x !== 0 || position.y !== 0 ? 'transform' : 'auto',
   };
 
   if (href) {
@@ -146,8 +150,8 @@ export default function LuxuryHero({
       ref={sectionRef}
       className="relative min-h-[100svh] flex items-center overflow-hidden pt-28 pb-20 md:pb-28"
     >
-      {/* Mesh atmosphere */}
-      <motion.div style={{ y: bgY }} className="absolute inset-0 -z-20">
+      {/* Mesh atmosphere — will-change promotes to GPU layer before scroll starts */}
+      <motion.div style={{ y: bgY }} className="absolute inset-0 -z-20" initial={false}>
         <div className="absolute inset-0 mesh-hero" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cream/20 to-cream" />
         <div className="absolute top-[-10%] end-[-5%] w-[55vw] h-[55vw] rounded-full bg-primary-gold/20 blur-[140px] animate-aurora" />
@@ -227,10 +231,11 @@ export default function LuxuryHero({
           </motion.div>
         </motion.div>
 
-        {/* Floating jewelry gallery — parallax showcase */}
+        {/* Floating jewelry gallery — parallax showcase; will-change pre-promotes layer */}
         <motion.div
           style={{ y: smoothGalleryY, rotate: galleryRotate }}
-          className="lg:col-span-6 xl:col-span-7 relative h-[420px] md:h-[520px] lg:h-[600px] flex items-center justify-center"
+          className="lg:col-span-6 xl:col-span-7 relative h-[420px] md:h-[520px] lg:h-[600px] flex items-center justify-center hardware-accelerated"
+          initial={false}
         >
           <div className="relative w-full max-w-[520px] h-full">
             {showcaseFrames.map((frame, idx) => {
@@ -269,9 +274,10 @@ export default function LuxuryHero({
                       alt={lang === 'ar' ? frame.label_ar : frame.label_en}
                       fill
                       priority={idx === 0}
-                      className="object-cover scale-105 group-hover:scale-110 smooth-transition duration-700"
+                      loading={idx === 0 ? 'eager' : 'lazy'}
+                      className="object-cover scale-105 group-hover:scale-110 [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
                       referrerPolicy="no-referrer"
-                      sizes="(max-width: 768px) 70vw, 35vw"
+                      sizes="(max-width: 640px) 65vw, (max-width: 1024px) 50vw, 32vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian/75 via-obsidian/10 to-transparent" />
                     <div className="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between">

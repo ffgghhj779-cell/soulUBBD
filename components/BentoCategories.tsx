@@ -79,9 +79,10 @@ function BentoTile({
         src={tile.img}
         alt={lang === 'ar' ? tile.name_ar : tile.name_en}
         fill
-        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
+        loading={isHero ? 'eager' : 'lazy'}
+        className="object-cover group-hover:scale-105 will-change-transform [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
         referrerPolicy="no-referrer"
-        sizes={isHero ? '(max-width:1024px) 100vw, 44vw' : '(max-width:640px) 50vw, 28vw'}
+        sizes={isHero ? '(max-width:640px) 100vw, (max-width:1024px) 100vw, 44vw' : '(max-width:640px) 50vw, 28vw'}
       />
 
       {/* Multi-layer gradient — dark cinematic bottom, subtle top vignette */}
@@ -95,7 +96,7 @@ function BentoTile({
       {/* Top-right arrow — hidden until hover */}
       <div
         aria-hidden="true"
-        className="absolute top-4 end-4 w-9 h-9 rounded-full glass-panel border border-white/20 flex items-center justify-center text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 smooth-transition"
+        className="absolute top-3 end-3 min-w-[44px] min-h-[44px] rounded-full glass-panel border border-white/20 flex items-center justify-center text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 smooth-transition"
       >
         <ArrowUpRight size={16} />
       </div>
