@@ -128,29 +128,28 @@ export default function LuxuryHeader({
             }
             [transition:padding_0.35s_cubic-bezier(0.25,1,0.5,1),background-color_0.35s_cubic-bezier(0.25,1,0.5,1),box-shadow_0.35s_cubic-bezier(0.25,1,0.5,1)]`}
         >
-          {/* Logo — start position, vertically centred with nav */}
-          <a
-            href="#hero"
-            className="flex items-center gap-3 md:gap-4 cursor-pointer min-h-[56px] shrink-0 group pe-3 md:pe-6 -ms-1 md:-ms-0.5"
-          >
+          {/* Brand lockup — emblem · rule · wordmark */}
+          <a href="#hero" className="sg-brand-lockup cursor-pointer shrink-0 group">
             <motion.div
               animate={{ scale: isScrolled ? 0.94 : 1 }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-              className="origin-[0_50%] will-change-transform"
+              className="sg-brand-lockup__mark origin-[0_50%] will-change-transform"
             >
               <BrandLogo variant="header" />
             </motion.div>
+            <motion.span
+              animate={{ opacity: isScrolled ? 0 : 1, scaleX: isScrolled ? 0 : 1 }}
+              transition={{ duration: 0.28 }}
+              className="sg-brand-lockup__rule hidden sm:block"
+              aria-hidden="true"
+            />
             <motion.div
               animate={{ opacity: isScrolled ? 0 : 1, maxWidth: isScrolled ? '0px' : '120px' }}
               transition={{ duration: 0.28 }}
-              className="hidden sm:flex flex-col justify-center text-dark-gold border-s-2 border-light-gold ps-2 ms-1 overflow-hidden"
+              className="sg-brand-lockup__wordmark hidden sm:flex overflow-hidden"
             >
-              <span className="text-[10px] font-bold uppercase tracking-widest leading-none whitespace-nowrap">
-                {dict.brandTitle}
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-widest leading-none mt-1 whitespace-nowrap">
-                {dict.brandSubtitle}
-              </span>
+              <span>{dict.brandTitle}</span>
+              <span>{dict.brandSubtitle}</span>
             </motion.div>
           </a>
 

@@ -9,7 +9,7 @@ type BrandLogoProps = {
 };
 
 const variantClasses: Record<NonNullable<BrandLogoProps['variant']>, string> = {
-  header: 'h-12 sm:h-14 md:h-16 lg:h-[4.5rem] w-auto max-h-[4.5rem]',
+  header: 'sg-brand-logo-img h-[1.625rem] sm:h-7 md:h-8 w-auto max-h-8',
   footer: 'h-10 md:h-12 w-auto max-h-12',
   drawer: 'h-12 sm:h-14 w-auto max-h-14',
   inline: 'h-8 w-auto max-h-8',
@@ -18,7 +18,7 @@ const variantClasses: Record<NonNullable<BrandLogoProps['variant']>, string> = {
 /** Container padding + visibility lift per variant */
 const variantWrapper: Record<NonNullable<BrandLogoProps['variant']>, string> = {
   header:
-    'px-2 py-1.5 sm:px-2.5 sm:py-2 md:px-3 md:py-2 ' +
+    'sg-brand-logo-wrap ' +
     'drop-shadow-[0_2px_10px_rgba(26,22,18,0.14)] drop-shadow-[0_0_18px_rgba(201,160,61,0.22)]',
   footer: '',
   drawer: 'px-1 py-1 drop-shadow-[0_2px_8px_rgba(26,22,18,0.12)]',
@@ -26,7 +26,7 @@ const variantWrapper: Record<NonNullable<BrandLogoProps['variant']>, string> = {
 };
 
 const variantSizes: Record<NonNullable<BrandLogoProps['variant']>, string> = {
-  header: '(max-width: 640px) 168px, (max-width: 1024px) 220px, 280px',
+  header: '(max-width: 640px) 120px, (max-width: 1024px) 140px, 160px',
   footer: '(max-width: 640px) 120px, 180px',
   drawer: '(max-width: 640px) 160px, 200px',
   inline: '96px',
@@ -36,7 +36,7 @@ const variantDimensions: Record<
   NonNullable<BrandLogoProps['variant']>,
   { width: number; height: number }
 > = {
-  header: { width: 560, height: 224 },
+  header: { width: 320, height: 128 },
   footer: { width: 240, height: 96 },
   drawer: { width: 400, height: 160 },
   inline: { width: 160, height: 64 },
@@ -62,7 +62,7 @@ export default function BrandLogo({
         priority={priority}
         loading={priority ? 'eager' : 'lazy'}
         sizes={variantSizes[variant]}
-        className={`object-contain object-center ${variantClasses[variant]}`}
+        className={`object-contain ${variantClasses[variant]}`}
       />
     </span>
   );
