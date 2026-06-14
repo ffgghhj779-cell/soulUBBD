@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { ShoppingCart, Plus } from 'lucide-react';
 
@@ -52,25 +52,33 @@ const PRODUCTS: ShowcaseProduct[] = [
   { id:'baladi-chicken',   file:'WhatsApp Image 2026-06-14 at 10.19.40 AM.jpeg',     name_en:'Baladi Frozen Chicken',      name_ar:'دجاج بلدي مجمد',      sub_en:'1100g+ · Frozen · No.1',      sub_ar:'١١٠٠ج+ · مجمد · الرقم ١',    price:42, category_en:'Poultry', category_ar:'دواجن' },
 ];
 
+/* Stagger classes by column position (0-3) */
+const STAGGER = ['sg-reveal-d1', 'sg-reveal-d2', 'sg-reveal-d3', 'sg-reveal-d4'] as const;
+
 /* ── Product card (grid) ── */
-function ProductCard({ product, lang, onAdd, priority = false }: {
-  product: ShowcaseProduct; lang: Lang; onAdd: () => void; priority?: boolean;
+function ProductCard({ product, lang, onAdd, priority = false, staggerIdx = 0 }: {
+  product: ShowcaseProduct; lang: Lang; onAdd: () => void; priority?: boolean; staggerIdx?: number;
 }) {
   const rtl = lang === 'ar';
   return (
-    <article className="group relative flex flex-col bg-[#FEF7ED] overflow-hidden" style={{ borderRadius: 2 }}>
-      {/* Image */}
-      <div className="relative w-full aspect-square overflow-hidden bg-[#EAE1D7]">
-        <Image
-          src={img(product.file)}
-          alt={rtl ? product.name_ar : product.name_en}
-          fill unoptimized priority={priority}
-          sizes="(max-width:640px) 72vw, (max-width:1024px) 33vw, 25vw"
-          className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105 will-change-transform"
-        />
-        <div className="absolute inset-0 bg-[#1A1612]/0 group-hover:bg-[#1A1612]/8 transition-colors duration-500 pointer-events-none" />
+    <article
+      className={`group relative flex flex-col bg-[#FEF7ED] overflow-hidden sg-reveal-clip ${STAGGER[staggerIdx]} touch-premium`}
+      style={{ borderRadius: 2 }}
+    >
+      {/* Image — full packaging visible on cream product stage */}
+      <div className="relative w-full aspect-[4/5] overflow-hidden bg-[#FEF7ED]">
+        <div className="absolute inset-0 p-6 md:p-8">
+          <Image
+            src={img(product.file)}
+            alt={rtl ? product.name_ar : product.name_en}
+            fill unoptimized priority={priority}
+            sizes="(max-width:640px) 72vw, (max-width:1024px) 33vw, 25vw"
+            className="object-contain object-center sg-luxury-img"
+          />
+        </div>
+        <div className="absolute inset-0 bg-[#1A1612]/0 group-hover:bg-[#1A1612]/5 transition-colors duration-500 pointer-events-none" />
 
-        {/* Hover cart button */}
+        {/* Hover cart button — desktop only */}
         <button onClick={onAdd}
           aria-label={rtl ? 'أضف للسلة' : 'Add to cart'}
           className="absolute bottom-3 end-3 w-10 h-10 rounded bg-[#1A1612] text-[#FEF7ED] flex items-center justify-center
@@ -79,7 +87,7 @@ function ProductCard({ product, lang, onAdd, priority = false }: {
                      shadow-lg touch-manipulation active:scale-90 z-10 md:flex hidden">
           <Plus size={15} strokeWidth={2} />
         </button>
-        {/* Mobile always-visible */}
+        {/* Mobile always-visible cart button */}
         <button onClick={onAdd}
           aria-label={rtl ? 'أضف للسلة' : 'Add to cart'}
           className="absolute bottom-3 end-3 w-10 h-10 rounded bg-[#1A1612] text-[#FEF7ED] flex items-center justify-center
@@ -90,7 +98,7 @@ function ProductCard({ product, lang, onAdd, priority = false }: {
 
       {/* Text */}
       <div className="p-3 md:p-4 flex flex-col gap-1 flex-1">
-        <span className="text-[9px] uppercase tracking-[0.25em] text-[#C9A03D] font-semibold"
+        <span className="text-[9px] uppercase tracking-[0.25em] font-semibold sg-gold-sweep-text"
           style={{ fontFamily: 'var(--font-hanken,sans-serif)' }}>
           {rtl ? product.category_ar : product.category_en}
         </span>
@@ -123,25 +131,33 @@ function ProductCard({ product, lang, onAdd, priority = false }: {
 }
 
 /* ── Editorial tile (bento) ── */
-function EditorialTile({ product, lang, onAdd, priority = false, className = '' }: {
-  product: ShowcaseProduct; lang: Lang; onAdd: () => void; priority?: boolean; className?: string;
+function EditorialTile({ product, lang, onAdd, priority = false, className = '', staggerCls = '' }: {
+  product: ShowcaseProduct; lang: Lang; onAdd: () => void; priority?: boolean; className?: string; staggerCls?: string;
 }) {
   const rtl = lang === 'ar';
   return (
-    <article className={`group relative overflow-hidden cursor-pointer select-none ${className}`} style={{ borderRadius: 2 }}>
-      <Image
-        src={img(product.file)}
-        alt={rtl ? product.name_ar : product.name_en}
-        fill unoptimized priority={priority}
-        sizes="(max-width:640px) 100vw, 50vw"
-        className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105 will-change-transform"
-      />
-      {/* Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1A1612]/88 via-[#1A1612]/25 to-[#1A1612]/0 pointer-events-none" />
+    <article
+      className={`group relative overflow-hidden cursor-pointer select-none sg-reveal-clip ${staggerCls} touch-premium ${className}`}
+      style={{ borderRadius: 2 }}
+    >
+      {/* Cream product stage — full packaging visible */}
+      <div className="absolute inset-0 bg-[#FEF7ED] p-5 md:p-8">
+        <div className="relative w-full h-full">
+          <Image
+            src={img(product.file)}
+            alt={rtl ? product.name_ar : product.name_en}
+            fill unoptimized priority={priority}
+            sizes="(max-width:640px) 100vw, 50vw"
+            className="object-contain object-center sg-luxury-img"
+          />
+        </div>
+      </div>
+      {/* Gradient — legibility behind text */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
 
       {/* Content */}
       <div className="absolute bottom-0 start-0 w-full p-5 md:p-7">
-        <span className="inline-block text-[9px] uppercase tracking-[0.3em] text-[#C9A03D] mb-2 font-semibold"
+        <span className="inline-block text-[9px] uppercase tracking-[0.3em] mb-2 font-semibold sg-gold-sweep-text"
           style={{ fontFamily: 'var(--font-hanken,sans-serif)' }}>
           {rtl ? product.category_ar : product.category_en}
         </span>
@@ -157,7 +173,7 @@ function EditorialTile({ product, lang, onAdd, priority = false, className = '' 
           {rtl ? product.sub_ar : product.sub_en}
         </p>
 
-        {/* Price + CTA — appears on hover */}
+        {/* Price + CTA — hover reveal */}
         <div className="flex items-center justify-between mt-5
                         opacity-0 translate-y-3
                         group-hover:opacity-100 group-hover:translate-y-0
@@ -195,6 +211,32 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
   const rtl = lang === 'ar';
   const mobileEditRef = useRef<HTMLDivElement>(null);
   const mobileGridRef = useRef<HTMLDivElement>(null);
+  /* Root ref for scoped IntersectionObserver */
+  const showcaseRef  = useRef<HTMLDivElement>(null);
+
+  /* Cinematic scroll reveal — fires clip-path transitions as items enter viewport */
+  useEffect(() => {
+    const root = showcaseRef.current;
+    if (!root || typeof IntersectionObserver === 'undefined') return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.06, rootMargin: '0px 0px -32px 0px' }
+    );
+
+    root
+      .querySelectorAll('.sg-reveal-clip, .sg-heading-reveal')
+      .forEach((el) => io.observe(el));
+
+    return () => io.disconnect();
+  }, []);
 
   const scrollbarHide: React.CSSProperties = {
     scrollbarWidth: 'none',
@@ -203,21 +245,23 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
   };
 
   return (
-    <>
+    /* Wrapper div scopes the IntersectionObserver — no visual effect */
+    <div ref={showcaseRef}>
+
       {/* ═══════════════════════════════════════════════
           SECTION 1 — EDITORIAL BENTO
       ═══════════════════════════════════════════════ */}
       <section id="editorial" className="py-16 md:py-24 px-4 md:px-8 bg-[#FEF7ED]">
         <div className="max-w-[1280px] mx-auto">
 
-          {/* Header */}
+          {/* Section header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-8 md:mb-10">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A03D] mb-2 font-semibold"
+              <p className="text-[10px] uppercase tracking-[0.3em] mb-2 font-semibold sg-gold-sweep-text"
                 style={{ fontFamily: 'var(--font-hanken,sans-serif)' }}>
                 {rtl ? 'المجموعة الحصرية' : 'The Signature Collection'}
               </p>
-              <h2 className="text-3xl md:text-4xl lg:text-[48px] font-medium text-[#1F1B15] leading-tight"
+              <h2 className="text-3xl md:text-4xl lg:text-[48px] font-medium text-[#1F1B15] leading-tight sg-heading-reveal"
                 style={{ fontFamily: 'var(--font-eb-garamond,Georgia,serif)', letterSpacing: '-0.01em' }}>
                 {rtl ? 'منتجاتنا المميزة' : 'Our Finest Offerings'}
               </h2>
@@ -233,29 +277,25 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
           {/* ─ Desktop asymmetric bento ─
               Cols:  44%  |  1fr  |  1fr
               Rows:  400px | 280px
-              Tuna:  col-1, row-span-2 (tall)
-              Rice:  col-2, row-1
-              Veg:   col-2, row-2
-              Caramel: col-3, row-span-2 (tall)   ← swapped for Tomato below
           */}
-          <div className="hidden md:grid gap-3"
-            style={{ gridTemplateColumns: '44% 1fr 1fr', gridTemplateRows: '400px 280px' }}>
+          <div className="hidden md:grid gap-3 max-h-[640px]"
+            style={{ gridTemplateColumns: '44% 1fr 1fr', gridTemplateRows: 'minmax(280px, 1fr) minmax(200px, 0.65fr)' }}>
 
             {/* Tuna — tall hero left */}
             <div className="row-span-2">
-              <EditorialTile product={EDITORIAL[0]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[0])} priority className="h-full" />
+              <EditorialTile product={EDITORIAL[0]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[0])} priority staggerCls="sg-reveal-d1" className="h-full" />
             </div>
 
             {/* Rice — top centre */}
-            <EditorialTile product={EDITORIAL[1]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[1])} priority className="h-full" />
+            <EditorialTile product={EDITORIAL[1]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[1])} priority staggerCls="sg-reveal-d2" className="h-full" />
 
             {/* Caramel — tall right (row-span-2) */}
             <div className="row-span-2">
-              <EditorialTile product={EDITORIAL[2]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[2])} className="h-full" />
+              <EditorialTile product={EDITORIAL[2]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[2])} staggerCls="sg-reveal-d3" className="h-full" />
             </div>
 
             {/* Mixed Veg — bottom centre */}
-            <EditorialTile product={EDITORIAL[4]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[4])} className="h-full" />
+            <EditorialTile product={EDITORIAL[4]} lang={lang} onAdd={() => onAddToCart(EDITORIAL[4])} staggerCls="sg-reveal-d4" className="h-full" />
           </div>
 
           {/* ─ Mobile horizontal snap scroll ─ */}
@@ -263,8 +303,8 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
             className="md:hidden flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4"
             style={scrollbarHide}>
             {EDITORIAL.map((p) => (
-              <div key={p.id} className="snap-center shrink-0 relative"
-                style={{ width: 'min(80vw, 300px)', height: 420, borderRadius: 2 }}>
+              <div key={p.id} className="snap-center shrink-0 relative aspect-[4/5] max-h-[420px]"
+                style={{ width: 'min(80vw, 300px)', borderRadius: 2 }}>
                 <EditorialTile product={p} lang={lang} onAdd={() => onAddToCart(p)} className="h-full w-full" />
               </div>
             ))}
@@ -278,14 +318,14 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
       <section id="all-products" className="py-16 md:py-24 px-4 md:px-8 bg-[#F0E7DD]">
         <div className="max-w-[1280px] mx-auto">
 
-          {/* Header */}
+          {/* Section header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-8 md:mb-10">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A03D] mb-2 font-semibold"
-                style={{ fontFamily: 'var(--font-hanken,sans-serif)' }}>
+              <p className="text-[10px] uppercase tracking-[0.3em] mb-2 font-semibold sg-gold-sweep-text"
+                style={{ fontFamily: 'var(--font-hanken,sans-serif)', '--sweep-delay': '1.5s' } as React.CSSProperties}>
                 {rtl ? 'تسوق الآن' : 'Shop the Collection'}
               </p>
-              <h2 className="text-3xl md:text-4xl lg:text-[48px] font-medium text-[#1F1B15] leading-tight"
+              <h2 className="text-3xl md:text-4xl lg:text-[48px] font-medium text-[#1F1B15] leading-tight sg-heading-reveal"
                 style={{ fontFamily: 'var(--font-eb-garamond,Georgia,serif)', letterSpacing: '-0.01em' }}>
                 {rtl ? 'جميع المنتجات' : 'The Complete Pantry'}
               </h2>
@@ -307,6 +347,7 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
                 lang={lang}
                 onAdd={() => onAddToCart(product)}
                 priority={idx < 4}
+                staggerIdx={idx % 4}
               />
             ))}
           </div>
@@ -330,6 +371,7 @@ export default function SoulGoldShowcase({ lang, onAddToCart }: SoulGoldShowcase
           </p>
         </div>
       </section>
-    </>
+
+    </div>
   );
 }

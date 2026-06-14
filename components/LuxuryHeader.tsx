@@ -43,8 +43,32 @@ export default function LuxuryHeader({
 }: LuxuryHeaderProps) {
   const [isScrolled, setIsScrolled]   = useState(false);
   const [isHidden,   setIsHidden]     = useState(false);
-  const lastY   = useRef(0);
-  const ticking = useRef(false);
+  const lastY      = useRef(0);
+  const ticking    = useRef(false);
+  const cartBtnRef = useRef<HTMLButtonElement>(null);
+  const cartRafRef = useRef<number | null>(null);
+
+  /* ── Magnetic cart button: desktop cursor-pull ─────────────────── */
+  const handleCartMagneticMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    const btn = cartBtnRef.current;
+    if (!btn) return;
+    if (cartRafRef.current) cancelAnimationFrame(cartRafRef.current);
+    cartRafRef.current = requestAnimationFrame(() => {
+      const rect = btn.getBoundingClientRect();
+      const dx   = (e.clientX - (rect.left + rect.width  / 2)) * 0.32;
+      const dy   = (e.clientY - (rect.top  + rect.height / 2)) * 0.32;
+      btn.style.transform  = `translate(${dx}px, ${dy}px)`;
+      btn.style.transition = 'transform 0.12s cubic-bezier(0.25,1,0.5,1)';
+    });
+  };
+  const handleCartMagneticLeave = () => {
+    if (cartRafRef.current) cancelAnimationFrame(cartRafRef.current);
+    const btn = cartBtnRef.current;
+    if (!btn) return;
+    btn.style.transform  = 'translate(0px, 0px)';
+    btn.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+  };
 
   const onScroll = useCallback(() => {
     if (ticking.current) return;
@@ -170,8 +194,11 @@ export default function LuxuryHeader({
             </button>
 
             <button
+              ref={cartBtnRef}
               onClick={onOpenCheckout}
               disabled={isCheckingOut}
+              onMouseMove={handleCartMagneticMove}
+              onMouseLeave={handleCartMagneticLeave}
               aria-label={lang === 'ar' ? `عربة التسوق${cartCount > 0 ? ` (${cartCount})` : ''}` : `Shopping cart${cartCount > 0 ? ` (${cartCount} items)` : ''}`}
               className={`relative min-w-[48px] min-h-[48px] flex items-center justify-center rounded hover:bg-[var(--sg-surface-low)] smooth-transition text-[var(--sg-on-surface)] touch-manipulation active:scale-95 ${isCheckingOut ? 'opacity-50' : ''}`}
             >

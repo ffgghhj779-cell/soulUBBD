@@ -92,21 +92,20 @@ export default function ChefPairings({ lang }: { lang: Lang }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: i * 0.1, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative shrink-0 w-[78vw] md:w-auto snap-start rounded-[4px] overflow-hidden cursor-pointer select-none"
-              style={{ aspectRatio: '3 / 4' }}
+              className="group relative shrink-0 w-[78vw] md:w-auto snap-start rounded-[4px] overflow-hidden cursor-pointer select-none aspect-[3/4] max-h-[480px]"
             >
-              {/* Image */}
+              {/* Image — editorial magazine crop */}
               <Image
                 src={p.img}
                 alt={isRtl ? p.dish_ar : p.dish_en}
                 fill
                 loading="lazy"
-                className="object-cover group-hover:scale-[1.04] will-change-transform [transition:transform_0.75s_cubic-bezier(0.25,1,0.5,1)]"
+                className="object-cover object-center group-hover:scale-[1.04] will-change-transform [transition:transform_0.75s_cubic-bezier(0.25,1,0.5,1)]"
                 sizes="(max-width: 768px) 78vw, 33vw"
               />
 
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1612]/88 via-[#1A1612]/20 to-transparent" />
+              {/* Gradient overlay — ensures 100% text legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
 
               {/* Content */}
               <div className="absolute inset-0 flex flex-col justify-end p-7">

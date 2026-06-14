@@ -558,4 +558,211 @@ html[lang='en'] button {
     font-optical-sizing: auto;
     font-feature-settings: 'onum' 1;
   }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ULTRA-PREMIUM VISUAL LAYER
+     ALL animations target only transform / opacity / clip-path.
+     GPU-composited properties only — zero layout recalculations.
+     ══════════════════════════════════════════════════════════════════ */
+
+  /* ── 1. Cinematic clip-path scroll reveal (bottom → top) ────────── */
+  .sg-reveal-clip {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0.7;
+    will-change: clip-path, opacity;
+    transition:
+      clip-path 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity   0.7s ease;
+  }
+  .sg-reveal-clip.in-view {
+    clip-path: inset(0% 0 0 0);
+    opacity: 1;
+  }
+
+  /* Center-out variant for tall editorial tiles */
+  .sg-reveal-center {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 0.7;
+    will-change: clip-path, opacity;
+    transition:
+      clip-path 1.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity   0.7s ease;
+  }
+  .sg-reveal-center.in-view {
+    clip-path: inset(0 0% 0 0%);
+    opacity: 1;
+  }
+
+  /* Stagger delay helpers */
+  .sg-reveal-d1 { transition-delay: 0.08s; }
+  .sg-reveal-d2 { transition-delay: 0.18s; }
+  .sg-reveal-d3 { transition-delay: 0.28s; }
+  .sg-reveal-d4 { transition-delay: 0.38s; }
+
+  /* Section heading clip reveal (reusable) */
+  .sg-heading-reveal {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+    clip-path: inset(0 0 100% 0);
+    will-change: opacity, transform, clip-path;
+    transition:
+      opacity   0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      clip-path 1s   cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .sg-heading-reveal.in-view {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    clip-path: inset(0 0 0% 0);
+  }
+
+  /* ── 2. EB Garamond hero title line-by-line stagger reveal ──────── */
+  @keyframes sg-title-reveal {
+    from {
+      opacity:   0;
+      transform: translate3d(0, 30px, 0);
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      opacity:   1;
+      transform: translate3d(0,  0px, 0);
+      clip-path: inset(0 0   0% 0);
+    }
+  }
+  /* Default: elements are visible (SSR-safe, no flash). Once
+     sg-hero-mounted is added via JS, animation runs with fill-mode
+     'both' which applies the 'from' keyframe during delay — this
+     momentarily hides then elegantly reveals. The brief pre-paint
+     invisible window is imperceptible during normal page load. */
+  .sg-hero-mounted .sg-eyebrow {
+    animation: sg-title-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.05s;
+  }
+  .sg-hero-mounted .sg-title-line {
+    animation: sg-title-reveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .sg-hero-mounted .sg-title-line-1 { animation-delay: 0.22s; }
+  .sg-hero-mounted .sg-title-line-2 { animation-delay: 0.44s; }
+  .sg-hero-mounted .sg-sub-text {
+    animation: sg-title-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.62s;
+  }
+  .sg-hero-mounted .sg-cta-wrap {
+    animation: sg-title-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.82s;
+  }
+
+  /* ── 3. Hero image cinematic clip-path reveal ───────────────────── */
+  .sg-img-hidden {
+    clip-path: inset(8% 0 0 0);
+    opacity: 0;
+    will-change: clip-path, opacity;
+  }
+  .sg-img-revealed {
+    clip-path: inset(0% 0 0 0);
+    opacity: 1;
+    will-change: clip-path, opacity;
+    transition:
+      clip-path 1.7s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity   0.9s ease;
+  }
+
+  /* ── 4. Ambient breathing glow behind hero / product images ─────── */
+  @keyframes sg-ambient-breathe {
+    0%, 100% { opacity: 0.5;  transform: scale3d(1,    1,    1); }
+    50%       { opacity: 1;    transform: scale3d(1.07, 1.07, 1); }
+  }
+  .sg-ambient-glow {
+    animation: sg-ambient-breathe 5.5s ease-in-out infinite;
+    will-change: opacity, transform;
+  }
+
+  /* ── 5. Periodic gold light sweep — TrustBar top/bottom borders ─── */
+  @keyframes sg-border-sweep {
+    0%   { background-position: 220% center; }
+    100% { background-position: -220% center; }
+  }
+  .sg-trust-border-sweep {
+    background: linear-gradient(
+      90deg,
+      transparent           0%,
+      rgba(201,160,61,0.3) 20%,
+      rgba(232,196,104,0.9) 50%,
+      rgba(201,160,61,0.3) 80%,
+      transparent          100%
+    );
+    background-size: 300% 100%;
+    animation: sg-border-sweep 3.5s linear infinite;
+    will-change: background-position;
+  }
+
+  /* ── 6. TrustBar icon periodic gold shimmer ─────────────────────── */
+  @keyframes sg-icon-shimmer {
+    0%, 62%, 100% { filter: drop-shadow(0 0 3px rgba(201,160,61,0.15)); }
+    74%           { filter: drop-shadow(0 0 14px rgba(201,160,61,0.80)) drop-shadow(0 0 28px rgba(232,196,104,0.45)); }
+  }
+  .sg-icon-shimmer {
+    animation: sg-icon-shimmer 9s ease-in-out infinite;
+    will-change: filter;
+  }
+  .sg-icon-shimmer-d0 { animation-delay:    0s; }
+  .sg-icon-shimmer-d1 { animation-delay: 2.25s; }
+  .sg-icon-shimmer-d2 { animation-delay:  4.5s; }
+  .sg-icon-shimmer-d3 { animation-delay: 6.75s; }
+
+  /* ── 7. Luxury image hover: 1.04× scale + brightness (GPU-safe) ─── */
+  .sg-luxury-img {
+    transition:
+      transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+      filter    0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, filter;
+  }
+  .group:hover .sg-luxury-img,
+  .group-hover .sg-luxury-img {
+    transform: scale(1.04);
+    filter: brightness(1.06);
+  }
+
+  /* ── 8. Mobile touch premium feedback ──────────────────────────── */
+  @media (hover: none) and (pointer: coarse) {
+    .touch-premium {
+      -webkit-tap-highlight-color: transparent;
+    }
+    .touch-premium:active {
+      transform: scale(0.96) !important;
+      transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+  }
+
+  /* ── 10. Gold text light sweep (eyebrow labels, accent text) ────── */
+  @keyframes sg-gold-sweep {
+    0%   { background-position: 220% center; }
+    100% { background-position: -120% center; }
+  }
+  .sg-gold-sweep-text {
+    background: linear-gradient(
+      105deg,
+      var(--primary-gold)  0%,
+      var(--primary-gold) 34%,
+      #FFF8C0             46%,
+      #FFF0A8             50%,
+      #FFF8C0             54%,
+      var(--primary-gold) 66%,
+      var(--primary-gold) 100%
+    );
+    background-size: 260% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: sg-gold-sweep 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: var(--sweep-delay, 0s);
+  }
+
+  /* ── 9. Mobile performance guards ──────────────────────────────── */
+  @media (max-width: 768px) {
+    .sg-ambient-glow       { animation: none !important; opacity: 0.7 !important; }
+    .sg-icon-shimmer       { animation-duration: 14s !important; }
+    .sg-trust-border-sweep { animation-duration: 5s  !important; }
+    .sg-gold-sweep-text    { animation-duration: 10s !important; }
+  }
 }

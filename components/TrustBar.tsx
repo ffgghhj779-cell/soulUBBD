@@ -95,21 +95,16 @@ export default function TrustBar({ lang, items = DEFAULT_ITEMS }: TrustBarProps)
       aria-label={isRtl ? 'مميزاتنا' : 'Why choose us'}
       className="relative bg-obsidian overflow-hidden"
     >
-      {/* ── Top gold border line ──────────────────────────────── */}
+      {/* ── Top gold border line — animated sweep ────────────────── */}
       <div
         aria-hidden="true"
-        className="absolute top-0 inset-x-0 h-px"
-        style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(201,160,61,0.6) 30%, rgba(232,196,104,0.9) 50%, rgba(201,160,61,0.6) 70%, transparent 100%)',
-        }}
+        className="absolute top-0 inset-x-0 h-px sg-trust-border-sweep"
       />
-      {/* ── Bottom gold border line ───────────────────────────── */}
+      {/* ── Bottom gold border line — animated sweep (offset) ────── */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 inset-x-0 h-px"
-        style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(201,160,61,0.4) 30%, rgba(232,196,104,0.7) 50%, rgba(201,160,61,0.4) 70%, transparent 100%)',
-        }}
+        className="absolute bottom-0 inset-x-0 h-px sg-trust-border-sweep"
+        style={{ animationDelay: '1.75s', opacity: 0.7 }}
       />
 
       {/* ── Subtle atmospheric glow ───────────────────────────── */}
@@ -143,10 +138,9 @@ export default function TrustBar({ lang, items = DEFAULT_ITEMS }: TrustBarProps)
                 aria-hidden="true"
               />
 
-              {/* Icon — thin gold stroke */}
+              {/* Icon — thin gold stroke with periodic shimmer */}
               <div
-                className="text-primary-gold/60 group-hover:text-primary-gold mb-5 smooth-transition"
-                style={{ filter: 'drop-shadow(0 0 8px rgba(201,160,61,0.3))' }}
+                className={`text-primary-gold/60 group-hover:text-primary-gold mb-5 smooth-transition sg-icon-shimmer sg-icon-shimmer-d${i}`}
               >
                 {item.icon}
               </div>

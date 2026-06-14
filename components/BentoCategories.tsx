@@ -84,9 +84,9 @@ function BentoTile({
       /* Use simpler fade-only on mobile (no Y translation = no layout work each frame)
          and full slide+fade on desktop via CSS media via the variants object trick */
       variants={isMobile ? reveal : revealDesktop}
-      className={`group relative rounded overflow-hidden cursor-pointer touch-manipulation select-none ${className}`}
+      className={`group relative rounded overflow-hidden cursor-pointer touch-manipulation select-none ${isHero ? 'aspect-[4/5] lg:aspect-auto' : 'aspect-[4/3]'} ${className}`}
     >
-      {/* Image */}
+      {/* Image — editorial framing, deliberate magazine crop */}
       <Image
         src={tile.img}
         alt={lang === 'ar' ? tile.name_ar : tile.name_en}
@@ -95,15 +95,15 @@ function BentoTile({
         loading={isHero ? 'eager' : 'lazy'}
         decoding={isHero ? 'sync' : 'async'}
         {...(isHero ? { fetchPriority: 'high' as const } : {})}
-        className="object-cover group-hover:scale-105 will-change-transform [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
+        className="object-cover object-center group-hover:scale-105 will-change-transform [transition:transform_0.7s_cubic-bezier(0.25,1,0.5,1)]"
         referrerPolicy="no-referrer"
         sizes={isHero
           ? '(max-width:640px) 100vw, (max-width:1024px) 100vw, 44vw'
           : '(max-width:640px) 50vw, (max-width:1024px) 33vw, 22vw'}
       />
 
-      {/* Multi-layer gradient — dark cinematic bottom, subtle top vignette */}
-      <div className="absolute inset-0 bg-gradient-to-t from-obsidian/90 via-obsidian/20 to-obsidian/5 transition-opacity duration-500 group-hover:from-obsidian/95" />
+      {/* Gradient — ensures 100% text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
 
       {/* Top-left index — editorial numbering */}
       <div className="absolute top-5 start-5 text-white/30 text-[10px] font-extrabold tracking-[0.35em] tabular-nums">
@@ -161,10 +161,10 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
 
         {/* ── Desktop bento: asymmetric 3-column, 2-row ── */}
         <div
-          className="hidden lg:grid gap-4"
+          className="hidden lg:grid gap-4 max-h-[640px]"
           style={{
             gridTemplateColumns: '44% 1fr 1fr',
-            gridTemplateRows:    '380px 260px',
+            gridTemplateRows:    'minmax(280px, 1fr) minmax(200px, 0.65fr)',
           }}
         >
           {/* Hero tile — tall (row-span-2) */}
@@ -175,24 +175,24 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
           <BentoTile tile={tiles[1]} idx={1} lang={lang} className="h-full" />
           {/* Tile 3 */}
           <BentoTile tile={tiles[2]} idx={2} lang={lang} className="h-full" />
-          {/* Tile 4 — wide landscape (col-span-2) */}
-          <div className="col-span-2">
+          {/* Tile 4 — wide landscape banner (col-span-2) */}
+          <div className="col-span-2 aspect-[21/9] max-h-[220px]">
             <BentoTile tile={tiles[3]} idx={3} lang={lang} className="h-full" />
           </div>
         </div>
 
         {/* ── Mobile: fluid 2-col asymmetric ── */}
         <div className="grid lg:hidden grid-cols-2 gap-3">
-          <div className="col-span-2 h-60">
+          <div className="col-span-2 aspect-[16/9] max-h-[260px]">
             <BentoTile tile={tiles[0]} idx={0} lang={lang} className="h-full" isHero />
           </div>
-          <div className="h-44">
+          <div className="aspect-[4/3] max-h-[180px]">
             <BentoTile tile={tiles[1]} idx={1} lang={lang} className="h-full" />
           </div>
-          <div className="h-44">
+          <div className="aspect-[4/3] max-h-[180px]">
             <BentoTile tile={tiles[2]} idx={2} lang={lang} className="h-full" />
           </div>
-          <div className="col-span-2 h-48">
+          <div className="col-span-2 aspect-[21/9] max-h-[160px]">
             <BentoTile tile={tiles[3]} idx={3} lang={lang} className="h-full" />
           </div>
         </div>
