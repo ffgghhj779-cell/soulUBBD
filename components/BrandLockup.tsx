@@ -13,9 +13,9 @@ type BrandLockupProps = {
 };
 
 const logoSize: Record<NonNullable<BrandLockupProps['variant']>, string> = {
-  header: 'h-[52px] w-[52px] sm:h-14 sm:w-14 md:h-[60px] md:w-[60px]',
+  header: 'h-[62px] w-[62px] sm:h-16 sm:w-16 md:h-[60px] md:w-[60px]',
   footer: 'h-12 w-12 md:h-14 md:w-14',
-  drawer: 'h-12 w-12 sm:h-14 sm:w-14',
+  drawer: 'h-14 w-14 sm:h-16 sm:w-16',
 };
 
 const titleSize: Record<NonNullable<BrandLockupProps['variant']>, string> = {
@@ -37,7 +37,7 @@ export default function BrandLockup({
   const tagline = rtl ? 'ذهب المائدة السعودية' : 'THE GOLD OF THE SAUDI TABLE';
 
   const logoClass = compact
-    ? 'h-9 w-9'
+    ? 'h-10 w-10 sm:h-11 sm:w-11'
     : logoSize[variant];
   const titleClass = compact
     ? 'text-base'
@@ -53,13 +53,13 @@ export default function BrandLockup({
           alt={BRAND_LOGO_ALT}
           fill
           priority={priority}
-          sizes="64px"
-          className="object-contain p-1"
+          sizes="(max-width:640px) 72px, 80px"
+          className="object-contain p-1.5"
         />
       </div>
 
-      <div className={`flex flex-col leading-tight min-w-0 border-s border-gray-100 ps-2.5 md:ps-3 ${compact ? 'ps-2' : ''}`}>
-        <div className="flex items-baseline gap-1 md:gap-1.5 flex-wrap">
+      <div className={`flex min-w-0 flex-1 flex-col leading-tight border-s border-gray-100 ps-2.5 md:ps-3 ${compact ? 'ps-2' : ''}`}>
+        <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5 md:gap-1.5">
           <span
             className={`text-[#1b5e20] font-black tracking-tight leading-none ${titleClass}`}
             style={{
@@ -82,9 +82,9 @@ export default function BrandLockup({
           </span>
         </div>
         <span
-          className={`text-[#2e7d32] text-[8px] sm:text-[9px] font-bold tracking-[0.2em] uppercase mt-0.5 truncate premium-ease ${
-            compact ? 'max-h-0 opacity-0 overflow-hidden mt-0' : 'max-h-4 opacity-100'
-          }`}
+          className={`text-[#2e7d32] mt-1 text-[9px] sm:text-[10px] font-bold leading-snug whitespace-normal ${
+            rtl ? 'tracking-normal' : 'uppercase tracking-[0.12em]'
+          } premium-ease ${compact ? 'hidden' : 'block'}`}
         >
           {tagline}
         </span>

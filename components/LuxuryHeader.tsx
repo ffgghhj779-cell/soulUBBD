@@ -85,7 +85,7 @@ export default function LuxuryHeader({
             isCompact ? 'py-2' : 'py-3'
           }`}
         >
-          <a href="#hero" className="shrink min-w-0 max-w-[128px] sm:max-w-[150px] md:max-w-[200px] touch-press rounded-lg" aria-label={`${dict.brandTitle} ${dict.brandSubtitle}`}>
+          <a href="#hero" className="min-w-0 flex-1 max-w-[min(100%,240px)] sm:max-w-[280px] md:max-w-none touch-press rounded-lg overflow-visible" aria-label={`${dict.brandTitle} ${dict.brandSubtitle}`}>
             <BrandLockup
               lang={lang}
               brandTitle={dict.brandTitle}

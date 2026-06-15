@@ -190,25 +190,35 @@ function CitrusStoreContent() {
     setLang((prev) => (prev === 'ar' ? 'en' : 'ar'));
   };
 
-  const handleAddToCart = useCallback((product: CartProduct) => {
+  const handleAddToCart = useCallback((product: CartProduct, addQty = 1) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
+      const newQty = existing ? existing.qty + addQty : addQty;
+      const title = lang === 'ar' ? product.title_ar : product.title_en;
+      const msg =
+        newQty > 1
+          ? lang === 'ar'
+            ? `تم إضافة ${newQty} من ${title}`
+            : `Added ${newQty} × ${title} to cart`
+          : lang === 'ar'
+            ? `تم إضافة ${title} إلى السلة`
+            : `Added ${title} to cart`;
+
+      toast(msg, 'success', `cart-${product.id}`);
+
       if (existing) {
         return prev.map((item) =>
-          item.product.id === product.id ? { ...item, qty: item.qty + 1 } : item
+          item.product.id === product.id ? { ...item, qty: newQty } : item
         );
       }
-      return [...prev, { product, qty: 1 }];
+      return [...prev, { product, qty: addQty }];
     });
 
-    const title = lang === 'ar' ? product.title_ar : product.title_en;
-    const msg = lang === 'ar' ? `تم إضافة ${title} إلى السلة` : `Added ${title} to cart`;
-    toast(msg, 'success');
     setCartBump((b) => b + 1);
   }, [lang, toast]);
 
-  const handleShowcaseAddToCart = useCallback((p: ShowcaseProduct) => {
-    handleAddToCart(toCartProduct(p));
+  const handleShowcaseAddToCart = useCallback((p: ShowcaseProduct, qty = 1) => {
+    handleAddToCart(toCartProduct(p), qty);
   }, [handleAddToCart]);
 
   const openCart = () => {

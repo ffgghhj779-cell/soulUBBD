@@ -60,7 +60,7 @@ function isSoldOutDemo(id: string, badge: string | null) {
 type ShowcaseProductCardProps = {
   product: ShowcaseProduct;
   lang: Lang;
-  onAddToCart: (product: ShowcaseProduct) => void;
+  onAddToCart: (product: ShowcaseProduct, qty?: number) => void;
 };
 
 const ShowcaseProductCard = memo(function ShowcaseProductCard({
@@ -73,9 +73,7 @@ const ShowcaseProductCard = memo(function ShowcaseProductCard({
   const [addedFlash, setAddedFlash] = useState(false);
 
   const handleAdd = () => {
-    for (let i = 0; i < qty; i += 1) {
-      onAddToCart(product);
-    }
+    onAddToCart(product, qty);
     setAddedFlash(true);
     window.setTimeout(() => setAddedFlash(false), 500);
   };
