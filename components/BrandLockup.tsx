@@ -61,20 +61,28 @@ export default function BrandLockup({
       <div className={`flex flex-col leading-tight min-w-0 border-s border-gray-100 ps-2.5 md:ps-3 ${compact ? 'ps-2' : ''}`}>
         <div className="flex items-baseline gap-1 md:gap-1.5 flex-wrap">
           <span
-            className={`text-[#1a3c34] font-black tracking-tight leading-none ${titleClass}`}
-            style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+            className={`text-[#1b5e20] font-black tracking-tight leading-none ${titleClass}`}
+            style={{
+              fontFamily: rtl
+                ? 'var(--font-cairo), sans-serif'
+                : 'var(--font-eb-garamond), Georgia, "Times New Roman", serif',
+            }}
           >
             {brandTitle}
           </span>
           <span
             className={`text-[#C9A03D] font-black tracking-tight leading-none ${titleClass}`}
-            style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+            style={{
+              fontFamily: rtl
+                ? 'var(--font-cairo), sans-serif'
+                : 'var(--font-eb-garamond), Georgia, "Times New Roman", serif',
+            }}
           >
             {brandSubtitle}
           </span>
         </div>
         <span
-          className={`text-[#2d6a4f] text-[8px] sm:text-[9px] font-bold tracking-[0.2em] uppercase mt-0.5 truncate premium-ease ${
+          className={`text-[#2e7d32] text-[8px] sm:text-[9px] font-bold tracking-[0.2em] uppercase mt-0.5 truncate premium-ease ${
             compact ? 'max-h-0 opacity-0 overflow-hidden mt-0' : 'max-h-4 opacity-100'
           }`}
         >

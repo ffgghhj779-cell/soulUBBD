@@ -277,7 +277,7 @@ function CitrusStoreContent() {
   return (
     <div className="min-h-[100dvh] mobile-shell bg-[#f9fafb] overflow-x-hidden app-scroll">
       {/* Top announcement bar */}
-      <div className="bg-[#1a3c34] text-white text-[11px] md:text-xs py-2 px-4">
+      <div className="bg-[#1b5e20] text-white text-[11px] md:text-xs py-2 px-4">
         <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center">
           <span className="inline-flex items-center gap-1 bg-white/15 rounded-full px-2.5 py-0.5 font-semibold">
             🌿 {lang === 'ar' ? 'طازج من المزرعة' : 'FARM FRESH'}
@@ -312,7 +312,7 @@ function CitrusStoreContent() {
               className="premium-ease premium-card-hover relative rounded-2xl overflow-hidden min-h-[220px] md:min-h-[260px] flex items-end p-6 md:p-8 bg-cover bg-center shadow-sm hover:shadow-md"
               style={{
                 backgroundImage:
-                  'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.15) 100%), url(https://images.unsplash.com/photo-1610839335344-87b7971414a6?auto=format&fit=crop&w=900&q=80)',
+                  'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.15) 100%), url(https://images.unsplash.com/photo-1498557850523-fd3d118b962e?auto=format&fit=crop&w=1200&q=85)',
               }}
             >
               <div>
@@ -323,11 +323,11 @@ function CitrusStoreContent() {
                   {lang === 'ar' ? 'فواكه طازجة توصل في المملكة' : 'Fresh Fruits Delivered in Saudi Arabia'}
                 </h2>
                 <p className="text-white font-bold mb-1">{lang === 'ar' ? 'خصم حتى - 10%' : 'Up to - 10%'}</p>
-                <div className="w-12 h-0.5 bg-[#9ccc65] mb-4" />
+                <div className="w-12 h-0.5 bg-[#8cbc67] mb-4" />
                 <button
                   type="button"
                   onClick={scrollToProducts}
-                  className="premium-ease touch-press min-h-[44px] inline-flex items-center bg-[#287233] hover:bg-[#1a3c34] text-white text-xs font-bold px-6 py-2.5 rounded-full uppercase tracking-wide"
+                  className="premium-ease touch-press min-h-[44px] inline-flex items-center bg-[#2e7d32] hover:bg-[#1b5e20] text-white text-xs font-bold px-6 py-2.5 rounded-full uppercase tracking-wide"
                 >
                   {lang === 'ar' ? 'تسوق الآن' : 'SHOP NOW'}
                 </button>
@@ -338,7 +338,7 @@ function CitrusStoreContent() {
               className="premium-ease premium-card-hover relative rounded-2xl overflow-hidden min-h-[220px] md:min-h-[260px] flex items-end p-6 md:p-8 bg-cover bg-center shadow-sm hover:shadow-md"
               style={{
                 backgroundImage:
-                  'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.15) 100%), url(https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80)',
+                  'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.15) 100%), url(https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=85)',
               }}
             >
               <div>
@@ -349,11 +349,11 @@ function CitrusStoreContent() {
                   {lang === 'ar' ? 'خضروات طازجة توصل في المملكة' : 'Fresh Vegetables Delivered in Saudi Arabia'}
                 </h2>
                 <p className="text-white font-bold mb-1">{lang === 'ar' ? 'خصم حتى - 30%' : 'Up to - 30%'}</p>
-                <div className="w-12 h-0.5 bg-[#9ccc65] mb-4" />
+                <div className="w-12 h-0.5 bg-[#8cbc67] mb-4" />
                 <button
                   type="button"
                   onClick={scrollToProducts}
-                  className="premium-ease touch-press min-h-[44px] inline-flex items-center bg-[#287233] hover:bg-[#1a3c34] text-white text-xs font-bold px-6 py-2.5 rounded-full uppercase tracking-wide"
+                  className="premium-ease touch-press min-h-[44px] inline-flex items-center bg-[#2e7d32] hover:bg-[#1b5e20] text-white text-xs font-bold px-6 py-2.5 rounded-full uppercase tracking-wide"
                 >
                   {lang === 'ar' ? 'تسوق الآن' : 'SHOP NOW'}
                 </button>

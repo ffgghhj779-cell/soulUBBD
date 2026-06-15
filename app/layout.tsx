@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cairo, Tajawal, EB_Garamond, Hanken_Grotesk } from 'next/font/google';
+import { Cairo, Tajawal, Playfair_Display, Roboto } from 'next/font/google';
 import './globals.css';
 import { BRAND_LOGO_SRC } from '@/lib/brand';
 
@@ -17,16 +17,17 @@ const tajawal = Tajawal({
   display: 'swap',
 });
 
-const ebGaramond = EB_Garamond({
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
+/** Premium serif — matches citrusf.com logo / heading style */
+const playfair = Playfair_Display({
+  weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
   variable: '--font-eb-garamond',
   display: 'swap',
 });
 
-const hankenGrotesk = Hanken_Grotesk({
-  weight: ['400', '500', '600'],
+/** Clean UI sans — matches citrusf.com body / buttons */
+const roboto = Roboto({
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
   variable: '--font-hanken',
   display: 'swap',
@@ -47,7 +48,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={`${cairo.variable} ${tajawal.variable} ${ebGaramond.variable} ${hankenGrotesk.variable}`}>
+    <html lang="en" dir="ltr" className={`${cairo.variable} ${tajawal.variable} ${playfair.variable} ${roboto.variable}`}>
       <head>
         {/* Preconnect to font CDNs */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -59,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preload brand logo — LCP-critical header asset */}
         <link rel="preload" as="image" href={BRAND_LOGO_SRC} fetchPriority="high" />
       </head>
-      <body className={`${tajawal.className} premium-body antialiased`} suppressHydrationWarning>{children}</body>
+      <body className={`${roboto.className} premium-body antialiased`} suppressHydrationWarning>{children}</body>
     </html>
   );
 }

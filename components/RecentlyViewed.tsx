@@ -26,10 +26,10 @@ export default function RecentlyViewed({ lang, products }: RecentlyViewedProps) 
 
   return (
     <FadeInSection as="section" className="py-8 px-4 max-w-[1400px] mx-auto">
-      <h2 className="premium-heading text-xl md:text-2xl font-bold text-[#1a3c34] tracking-tight mb-1">
+      <h2 className="premium-heading text-xl md:text-2xl font-bold text-[#1b5e20] tracking-tight mb-1">
         {rtl ? 'شوهد مؤخراً' : 'Recently Viewed'}
       </h2>
-      <div className="w-12 h-0.5 bg-[#2d6a4f] mb-5" />
+      <div className="w-12 h-0.5 bg-[#2e7d32] mb-5" />
 
       <div className="flex gap-3 md:gap-4 overflow-x-auto pb-2 hide-scrollbar snap-x snap-mandatory scroll-smooth overscroll-x-contain">
         {items.map((product, i) => {
@@ -52,7 +52,7 @@ export default function RecentlyViewed({ lang, products }: RecentlyViewedProps) 
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="premium-heading font-semibold text-[#1a3c34] text-sm tracking-tight truncate">{name}</h3>
+                  <h3 className="premium-heading font-semibold text-[#1b5e20] text-sm tracking-tight truncate">{name}</h3>
                   <div className="flex items-center gap-0.5 mt-1">
                     {[1, 2, 3, 4, 5].map((s) => (
                       <Star key={s} className="size-3 fill-[#f5a623] text-[#f5a623]" />
@@ -60,7 +60,7 @@ export default function RecentlyViewed({ lang, products }: RecentlyViewedProps) 
                   </div>
                   <div className="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
                     <span className="text-xs text-gray-400 line-through">{formatPrice(original, rtl)}</span>
-                    <span className="text-sm font-bold text-[#2d6a4f]">{formatPrice(sale, rtl)}</span>
+                    <span className="text-sm font-bold text-[#2e7d32]">{formatPrice(sale, rtl)}</span>
                     {unit && <span className="text-xs text-gray-500 leading-relaxed">/ {unit}</span>}
                   </div>
                 </div>
@@ -72,7 +72,7 @@ export default function RecentlyViewed({ lang, products }: RecentlyViewedProps) 
 
       <div className="relative mt-6">
         <div className="border-t border-gray-100" />
-        <div className="absolute start-0 top-0 w-16 h-0.5 bg-[#2d6a4f] -translate-y-px" />
+        <div className="absolute start-0 top-0 w-16 h-0.5 bg-[#2e7d32] -translate-y-px" />
       </div>
     </FadeInSection>
   );

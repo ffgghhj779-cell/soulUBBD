@@ -105,7 +105,7 @@ export default function LuxuryHeader({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full ps-12 pe-4 py-3 rounded-full border border-gray-100 bg-white/90 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent premium-ease"
+                className="w-full ps-12 pe-4 py-3 rounded-full border border-gray-100 bg-white/90 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2e7d32] focus:border-transparent premium-ease"
               />
             </div>
           </form>
@@ -116,7 +116,7 @@ export default function LuxuryHeader({
               type="button"
               onClick={onToggleLanguage}
               aria-label={lang === 'ar' ? 'Switch to English' : 'تغيير إلى العربية'}
-              className="hidden lg:flex items-center gap-2 text-sm text-gray-700 hover:text-[#2d6a4f] premium-ease touch-manipulation"
+              className="hidden lg:flex items-center gap-2 text-sm text-gray-700 hover:text-[#2e7d32] premium-ease touch-manipulation"
             >
               <Globe size={18} className={lang === 'ar' ? 'rotate-180' : ''} />
               <span className="font-medium">{dict.language}</span>
@@ -124,7 +124,7 @@ export default function LuxuryHeader({
 
             <a
               href="#all-products"
-              className="hidden lg:flex items-center gap-2 text-sm text-gray-700 hover:text-[#2d6a4f] premium-ease"
+              className="hidden lg:flex items-center gap-2 text-sm text-gray-700 hover:text-[#2e7d32] premium-ease"
             >
               <User className="size-5" />
               <span className="font-medium">
@@ -133,8 +133,8 @@ export default function LuxuryHeader({
             </a>
 
             <a href="#categories" className="relative hidden sm:block">
-              <Heart className="size-6 text-gray-700 hover:text-[#287233] transition-colors" />
-              <span className="absolute -top-1.5 -end-1.5 bg-[#287233] text-white text-[10px] font-bold rounded-full size-4 flex items-center justify-center">
+              <Heart className="size-6 text-gray-700 hover:text-[#2e7d32] transition-colors" />
+              <span className="absolute -top-1.5 -end-1.5 bg-[#2e7d32] text-white text-[10px] font-bold rounded-full size-4 flex items-center justify-center">
                 0
               </span>
             </a>
@@ -143,7 +143,7 @@ export default function LuxuryHeader({
               type="button"
               onClick={onScrollToProducts}
               aria-label={lang === 'ar' ? 'بحث' : 'Search'}
-              className="md:hidden touch-target touch-press flex items-center justify-center text-gray-700 hover:text-[#2d6a4f] rounded-full"
+              className="md:hidden touch-target touch-press flex items-center justify-center text-gray-700 hover:text-[#2e7d32] rounded-full"
             >
               <Search className="size-5" />
             </button>
@@ -166,7 +166,7 @@ export default function LuxuryHeader({
                     : { scale: isCompact ? 0.92 : 1 }
                 }
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="bg-[#2d6a4f] rounded-full size-10 md:size-10 flex items-center justify-center premium-ease hover:bg-[#1a3c34]"
+                className="bg-[#2e7d32] rounded-full size-10 md:size-10 flex items-center justify-center premium-ease hover:bg-[#1b5e20]"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   {cartFlash ? (
@@ -197,7 +197,7 @@ export default function LuxuryHeader({
                 initial={{ scale: 1.35 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute -top-1 -end-1 bg-white border-2 border-[#2d6a4f] text-[#2d6a4f] text-[10px] font-bold rounded-full size-4 flex items-center justify-center"
+                className="absolute -top-1 -end-1 bg-white border-2 border-[#2e7d32] text-[#2e7d32] text-[10px] font-bold rounded-full size-4 flex items-center justify-center"
               >
                 {cartCount}
               </motion.span>
@@ -205,7 +205,7 @@ export default function LuxuryHeader({
 
             <button
               type="button"
-              className="lg:hidden touch-target touch-press flex items-center justify-center text-gray-700 hover:text-[#2d6a4f] rounded-full"
+              className="lg:hidden touch-target touch-press flex items-center justify-center text-gray-700 hover:text-[#2e7d32] rounded-full"
               onClick={onToggleMobileMenu}
               aria-label={
                 isMobileMenuOpen
@@ -255,7 +255,7 @@ export default function LuxuryHeader({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={searchPlaceholder}
-              className="w-full min-h-[44px] ps-11 pe-4 py-2.5 rounded-2xl border border-gray-100 bg-white/90 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent premium-ease"
+              className="w-full min-h-[44px] ps-11 pe-4 py-2.5 rounded-2xl border border-gray-100 bg-white/90 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2e7d32] focus:border-transparent premium-ease"
             />
           </div>
         </form>
@@ -283,7 +283,7 @@ export default function LuxuryHeader({
               transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
               className="mobile-drawer-panel fixed top-0 bottom-0 end-0 z-50 lg:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe bg-white/98 backdrop-blur-xl shadow-2xl overflow-y-auto overscroll-contain app-scroll"
             >
-              <div className="h-1 w-full bg-[#2d6a4f]" />
+              <div className="h-1 w-full bg-[#2e7d32]" />
 
               <div className="px-8 pt-10 pb-6 border-b border-gray-100">
                 <BrandLockup
@@ -303,7 +303,7 @@ export default function LuxuryHeader({
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.12 + i * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     onClick={onToggleMobileMenu}
-                    className="py-4 min-h-[52px] flex items-center border-b border-gray-100 text-lg font-semibold text-[#1a3c34] hover:text-[#2d6a4f] touch-press touch-target rounded-lg -mx-2 px-2"
+                    className="py-4 min-h-[52px] flex items-center border-b border-gray-100 text-lg font-semibold text-[#1b5e20] hover:text-[#2e7d32] touch-press touch-target rounded-lg -mx-2 px-2"
                   >
                     {item.label}
                   </motion.a>
@@ -315,7 +315,7 @@ export default function LuxuryHeader({
                   type="button"
                   onClick={() => { onToggleLanguage(); onToggleMobileMenu(); }}
                   aria-label={lang === 'ar' ? 'Switch to English' : 'تغيير إلى العربية'}
-                  className="w-full min-h-[52px] rounded-2xl bg-[#2d6a4f] text-white flex items-center justify-center gap-2 font-medium text-base hover:bg-[#1a3c34] touch-press touch-target"
+                  className="w-full min-h-[52px] rounded-2xl bg-[#2e7d32] text-white flex items-center justify-center gap-2 font-medium text-base hover:bg-[#1b5e20] touch-press touch-target"
                 >
                   <Globe size={18} className={lang === 'ar' ? 'rotate-180' : ''} />
                   {dict.language}
@@ -328,7 +328,7 @@ export default function LuxuryHeader({
                       ? `عربة التسوق${cartCount > 0 ? ` (${cartCount})` : ''}`
                       : `Shopping cart${cartCount > 0 ? ` (${cartCount} items)` : ''}`
                   }
-                  className="w-full min-h-[52px] rounded-2xl border border-[#2d6a4f] text-[#2d6a4f] flex items-center justify-center gap-2 font-medium text-base hover:bg-[#ecfdf5] touch-press touch-target"
+                  className="w-full min-h-[52px] rounded-2xl border border-[#2e7d32] text-[#2e7d32] flex items-center justify-center gap-2 font-medium text-base hover:bg-[#ecfdf5] touch-press touch-target"
                 >
                   <ShoppingCart size={18} />
                   {lang === 'ar' ? 'عربة التسوق' : 'Shopping Cart'}

@@ -23,12 +23,12 @@ const features = (rtl: boolean) => [
   },
   {
     icon: Package,
-    color: 'text-[#2d6a4f]',
+    color: 'text-[#2e7d32]',
     label: rtl ? 'طلبات بالجملة' : 'Bulk Orders Available',
   },
   {
     icon: BadgeCheck,
-    color: 'text-[#2d6a4f]',
+    color: 'text-[#2e7d32]',
     label: rtl ? 'منتجات مفحوصة الجودة' : 'Quality Checked Products',
   },
   {
@@ -38,7 +38,7 @@ const features = (rtl: boolean) => [
   },
   {
     icon: Headphones,
-    color: 'text-[#2d6a4f]',
+    color: 'text-[#2e7d32]',
     label: rtl ? 'دعم ٢٤/٧' : '24/7 Support Always Be There for You',
   },
 ];
@@ -57,7 +57,7 @@ export default function CitrusFeaturesBar({ lang }: CitrusFeaturesBarProps) {
               className="flex items-start gap-2.5 md:items-center md:flex-1 md:min-w-0 rounded-2xl md:rounded-none p-2 md:p-0 bg-gray-50/80 md:bg-transparent"
             >
               <Icon className={`size-5 md:size-6 shrink-0 mt-0.5 md:mt-0 ${color}`} strokeWidth={1.75} />
-              <span className="text-[11px] md:text-xs font-semibold text-[#1a3c34] leading-relaxed">
+              <span className="text-[11px] md:text-xs font-semibold text-[#1b5e20] leading-relaxed">
                 {label}
               </span>
             </div>

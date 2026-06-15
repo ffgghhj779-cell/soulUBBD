@@ -54,12 +54,12 @@ export default function ProductSection({
       <div className="flex items-center justify-between mb-1 gap-4">
         <div className="flex items-center gap-2 min-w-0">
           {showIcon && (
-            <div className="bg-[#e8f4e8] border border-[#2d6a4f] rounded px-1.5 py-1 flex items-center shrink-0">
-              <span className="text-[#2d6a4f] text-xs font-black leading-none">%</span>
+            <div className="bg-[#e8f4e8] border border-[#2e7d32] rounded px-1.5 py-1 flex items-center shrink-0">
+              <span className="text-[#2e7d32] text-xs font-black leading-none">%</span>
             </div>
           )}
           <h2
-            className={`premium-heading text-xl md:text-2xl font-bold text-[#1a3c34] tracking-tight ${titleSerif ? 'font-serif' : ''}`}
+            className={`premium-heading text-xl md:text-2xl font-bold text-[#1b5e20] tracking-tight ${titleSerif ? 'font-serif' : ''}`}
             style={titleSerif ? { fontFamily: 'var(--font-eb-garamond, Georgia, serif)' } : undefined}
           >
             {title}
@@ -67,12 +67,12 @@ export default function ProductSection({
         </div>
         <a
           href="#all-products"
-          className="premium-ease touch-press bg-[#1a3c34] text-white text-xs md:text-sm font-bold px-5 md:px-6 py-2.5 md:py-3 min-h-[44px] inline-flex items-center rounded-full hover:bg-[#287233] tracking-wide shrink-0 uppercase"
+          className="premium-ease touch-press bg-[#2e7d32] text-white text-xs md:text-sm font-bold px-5 md:px-6 py-2.5 md:py-3 min-h-[44px] inline-flex items-center rounded-full hover:bg-[#1b5e20] tracking-wide shrink-0 uppercase"
         >
           {allProductsLabel}
         </a>
       </div>
-      <div className="w-12 h-0.5 bg-[#2d6a4f] mb-6" />
+      <div className="w-12 h-0.5 bg-[#2e7d32] mb-6" />
 
       {isLoading && products.length === 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
@@ -100,7 +100,7 @@ export default function ProductSection({
             ))}
           </div>
           <div className="flex items-center justify-center gap-2 mt-8">
-            <span className="h-2 w-6 rounded-full bg-[#2d6a4f]" aria-hidden="true" />
+            <span className="h-2 w-6 rounded-full bg-[#2e7d32]" aria-hidden="true" />
             {[0, 1, 2].map((i) => (
               <span key={i} className="size-2 rounded-full bg-gray-300" aria-hidden="true" />
             ))}

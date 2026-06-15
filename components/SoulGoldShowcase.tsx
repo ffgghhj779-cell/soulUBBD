@@ -85,7 +85,7 @@ const ProductCard = memo(function ProductCard({
           {badge && (
             <div
               className={`absolute top-3 start-3 text-white text-xs font-bold px-3 py-1 rounded-full z-10 ${
-                badge === 'HOT' ? 'bg-red-500' : 'bg-[#2d6a4f]'
+                badge === 'HOT' ? 'bg-red-500' : 'bg-[#2e7d32]'
               }`}
             >
               {badge}
@@ -106,7 +106,7 @@ const ProductCard = memo(function ProductCard({
           <button
             type="button"
             onClick={() => setQuickView(true)}
-            className="absolute top-3 end-3 z-10 hidden md:flex items-center justify-center size-9 rounded-full bg-white/90 border border-gray-200 text-gray-600 hover:text-[#2d6a4f] hover:border-[#2d6a4f] transition-colors opacity-0 group-hover:opacity-100"
+            className="absolute top-3 end-3 z-10 hidden md:flex items-center justify-center size-9 rounded-full bg-white/90 border border-gray-200 text-gray-600 hover:text-[#2e7d32] hover:border-[#2e7d32] transition-colors opacity-0 group-hover:opacity-100"
             aria-label={rtl ? 'معاينة سريعة' : 'Quick View'}
           >
             <Eye className="size-4" />
@@ -115,33 +115,33 @@ const ProductCard = memo(function ProductCard({
 
         <div className="px-4 pb-4 flex flex-col gap-2 flex-1">
           <div>
-            <h3 className="font-semibold text-[#1a3c34] text-[15px] leading-tight">{name}</h3>
+            <h3 className="font-semibold text-[#1b5e20] text-[15px] leading-tight">{name}</h3>
             <p className="text-gray-400 text-xs mt-0.5">{category}</p>
           </div>
 
           <StarRating rating={4} />
 
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <span className="text-[15px] font-bold text-[#2d6a4f]">{salePrice}</span>
+            <span className="text-[15px] font-bold text-[#2e7d32]">{salePrice}</span>
             {unit && <span className="text-xs text-gray-500">/ {unit}</span>}
           </div>
 
           <div className="mt-auto">
             <div className="flex items-center gap-1">
-              <div className="flex items-center border border-[#2d6a4f] rounded-lg overflow-hidden">
+              <div className="flex items-center border border-[#2e7d32] rounded-lg overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setQty(Math.max(1, qty - 1))}
-                  className="bg-[#2d6a4f] text-white px-3 py-2.5 hover:bg-[#1a3c34] transition-colors touch-manipulation"
+                  className="bg-[#2e7d32] text-white px-3 py-2.5 hover:bg-[#1b5e20] transition-colors touch-manipulation"
                   aria-label={rtl ? 'تقليل الكمية' : 'Decrease quantity'}
                 >
                   <Minus className="size-3.5" />
                 </button>
-                <span className="px-3 text-sm font-semibold text-[#1a3c34] min-w-[2rem] text-center">{qty}</span>
+                <span className="px-3 text-sm font-semibold text-[#1b5e20] min-w-[2rem] text-center">{qty}</span>
                 <button
                   type="button"
                   onClick={() => setQty(qty + 1)}
-                  className="bg-[#2d6a4f] text-white px-3 py-2.5 hover:bg-[#1a3c34] transition-colors touch-manipulation"
+                  className="bg-[#2e7d32] text-white px-3 py-2.5 hover:bg-[#1b5e20] transition-colors touch-manipulation"
                   aria-label={rtl ? 'زيادة الكمية' : 'Increase quantity'}
                 >
                   <Plus className="size-3.5" />
@@ -150,7 +150,7 @@ const ProductCard = memo(function ProductCard({
               <button
                 type="button"
                 onClick={handleAdd}
-                className="flex-1 bg-[#2d6a4f] text-white text-xs font-bold py-2.5 rounded-lg hover:bg-[#1a3c34] transition-colors touch-manipulation sg-touch-fast"
+                className="flex-1 bg-[#2e7d32] text-white text-xs font-bold py-2.5 rounded-lg hover:bg-[#1b5e20] transition-colors touch-manipulation sg-touch-fast"
               >
                 {rtl ? 'أضف للسلة' : 'ADD TO CART'}
               </button>
@@ -174,7 +174,7 @@ const ProductCard = memo(function ProductCard({
               type="button"
               onClick={() => setQuickView(false)}
               aria-label={rtl ? 'إغلاق' : 'Close'}
-              className="absolute top-3 end-3 z-10 w-9 h-9 flex items-center justify-center bg-[#2d6a4f] text-white hover:bg-[#1a3c34] transition-colors rounded-full sg-touch-fast"
+              className="absolute top-3 end-3 z-10 w-9 h-9 flex items-center justify-center bg-[#2e7d32] text-white hover:bg-[#1b5e20] transition-colors rounded-full sg-touch-fast"
             >
               <X size={16} />
             </button>
@@ -189,17 +189,17 @@ const ProductCard = memo(function ProductCard({
               />
             </div>
             <div className="p-6 border-t border-gray-100">
-              <span className="text-xs font-bold text-[#2d6a4f] uppercase tracking-wide">
+              <span className="text-xs font-bold text-[#2e7d32] uppercase tracking-wide">
                 {rtl ? product.badge_ar : product.badge_en}
               </span>
-              <h3 className="mt-2 text-xl text-[#1a3c34] font-semibold">{name}</h3>
+              <h3 className="mt-2 text-xl text-[#1b5e20] font-semibold">{name}</h3>
               <p className="mt-1 text-sm text-gray-500">{unit}</p>
               <div className="flex items-center justify-between mt-5">
-                <span className="text-xl font-bold text-[#2d6a4f] tabular-nums">{salePrice}</span>
+                <span className="text-xl font-bold text-[#2e7d32] tabular-nums">{salePrice}</span>
                 <button
                   type="button"
                   onClick={() => { handleAdd(); setQuickView(false); }}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#2d6a4f] text-white text-xs font-bold rounded-lg hover:bg-[#1a3c34] transition-colors sg-touch-fast"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#2e7d32] text-white text-xs font-bold rounded-lg hover:bg-[#1b5e20] transition-colors sg-touch-fast"
                 >
                   {rtl ? 'أضف للسلة' : 'ADD TO CART'}
                 </button>
@@ -245,7 +245,7 @@ const EditorialTile = memo(function EditorialTile({
         {badge && (
           <span
             className={`absolute top-3 end-3 text-white text-xs font-bold px-3 py-1 rounded-full z-10 ${
-              badge === 'HOT' ? 'bg-red-500' : 'bg-[#2d6a4f]'
+              badge === 'HOT' ? 'bg-red-500' : 'bg-[#2e7d32]'
             }`}
           >
             {badge}
@@ -267,7 +267,7 @@ const EditorialTile = memo(function EditorialTile({
       <div className="px-4 md:px-5 pb-4 md:pb-5 flex flex-col gap-2 border-t border-gray-100">
         <div>
           <p className="text-gray-400 text-xs">{category}</p>
-          <h3 className="font-semibold text-[#1a3c34] text-base md:text-lg leading-tight mt-0.5 line-clamp-2">
+          <h3 className="font-semibold text-[#1b5e20] text-base md:text-lg leading-tight mt-0.5 line-clamp-2">
             {name}
           </h3>
           {unit && <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">{unit}</p>}
@@ -276,12 +276,12 @@ const EditorialTile = memo(function EditorialTile({
         <StarRating rating={4} />
 
         <div className="flex items-center justify-between gap-3 mt-auto pt-2">
-          <span className="text-base md:text-lg font-bold text-[#2d6a4f] tabular-nums">{salePrice}</span>
+          <span className="text-base md:text-lg font-bold text-[#2e7d32] tabular-nums">{salePrice}</span>
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
             aria-label={rtl ? 'أضف للسلة' : 'Add to cart'}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#2d6a4f] text-white rounded-lg text-xs font-bold hover:bg-[#1a3c34] transition-colors touch-manipulation sg-touch-fast shrink-0"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[#2e7d32] text-white rounded-lg text-xs font-bold hover:bg-[#1b5e20] transition-colors touch-manipulation sg-touch-fast shrink-0"
           >
             <ShoppingCart size={13} strokeWidth={2} />
             {rtl ? 'أضف للسلة' : 'ADD TO CART'}
@@ -355,10 +355,10 @@ function SoulGoldShowcase({
     <div ref={showcaseRef}>
       <section id="editorial" className="py-6 md:py-10 px-4 max-w-[1400px] mx-auto">
         <div className="max-w-[1280px] mx-auto">
-          <h2 className="text-3xl font-bold text-[#1a3c34] mb-1">
+          <h2 className="text-3xl font-bold text-[#1b5e20] mb-1">
             {rtl ? 'منتجاتنا المميزة' : 'Best Selling Fresh Produce'}
           </h2>
-          <div className="w-10 h-0.5 bg-[#2d6a4f] mb-6" />
+          <div className="w-10 h-0.5 bg-[#2e7d32] mb-6" />
 
           {editorialProducts.length >= 4 ? (
           <div
@@ -414,10 +414,10 @@ function SoulGoldShowcase({
 
       <section id="all-products" className="py-6 md:py-10 px-4 max-w-[1400px] mx-auto">
         <div className="max-w-[1280px] mx-auto">
-          <h2 className="text-3xl font-bold text-[#1a3c34] mb-1">
+          <h2 className="text-3xl font-bold text-[#1b5e20] mb-1">
             {rtl ? 'جميع المنتجات' : 'Shop the Collection'}
           </h2>
-          <div className="w-10 h-0.5 bg-[#2d6a4f] mb-6" />
+          <div className="w-10 h-0.5 bg-[#2e7d32] mb-6" />
 
           {isLoading && gridProducts.length === 0 ? (
             <>

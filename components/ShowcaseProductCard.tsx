@@ -103,7 +103,7 @@ const ShowcaseProductCard = memo(function ShowcaseProductCard({
         {badge && badge !== 'SOLD OUT' && (
           <div
             className={`absolute top-9 start-3 text-white text-xs font-bold px-3 py-1 rounded-full z-10 ${
-              badge === 'HOT' ? 'bg-red-500' : 'bg-[#2d6a4f]'
+              badge === 'HOT' ? 'bg-red-500' : 'bg-[#2e7d32]'
             }`}
           >
             {badge}
@@ -132,7 +132,7 @@ const ShowcaseProductCard = memo(function ShowcaseProductCard({
 
       <div className="px-3 pb-3 md:px-4 md:pb-4 flex flex-col gap-1.5 md:gap-2 flex-1">
         <div>
-          <h3 className="premium-heading font-bold text-[#1a3c34] text-[15px] md:text-[15px] tracking-tight line-clamp-2 md:line-clamp-1">{name}</h3>
+          <h3 className="premium-heading font-bold text-[#1b5e20] text-[15px] md:text-[15px] tracking-tight line-clamp-2 md:line-clamp-1">{name}</h3>
           <p className="text-gray-400 text-[11px] md:text-xs mt-0.5 line-clamp-1 leading-relaxed">{category}</p>
         </div>
 
@@ -142,7 +142,7 @@ const ShowcaseProductCard = memo(function ShowcaseProductCard({
           {!soldOut && (
             <span className="text-xs text-gray-400 line-through">{originalPrice}</span>
           )}
-          <span className="text-base md:text-[15px] font-bold text-[#2d6a4f]">{salePrice}</span>
+          <span className="text-base md:text-[15px] font-bold text-[#2e7d32]">{salePrice}</span>
           {unit && <span className="text-xs text-gray-500 leading-relaxed">/ {unit}</span>}
         </div>
 
@@ -150,26 +150,26 @@ const ShowcaseProductCard = memo(function ShowcaseProductCard({
           {soldOut ? (
             <button
               type="button"
-              className="w-full min-h-[48px] premium-ease touch-press bg-[#2d6a4f] text-white text-sm font-bold py-3 md:py-2.5 rounded-2xl md:rounded-lg hover:bg-[#1a3c34]"
+              className="w-full min-h-[48px] premium-ease touch-press bg-[#2e7d32] text-white text-sm font-bold py-3 md:py-2.5 rounded-2xl md:rounded-lg hover:bg-[#1b5e20]"
             >
               {rtl ? 'اقرأ المزيد' : 'READ MORE'}
             </button>
           ) : (
             <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-1">
-              <div className="flex items-center border border-[#2d6a4f] rounded-2xl md:rounded-lg overflow-hidden shrink-0 self-center md:self-auto">
+              <div className="flex items-center border border-[#2e7d32] rounded-2xl md:rounded-lg overflow-hidden shrink-0 self-center md:self-auto">
                 <button
                   type="button"
                   onClick={() => setQty(Math.max(1, qty - 1))}
-                  className="touch-target touch-press premium-ease bg-[#2d6a4f] text-white px-3.5 py-3 md:py-2.5 hover:bg-[#1a3c34]"
+                  className="touch-target touch-press premium-ease bg-[#2e7d32] text-white px-3.5 py-3 md:py-2.5 hover:bg-[#1b5e20]"
                   aria-label={rtl ? 'تقليل الكمية' : 'Decrease quantity'}
                 >
                   <Minus className="size-4 md:size-3.5" />
                 </button>
-                <span className="px-3.5 md:px-3 text-sm font-semibold text-[#1a3c34] min-w-[2.25rem] text-center">{qty}</span>
+                <span className="px-3.5 md:px-3 text-sm font-semibold text-[#1b5e20] min-w-[2.25rem] text-center">{qty}</span>
                 <button
                   type="button"
                   onClick={() => setQty(qty + 1)}
-                  className="touch-target touch-press premium-ease bg-[#2d6a4f] text-white px-3.5 py-3 md:py-2.5 hover:bg-[#1a3c34]"
+                  className="touch-target touch-press premium-ease bg-[#2e7d32] text-white px-3.5 py-3 md:py-2.5 hover:bg-[#1b5e20]"
                   aria-label={rtl ? 'زيادة الكمية' : 'Increase quantity'}
                 >
                   <Plus className="size-4 md:size-3.5" />
@@ -181,7 +181,7 @@ const ShowcaseProductCard = memo(function ShowcaseProductCard({
                 animate={addedFlash ? { scale: [1, 0.96, 1.02, 1] } : { scale: 1 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className={`w-full min-h-[48px] md:min-h-0 flex-1 touch-press text-white text-xs font-bold py-3.5 md:py-2.5 rounded-2xl md:rounded-lg min-w-0 uppercase tracking-wide gpu-animate ${
-                  addedFlash ? 'bg-[#1a3c34]' : 'bg-[#2d6a4f] hover:bg-[#1a3c34]'
+                  addedFlash ? 'bg-[#1b5e20]' : 'bg-[#2e7d32] hover:bg-[#1b5e20]'
                 }`}
               >
                 {rtl ? 'أضف للسلة' : 'ADD TO CART'}

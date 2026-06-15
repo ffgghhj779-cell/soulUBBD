@@ -24,10 +24,12 @@
   --ring: oklch(0.3 0.1 150);
   --radius: 0.5rem;
 
-  --citrus-green-dark: #1a3c34;
-  --citrus-green-mid: #2d6a4f;
-  --citrus-green-light: #8db87a;
-  --citrus-footer: #8ab88a;
+  --citrus-green-dark: #1b5e20;
+  --citrus-green-mid: #2e7d32;
+  --citrus-green-hover: #1b5e20;
+  --citrus-green-accent: #4caf50;
+  --citrus-green-light: #81c784;
+  --citrus-footer: #8cbc67;
   --citrus-orange: #f47c2b;
   --citrus-star: #f5a623;
   --citrus-page-bg: #f9fafb;
@@ -42,7 +44,7 @@
   --champagne: #f0fdf4;
   --obsidian: var(--citrus-green-dark);
   --charcoal: var(--citrus-green-dark);
-  --gold-border: rgba(45, 106, 79, 0.15);
+  --gold-border: rgba(46, 125, 50, 0.15);
 
   --sg-background:        #ffffff;
   --sg-surface:           #ffffff;
@@ -118,7 +120,7 @@ html.menu-open body {
 body {
   background-color: var(--citrus-page-bg);
   color: var(--foreground);
-  font-family: var(--font-tajawal), sans-serif;
+  font-family: var(--font-hanken), var(--font-tajawal), sans-serif;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -219,9 +221,32 @@ body {
   }
 }
 
-h1, h2, h3, h4, h5, h6, button {
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-eb-garamond), var(--font-cairo), Georgia, serif;
+  font-weight: 600;
+}
+
+button {
+  font-family: var(--font-hanken), var(--font-cairo), sans-serif;
+  font-weight: 700;
+}
+
+html[lang='ar'] body {
+  font-family: var(--font-tajawal), sans-serif;
+}
+
+html[lang='ar'] h1,
+html[lang='ar'] h2,
+html[lang='ar'] h3,
+html[lang='ar'] h4,
+html[lang='ar'] h5,
+html[lang='ar'] h6 {
   font-family: var(--font-cairo), sans-serif;
   font-weight: 700;
+}
+
+html[lang='ar'] button {
+  font-family: var(--font-cairo), sans-serif;
 }
 
 html[lang='ar'] h1,
@@ -1112,8 +1137,14 @@ html[lang='en'] button {
 
 /* ── Premium polish utilities ───────────────────────────────────── */
 .premium-heading {
+  font-family: var(--font-eb-garamond), var(--font-cairo), Georgia, serif;
   letter-spacing: -0.025em;
   line-height: 1.25;
+}
+
+html[lang='ar'] .premium-heading {
+  font-family: var(--font-cairo), sans-serif;
+  letter-spacing: 0;
 }
 
 .premium-body {

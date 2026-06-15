@@ -120,7 +120,7 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
   ];
 
   return (
-    <footer className="bg-[#9ccc65] text-white pb-safe">
+    <footer className="bg-[#8cbc67] text-white pb-safe">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8">
           {/* Brand */}
@@ -240,12 +240,12 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={dict.emailPlaceholder}
-              className="flex-1 rounded-full px-5 py-3 text-sm text-[#1a3c34] placeholder:text-gray-400 outline-none border-0 min-h-[48px]"
+              className="flex-1 rounded-full px-5 py-3 text-sm text-[#1b5e20] placeholder:text-gray-400 outline-none border-0 min-h-[48px]"
             />
             <button
               type="submit"
               aria-label={rtl ? 'اشتراك' : 'Subscribe'}
-              className="size-12 rounded-full bg-[#1a3c34] text-white flex items-center justify-center hover:bg-[#287233] transition-colors shrink-0 touch-manipulation"
+              className="size-12 rounded-full bg-[#2e7d32] text-white flex items-center justify-center hover:bg-[#1b5e20] transition-colors shrink-0 touch-manipulation"
             >
               <Send size={18} className={rtl ? 'rotate-180' : ''} />
             </button>

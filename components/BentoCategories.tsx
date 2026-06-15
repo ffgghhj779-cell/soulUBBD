@@ -24,10 +24,10 @@ const TILE_BG = [
 export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
   return (
     <FadeInSection as="section" id="categories" className="py-8 px-4 max-w-[1400px] mx-auto">
-      <h2 className="premium-heading text-xl md:text-2xl font-bold text-[#1a3c34] tracking-tight mb-1">
+      <h2 className="premium-heading text-xl md:text-2xl font-bold text-[#1b5e20] tracking-tight mb-1">
         {dict.discover}
       </h2>
-      <div className="w-12 h-0.5 bg-[#2d6a4f] mb-6" />
+      <div className="w-12 h-0.5 bg-[#2e7d32] mb-6" />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-5">
         {CATEGORY_TILES.map((tile, idx) => (
@@ -48,7 +48,7 @@ export default function BentoCategories({ lang, dict }: BentoCategoriesProps) {
                   className="object-cover object-center premium-ease group-hover:scale-[1.04]"
                 />
                 <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none">
-                  <span className="bg-white/95 text-[#1a3c34] text-[9px] sm:text-[10px] font-bold tracking-wide uppercase px-3 py-1 rounded shadow-sm">
+                  <span className="bg-white/95 text-[#1b5e20] text-[9px] sm:text-[10px] font-bold tracking-wide uppercase px-3 py-1 rounded shadow-sm">
                     {lang === 'ar' ? tile.name_ar : tile.name_en}
                   </span>
                 </div>
