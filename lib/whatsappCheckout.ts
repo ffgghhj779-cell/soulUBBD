@@ -1,6 +1,6 @@
 import type { CartProduct } from '@/lib/productTypes';
 
-export const WHATSAPP_CHECKOUT_NUMBER = '201066046067';
+export const WHATSAPP_CHECKOUT_NUMBER = '201144003490';
 
 export type CheckoutCartItem = {
   product: CartProduct;
