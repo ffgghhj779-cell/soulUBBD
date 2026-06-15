@@ -9,6 +9,11 @@ export const COMPANY = {
     en: 'Jeddah — Burj Al-Shasha',
     ar: 'جدة — برج الشاشة',
   },
+  social: {
+    instagram: 'https://instagram.com',
+    twitter: 'https://twitter.com',
+    facebook: 'https://facebook.com',
+  },
   registration: {
     number: '7053178781',
     type: {

@@ -1,21 +1,32 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Send, Instagram, Twitter, Facebook, Mail } from 'lucide-react';
-import BrandLogo from '@/components/BrandLogo';
+import { Send, Facebook, Instagram, Twitter, Mail } from 'lucide-react';
+import BrandLockup from '@/components/BrandLockup';
 import { COMPANY } from '@/lib/company';
 
 type Lang = 'ar' | 'en';
 
 type FooterDict = {
   footerDesc: string;
-  quickLinks: string; contactUs: string; newsletter: string;
-  newsletterDesc: string; emailPlaceholder: string;
-  allRights: string; contactPhoneLabel: string; contactLocationLabel: string; support: string;
-  shopAll: string; soulPlus: string; aboutUs: string; trackOrder: string;
+  quickLinks: string;
+  contactUs: string;
+  newsletter: string;
+  newsletterDesc: string;
+  emailPlaceholder: string;
+  allRights: string;
+  contactPhoneLabel: string;
+  contactLocationLabel: string;
+  support: string;
+  shopAll: string;
+  soulPlus: string;
+  aboutUs: string;
+  trackOrder: string;
   newsletterSuccess: string;
-  companyRegTitle: string; crLabel: string;
+  companyRegTitle: string;
+  crLabel: string;
+  brandTitle: string;
+  brandSubtitle: string;
 };
 
 type StatementFooterProps = {
@@ -24,61 +35,63 @@ type StatementFooterProps = {
 };
 
 const socials = [
-  { href: 'https://instagram.com', Icon: Instagram, label: 'Instagram' },
-  { href: 'https://twitter.com',   Icon: Twitter,   label: 'Twitter'   },
-  { href: 'https://facebook.com',  Icon: Facebook,  label: 'Facebook'  },
+  { href: COMPANY.social.instagram, Icon: Instagram, label: 'Instagram' },
+  { href: COMPANY.social.twitter, Icon: Twitter, label: 'Twitter' },
+  { href: COMPANY.social.facebook, Icon: Facebook, label: 'Facebook' },
 ];
 
-function CompanyRegistration({ lang }: { lang: Lang }) {
+function CompanyRegistration({ lang, dict }: { lang: Lang; dict: FooterDict }) {
   const rtl = lang === 'ar';
   const { registration: reg } = COMPANY;
 
   return (
-    <div className="rounded-sm border border-[#C9A03D]/25 bg-gradient-to-br from-[#FEF7ED]/[0.04] to-transparent p-6 md:p-8">
+    <div className="rounded-xl border border-white/25 bg-white/10 p-6 md:p-8">
       <div className="flex items-start gap-4 mb-6">
-        <div className="w-11 h-11 rounded-full border border-[#C9A03D]/35 flex items-center justify-center text-[#C9A03D] shrink-0">
+        <div className="size-11 rounded-full border border-white/35 flex items-center justify-center text-white shrink-0">
           <i className="fa-solid fa-building-columns text-[15px]" aria-hidden="true" />
         </div>
         <div>
-          <p className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-[#C9A03D]/80 mb-1">
-            {rtl ? 'السجل التجاري' : 'Company Registration'}
+          <p className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/75 mb-1">
+            {dict.companyRegTitle}
           </p>
-          <h4 className="text-lg text-[#FEF7ED] font-medium"
-            style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}>
+          <h4
+            className="text-lg text-white font-medium"
+            style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}
+          >
             {rtl ? 'صول الذهبية للتجارة' : 'Soul Gold Trading'}
           </h4>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
-            {rtl ? 'رقم السجل' : 'CR Number'}
+        <div className="rounded-lg border border-white/15 bg-white/5 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
+            {dict.crLabel}
           </p>
-          <p className="text-[#FEF7ED] font-semibold tracking-wide" dir="ltr">{reg.number}</p>
+          <p className="text-white font-semibold tracking-wide" dir="ltr">{reg.number}</p>
         </div>
-        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
+        <div className="rounded-lg border border-white/15 bg-white/5 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
             {rtl ? 'نوع الشركة' : 'Entity Type'}
           </p>
-          <p className="text-[#FEF7ED]/90 text-sm leading-snug">
+          <p className="text-white/90 text-sm leading-snug">
             {rtl ? reg.type.ar : reg.type.en}
           </p>
         </div>
-        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
+        <div className="rounded-lg border border-white/15 bg-white/5 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
             {rtl ? 'الحالة' : 'Status'}
           </p>
-          <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#C9A03D]">
-            <span className="w-2 h-2 rounded-full bg-[#C9A03D] animate-pulse" aria-hidden="true" />
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-white">
+            <span className="size-2 rounded-full bg-white animate-pulse" aria-hidden="true" />
             {rtl ? reg.status.ar : reg.status.en}
           </p>
         </div>
-        <div className="rounded-sm border border-white/[0.08] bg-[#1A1612]/40 px-4 py-3">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1">
+        <div className="rounded-lg border border-white/15 bg-white/5 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
             {rtl ? 'الضريبة' : 'Tax Status'}
           </p>
-          <p className="text-[#FEF7ED]/90 text-sm leading-snug">
+          <p className="text-white/90 text-sm leading-snug">
             {rtl ? reg.vat.ar : reg.vat.en}
           </p>
         </div>
@@ -88,7 +101,7 @@ function CompanyRegistration({ lang }: { lang: Lang }) {
 }
 
 export default function StatementFooter({ lang, dict }: StatementFooterProps) {
-  const [email,     setEmail]     = useState('');
+  const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const rtl = lang === 'ar';
 
@@ -99,102 +112,45 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
     setEmail('');
   };
 
-  const brandName = rtl ? 'صول الذهبية' : 'Soul Gold';
-  const tagline   = rtl
-    ? 'ذهب المائدة السعودية'
-    : 'The Gold of the Saudi Table';
-
   const navLinks = [
-    { label: dict.shopAll,    href: '#products'      },
-    { label: dict.soulPlus,   href: '#ai-consultant' },
-    { label: dict.aboutUs,    href: '#quality'       },
+    { label: dict.shopAll, href: '#all-products' },
+    { label: dict.soulPlus, href: '#best-selling' },
+    { label: dict.aboutUs, href: '#hero' },
     { label: dict.trackOrder, href: `tel:${COMPANY.phoneTel}` },
   ];
 
   return (
-    <footer className="relative bg-[#1A1612] text-[#FEF7ED] overflow-hidden pb-safe" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
-
-      {/* ── Grain noise overlay ── */}
-      <div className="grain-overlay pointer-events-none" aria-hidden="true"
-           style={{ opacity: 0.06 }} />
-
-      {/* ── Atmospheric glows ── */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-32 start-[8%] w-[520px] h-[520px] rounded-full bg-[#C9A03D]/5 blur-[180px]" />
-        <div className="absolute bottom-0 end-[4%] w-[400px] h-[400px] rounded-full bg-[#FEF7ED]/5 blur-[150px]" />
-      </div>
-
-      {/* ── Cinematic typographic lockup ── */}
-      <div className="relative px-4 md:px-10 pt-24 pb-14 border-b border-white/[0.07]">
-        <div className="max-w-7xl mx-auto">
-
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-[11px] font-extrabold tracking-[0.38em] uppercase text-primary-gold mb-7"
-          >
-            {rtl ? 'منذ ٢٠٢٠' : 'Est. 2020'}
-          </motion.p>
-
-          <div className="overflow-hidden">
-            <motion.h2
-              initial={{ y: '105%' }}
-              whileInView={{ y: '0%' }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] as const }}
-              className="statement-brand font-medium text-[#C9A03D] leading-[0.9] select-none"
-              style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}
-            >
-              {brandName}
-            </motion.h2>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] as const }}
-            className="flex flex-col sm:flex-row sm:items-center gap-4 mt-8"
-          >
-            <p className="text-[#FEF7ED]/50 text-lg md:text-xl font-light italic tracking-wide">
-              {tagline}
-            </p>
-            <div className="sm:ms-auto shrink-0 will-change-transform">
-              <BrandLogo variant="footer" className="opacity-90" />
+    <footer className="bg-[#9ccc65] text-white pb-safe">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 pt-12 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8">
+          {/* Brand */}
+          <div>
+            <div className="bg-white rounded-lg p-4 inline-block mb-4">
+              <BrandLockup
+                lang={lang}
+                brandTitle={dict.brandTitle}
+                brandSubtitle={dict.brandSubtitle}
+                variant="footer"
+              />
             </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* ── Gold divider with central mark ── */}
-      <div className="relative max-w-7xl mx-auto flex items-center gap-6 px-4 md:px-10 py-10">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C9A03D]/40 to-transparent" />
-        <div className="shrink-0 w-10 h-10 rounded border border-[#C9A03D]/25 flex items-center justify-center">
-          <div className="w-3 h-3 rounded bg-[#C9A03D]/60" />
-        </div>
-        <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#C9A03D]/40 to-transparent" />
-      </div>
-
-      {/* ── Three-column utility grid ── */}
-      <div className="relative max-w-7xl mx-auto px-4 md:px-10 pb-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10">
+            <p className="text-white/90 text-sm leading-relaxed max-w-xs">
+              {dict.footerDesc}
+            </p>
+          </div>
 
           {/* Quick links */}
           <div>
-            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/50 mb-7">
+            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/70 mb-5">
               {dict.quickLinks}
             </h3>
-            <ul className="space-y-4">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="group flex items-center gap-3 text-white/55 hover:text-white smooth-transition touch-manipulation min-h-[48px]"
-                >
-                    <span className="w-5 h-px bg-primary-gold/35 group-hover:w-8 group-hover:bg-primary-gold smooth-transition shrink-0" />
-                    <span className="font-medium">{link.label}</span>
+            <ul className="space-y-3">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="text-white/90 hover:text-white text-sm font-medium transition-colors touch-manipulation min-h-[44px] inline-flex items-center"
+                  >
+                    {link.label}
                   </a>
                 </li>
               ))}
@@ -203,17 +159,17 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
 
           {/* Contact */}
           <div>
-            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/50 mb-7">
+            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/70 mb-5">
               {dict.contactUs}
             </h3>
-            <ul className="space-y-5">
+            <ul className="space-y-4">
               <li>
-                <a href={`tel:${COMPANY.phoneTel}`} className="flex items-center gap-4 group min-h-[44px]">
-                  <div className="w-10 h-10 rounded-full border border-white/12 flex items-center justify-center text-primary-gold group-hover:border-primary-gold/60 smooth-transition shrink-0">
-                    <i className="fa-solid fa-phone text-[14px]" aria-hidden="true" />
+                <a href={`tel:${COMPANY.phoneTel}`} className="flex items-center gap-3 group min-h-[44px]">
+                  <div className="size-10 rounded-full border border-white/25 flex items-center justify-center shrink-0 group-hover:border-white/50 transition-colors">
+                    <i className="fa-solid fa-phone text-sm" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-0.5">
                       {dict.contactPhoneLabel}
                     </p>
                     <p className="text-white font-bold tracking-wide" dir="ltr">{COMPANY.phone}</p>
@@ -221,12 +177,12 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
                 </a>
               </li>
               <li>
-                <div className="flex items-center gap-4 min-h-[44px]">
-                  <div className="w-10 h-10 rounded-full border border-white/12 flex items-center justify-center text-primary-gold shrink-0">
-                    <i className="fa-solid fa-location-dot text-[14px]" aria-hidden="true" />
+                <div className="flex items-center gap-3 min-h-[44px]">
+                  <div className="size-10 rounded-full border border-white/25 flex items-center justify-center shrink-0">
+                    <i className="fa-solid fa-location-dot text-sm" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-0.5">
                       {dict.contactLocationLabel}
                     </p>
                     <p className="text-white font-bold leading-snug">
@@ -236,85 +192,104 @@ export default function StatementFooter({ lang, dict }: StatementFooterProps) {
                 </div>
               </li>
               <li>
-                <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-4 group min-h-[44px]">
-                  <div className="w-10 h-10 rounded-full border border-white/12 flex items-center justify-center text-primary-gold group-hover:border-primary-gold/60 smooth-transition shrink-0">
+                <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-3 group min-h-[44px]">
+                  <div className="size-10 rounded-full border border-white/25 flex items-center justify-center shrink-0 group-hover:border-white/50 transition-colors">
                     <Mail size={15} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-0.5">
                       {dict.support}
                     </p>
                     <p className="text-white font-bold">{COMPANY.email}</p>
                   </div>
                 </a>
               </li>
+              <li>
+                <a
+                  href={COMPANY.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 group min-h-[44px]"
+                >
+                  <div className="size-10 rounded-full border border-white/25 flex items-center justify-center shrink-0 group-hover:border-white/50 transition-colors">
+                    <i className="fa-brands fa-whatsapp text-base" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-0.5">
+                      WhatsApp
+                    </p>
+                    <p className="text-white font-bold" dir="ltr">{COMPANY.phone}</p>
+                  </div>
+                </a>
+              </li>
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-[10px] font-extrabold tracking-[0.32em] uppercase text-white/50 mb-7">
-              {dict.newsletter}
-            </h3>
-            <p className="text-white/45 text-sm mb-5 leading-relaxed">
-              {submitted ? dict.newsletterSuccess : dict.newsletterDesc}
-            </p>
-            <form onSubmit={submit} className="flex gap-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={dict.emailPlaceholder}
-                className="flex-1 bg-[#FEF7ED]/[0.06] border border-[#FEF7ED]/[0.1] rounded px-4 py-3 min-h-[48px] text-sm text-[#FEF7ED] placeholder:text-[#FEF7ED]/25 outline-none focus:border-[#C9A03D]/50 smooth-transition"
-              />
-              <button
-                type="submit"
-                aria-label={rtl ? 'اشترك في النشرة البريدية' : 'Subscribe to newsletter'}
-                className="min-w-[48px] min-h-[48px] rounded bg-[#C9A03D] hover:bg-[#C9A03D]/80 text-[#1A1612] flex items-center justify-center smooth-transition active:scale-95 touch-manipulation shrink-0"
-              >
-                <Send size={17} className={rtl ? 'rotate-180' : ''} />
-              </button>
-            </form>
           </div>
         </div>
 
-        {/* Company registration trust block */}
-        <div className="mt-14">
-          <CompanyRegistration lang={lang} />
+        {/* Newsletter */}
+        <div className="mt-12 bg-[#8bc34a] rounded-2xl px-6 md:px-10 py-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h3 className="text-xl md:text-2xl font-bold mb-1">{dict.newsletter}</h3>
+            <p className="text-white/90 text-sm">
+              {submitted ? dict.newsletterSuccess : dict.newsletterDesc}
+            </p>
+          </div>
+          <form onSubmit={submit} className="flex gap-2 w-full md:max-w-md shrink-0">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={dict.emailPlaceholder}
+              className="flex-1 rounded-full px-5 py-3 text-sm text-[#1a3c34] placeholder:text-gray-400 outline-none border-0 min-h-[48px]"
+            />
+            <button
+              type="submit"
+              aria-label={rtl ? 'اشتراك' : 'Subscribe'}
+              className="size-12 rounded-full bg-[#1a3c34] text-white flex items-center justify-center hover:bg-[#287233] transition-colors shrink-0 touch-manipulation"
+            >
+              <Send size={18} className={rtl ? 'rotate-180' : ''} />
+            </button>
+          </form>
+        </div>
+
+        {/* Company registration */}
+        <div className="mt-10">
+          <CompanyRegistration lang={lang} dict={dict} />
         </div>
       </div>
 
-      {/* ── Bottom bar ── */}
-      <div className="relative border-t border-white/[0.07] px-4 md:px-10 py-7 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
+      {/* Bottom bar */}
+      <div className="border-t border-white/20">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-5">
+          <p className="text-white/80 text-xs tracking-wide font-medium text-center md:text-start">
+            © {new Date().getFullYear()} {dict.allRights}
+          </p>
 
-        <p className="text-white/25 text-xs tracking-widest font-medium">
-          © {new Date().getFullYear()} {dict.allRights}
-        </p>
+          <div className="flex items-center gap-3">
+            {socials.map(({ href, Icon, label }) => (
+              <a
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="min-w-[44px] min-h-[44px] rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors touch-manipulation"
+              >
+                <Icon size={17} />
+              </a>
+            ))}
+          </div>
 
-        <div className="flex items-center gap-3">
-          {socials.map(({ href, Icon, label }) => (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="min-w-[48px] min-h-[48px] rounded-full border border-white/[0.1] flex items-center justify-center text-white/40 hover:border-primary-gold/60 hover:text-primary-gold smooth-transition active:scale-95 touch-manipulation"
-            >
-              <Icon size={17} />
-            </a>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-2">
-          {['VISA', 'MASTERCARD', 'MADA'].map((p) => (
-            <div
-              key={p}
-              className="h-7 px-2.5 bg-white/[0.05] border border-white/[0.1] rounded-md flex items-center justify-center font-bold text-[10px] text-white/30 tracking-wider"
-            >
-              {p}
-            </div>
-          ))}
+          <div className="flex items-center gap-2">
+            {['VISA', 'MASTERCARD', 'MADA'].map((p) => (
+              <div
+                key={p}
+                className="h-7 px-2.5 bg-white/10 border border-white/20 rounded-md flex items-center justify-center font-bold text-[10px] text-white/70 tracking-wider"
+              >
+                {p}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

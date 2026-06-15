@@ -1,46 +1,97 @@
 @import "tailwindcss";
 
 :root {
-  /* ── Existing Soul Gold tokens ──────────────────────────────── */
-  --primary-gold: #C9A03D;
-  --light-gold: #E8C468;
-  --dark-gold: #A67C1E;
-  --terracotta: #B85C38;
-  --warm-brown: #9E4A2A;
-  --cream: #FEF7ED;
-  --champagne: #F7E7C6;
-  --obsidian: #1A1612;
-  --charcoal: #2C2C2C;
-  --gold-border: rgba(201, 160, 61, 0.15);
+  color-scheme: light;
 
-  /* ── DESIGN.md tokens (exact values from spec) ───────────────── */
-  --sg-background:        #FFF8F3;
-  --sg-surface:           #FFF8F3;
-  --sg-surface-low:       #FBF2E8;
-  --sg-surface-container: #F6ECE3;
-  --sg-on-surface:        #1F1B15;
-  --sg-on-surface-var:    #4A463F;
-  --sg-primary:           #625E56;
-  --sg-primary-container: #FEF7ED;
-  --sg-tertiary:          #785A00;
-  --sg-tertiary-fixed:    #FFDF9C;
-  --sg-tertiary-fixed-dim:#EDC15A;
-  --sg-outline:           #7B776E;
-  --sg-outline-variant:   #CCC6BC;
-  --sg-inverse-surface:   #343029;
+  /* ── Citrus Foodstuff Trading Theme ─────────────────────────── */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.18 0.02 150);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.02 150);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.02 150);
+  --primary: oklch(0.3 0.1 150);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.85 0.06 140);
+  --secondary-foreground: oklch(0.18 0.02 150);
+  --muted: oklch(0.97 0.005 140);
+  --muted-foreground: oklch(0.55 0.02 150);
+  --accent: oklch(0.7 0.19 50);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.01 140);
+  --input: oklch(0.95 0.01 140);
+  --ring: oklch(0.3 0.1 150);
+  --radius: 0.5rem;
+
+  --citrus-green-dark: #1a3c34;
+  --citrus-green-mid: #2d6a4f;
+  --citrus-green-light: #8db87a;
+  --citrus-footer: #8ab88a;
+  --citrus-orange: #f47c2b;
+  --citrus-star: #f5a623;
+  --citrus-page-bg: #f9fafb;
+
+  /* Legacy aliases → citrus (keeps untouched components on-brand) */
+  --primary-gold: var(--citrus-green-mid);
+  --light-gold: var(--citrus-green-light);
+  --dark-gold: var(--citrus-green-dark);
+  --terracotta: var(--citrus-orange);
+  --warm-brown: #c45a1a;
+  --cream: #ffffff;
+  --champagne: #f0fdf4;
+  --obsidian: var(--citrus-green-dark);
+  --charcoal: var(--citrus-green-dark);
+  --gold-border: rgba(45, 106, 79, 0.15);
+
+  --sg-background:        #ffffff;
+  --sg-surface:           #ffffff;
+  --sg-surface-low:       #f9fafb;
+  --sg-surface-container: #f3f4f6;
+  --sg-on-surface:        var(--citrus-green-dark);
+  --sg-on-surface-var:    #4b5563;
+  --sg-primary:           var(--citrus-green-mid);
+  --sg-primary-container: #ecfdf5;
+  --sg-tertiary:          var(--citrus-orange);
+  --sg-tertiary-fixed:    #fef3c7;
+  --sg-tertiary-fixed-dim:#fde68a;
+  --sg-outline:           #9ca3af;
+  --sg-outline-variant:   #e5e7eb;
+  --sg-inverse-surface:   var(--citrus-green-dark);
 }
 
 @theme {
-  --color-primary-gold: #C9A03D;
-  --color-light-gold: #E8C468;
-  --color-dark-gold: #A67C1E;
-  --color-terracotta: #B85C38;
-  --color-warm-brown: #9E4A2A;
-  --color-cream: #FEF7ED;
-  --color-soft-white: #FFFFFF;
-  --color-soft-charcoal: #2C2C2C;
-  --color-obsidian: #1A1612;
-  --color-champagne: #F7E7C6;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-citrus-green-dark: var(--citrus-green-dark);
+  --color-citrus-green-mid: var(--citrus-green-mid);
+  --color-citrus-green-light: var(--citrus-green-light);
+  --color-citrus-orange: var(--citrus-orange);
+  --color-citrus-star: var(--citrus-star);
+  --color-primary-gold: var(--citrus-green-mid);
+  --color-light-gold: var(--citrus-green-light);
+  --color-dark-gold: var(--citrus-green-dark);
+  --color-terracotta: var(--citrus-orange);
+  --color-warm-brown: #c45a1a;
+  --color-cream: #ffffff;
+  --color-soft-white: #ffffff;
+  --color-soft-charcoal: var(--citrus-green-dark);
+  --color-obsidian: var(--citrus-green-dark);
+  --color-champagne: #f0fdf4;
   --font-cairo: var(--font-cairo);
   --font-tajawal: var(--font-tajawal);
 }
@@ -65,9 +116,10 @@ html.menu-open body {
 }
 
 body {
-  background-color: var(--cream);
-  color: var(--charcoal);
+  background-color: var(--citrus-page-bg);
+  color: var(--foreground);
   font-family: var(--font-tajawal), sans-serif;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
@@ -967,19 +1019,15 @@ html[lang='en'] button {
     filter: brightness(1.06);
   }
 
-  /* ── Premium product card (magazine editorial) ─────────────────── */
+  /* ── Citrus product card ─────────────────────────────────────────── */
   .sg-product-card {
-    border: 1px solid rgba(234, 225, 215, 0.95);
-    border-radius: 2px;
-    box-shadow: 0 4px 20px rgba(26, 22, 18, 0.06);
-    transition:
-      transform 0.45s cubic-bezier(0.25, 1, 0.5, 1),
-      box-shadow 0.45s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: transform, box-shadow;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.3s ease;
   }
   .sg-product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 22px 50px rgba(26, 22, 18, 0.13);
+    box-shadow: 0 8px 24px rgba(26, 60, 52, 0.08);
   }
 
   /* ── Ken Burns lifestyle hero ──────────────────────────────────── */
@@ -1059,5 +1107,157 @@ html[lang='en'] button {
     .sg-icon-shimmer       { animation-duration: 14s !important; }
     .sg-trust-border-sweep { animation-duration: 5s  !important; }
     .sg-gold-sweep-text    { animation-duration: 10s !important; }
+  }
+}
+
+/* ── Premium polish utilities ───────────────────────────────────── */
+.premium-heading {
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.premium-body {
+  line-height: 1.65;
+}
+
+.premium-ease {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.premium-card-hover:hover {
+  transform: scale(1.02);
+}
+
+.premium-btn-hover:hover {
+  transform: scale(1.02);
+}
+
+.sg-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 0%,
+    #ebedf0 35%,
+    #f9fafb 50%,
+    #ebedf0 65%,
+    #f3f4f6 100%
+  );
+  background-size: 220% 100%;
+  animation: sg-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes sg-skeleton-shimmer {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
+.glass-header {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card-hover:hover,
+  .premium-btn-hover:hover {
+    transform: none;
+  }
+  .sg-shimmer {
+    animation: none;
+    background: #f3f4f6;
+  }
+}
+
+/* ── Mobile app-like experience ─────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+.mobile-shell {
+  min-height: 100dvh;
+}
+
+.app-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.gpu-animate {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.touch-press {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.12s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.12s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease;
+}
+
+.touch-press:active {
+  transform: scale(0.97);
+  opacity: 0.88;
+}
+
+.mobile-header-shell {
+  transition:
+    padding 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-header-shell.is-compact {
+  box-shadow: 0 4px 24px rgba(26, 60, 52, 0.08);
+}
+
+.mobile-search-collapse {
+  transition:
+    max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s ease,
+    padding 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-search-collapse.is-compact {
+  max-height: 0 !important;
+  opacity: 0;
+  padding-bottom: 0 !important;
+  pointer-events: none;
+}
+
+.mobile-drawer-panel {
+  border-start-start-radius: 1.25rem;
+  border-end-start-radius: 1.25rem;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .premium-card-hover:hover {
+    transform: none;
+  }
+
+  .premium-card-hover:active {
+    transform: scale(0.985);
+  }
+
+  .premium-btn-hover:hover {
+    transform: none;
+  }
+
+  .glass-header {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
   }
 }

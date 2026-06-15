@@ -1,201 +1,96 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
-import {
-  ShoppingCart,
-  ShieldCheck,
-  Leaf,
-  Users,
-  Clock,
-  Send,
-  Sparkles,
-  Bot,
-  Heart,
-  Droplets,
-  X,
-  ChefHat,
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import LuxuryHeader     from '@/components/LuxuryHeader';
-import BentoCategories  from '@/components/BentoCategories';
-import StatementFooter  from '@/components/StatementFooter';
-import SoulGoldHero     from '@/components/SoulGoldHero';
-import SoulGoldShowcase from '@/components/SoulGoldShowcase';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import LuxuryHeader from '@/components/LuxuryHeader';
+import BentoCategories from '@/components/BentoCategories';
+import StatementFooter from '@/components/StatementFooter';
+import ProductSection from '@/components/ProductSection';
+import SeoText from '@/components/SeoText';
+import CitrusFeaturesBar from '@/components/CitrusFeaturesBar';
+import RecentlyViewed from '@/components/RecentlyViewed';
+import { FadeInSection } from '@/components/FadeInSection';
 import type { ShowcaseProduct, CartProduct } from '@/lib/productTypes';
 import { toCartProduct } from '@/lib/showcaseCatalog';
 import { COMPANY } from '@/lib/company';
 import SideCartDrawer from '@/components/SideCartDrawer';
 import { ToastProvider, useToast } from '@/lib/useToast';
 import ToastStack from '@/components/ToastStack';
-import EditorialPullQuote from '@/components/EditorialPullQuote';
-import OriginStory from '@/components/OriginStory';
-import HeroLifestyle from '@/components/HeroLifestyle';
-import ChefPairings from '@/components/ChefPairings';
-import PressWall from '@/components/PressWall';
-import TrustBar from '@/components/TrustBar';
-import IngredientMap from '@/components/IngredientMap';
-import StickyProductBar from '@/components/StickyProductBar';
 
 const t = {
   ar: {
-    topBar: "✨ توصيل مجاني للطلبات فوق ٢٠٠ ريال | استكشف منتجاتنا العضوية | انضم لبرنامج الولاء الحصري ✨",
-    brandTitle: "صول",
-    brandSubtitle: "الذهبية",
-    home: "الرئيسية",
-    shop: "تسوق",
-    whyUs: "لماذا نحن",
-    soulPlus: "Soul Plus",
-    language: "English",
-    heroBadge: "ذهب المائدة السعودية",
-    heroTitle1: "جودة ",
-    heroTitle2: "تلامس ",
-    heroTitle3: "القلب",
-    heroDesc: "ذكاء يعزز الفخامة وجودة تُلهم الحواس. ارتقِ بتجربتك في الطهي مع تشكيلتنا العضوية الفاخرة، المختارة بعناية لأصحاب الذوق الرفيع.",
-    shopNow: "تسوق الآن",
-    tryAi: "جرب المستشار الذكي",
-    trust1: "معتمد من الغذاء والدواء",
-    trust2: "طبيعي وصحي ١٠٠٪",
-    trust3: "أكثر من ١٠٠ ألف عميل راضٍ",
-    trust4: "توصيل خلال ٢٤ ساعة",
-    discover: "اكتشف المجموعات",
-    discoverDesc: "انغمس في النكهات الأصيلة المنتقاة بعناية من أجل صحتك وحيويتك.",
-    exclusive: "حصرياً لك",
-    filterAll: "الكل",
-    filterTuna: "تونة",
-    filterSauces: "صلصات",
-    filterGhee: "سمن",
-    filterOrganics: "عضوي",
-    aiBadge: "نقدم لك مساعد Soul Plus",
-    aiTitle1: "مستشارك ",
-    aiTitle2: "الشخصي للطهي",
-    aiDesc: "جرب مستوى جديد من تناول الطعام. سيقوم المساعد الذكي بتحليل احتياجاتك الغذائية ليوصي بأفضل المكونات الفاخرة وابتكار وصفات مخصصة فوراً.",
-    aiFeature1: "وصفات فورية",
-    aiFeature1Desc: "حوّل مكوناتنا العضوية إلى وجبات بمستوى ميشلان في ثوانٍ.",
-    aiFeature2: "تحليل السعرات",
-    aiFeature2Desc: "تفصيل دقيق للعناصر الغذائية لتناسب أهدافك الصحية والغذائية.",
-    aiFeature3: "اقتراحات مخصصة",
-    aiFeature3Desc: "أفضل توافقات النكهات المصممة خصيصاً لذوقك.",
-    aiChatName: "مستشار Soul Plus",
-    aiChatStatus: "متصل دائماً",
-    aiChatInput: "اسأل عن أفكار للوصفات...",
-    aiChatWelcome: "أهلاً بك في Soul Plus! مستشارك الذكي. هل تبحث عن وصفات صحية أو منتجات معينة اليوم؟",
-    aiChatResponse: "شكراً لرسالتك! يقوم نظامنا الآن بتقييم أفضل الخيارات التي تناسب ذوقك الرفيع. اقتراحاتنا الفاخرة في الطريق إليك!",
-    qualityTitle: "معيار صول",
-    qualityDesc: "التزام راسخ بالتميز في كل خطوة من رحلتنا.",
-    quality1: "حلال وآمن",
-    quality1Desc: "عمليات توريد معتمدة تضمن تلبية كل منتج لأعلى معايير السلامة والأخلاقيات والنزاهة الحلال.",
-    quality2: "أفضل المكونات",
-    quality2Desc: "نسافر حول العالم لنجلب العناصر العضوية الخام في أنقى صورها. جودة لا تُضاهى يمكنك تذوقها.",
-    quality3: "تغليف مستدام",
-    quality3Desc: "مواد صديقة للبيئة مصممة للحفاظ على نضارة أطعمتنا مع حماية مستقبل كوكبنا.",
-    footerDesc: "ذكاء يعزز الفخامة وجودة تُلهم الحواس. ذهب المائدة السعودية.",
-    quickLinks: "روابط سريعة",
-    contactUs: "اتصل بنا",
-    newsletter: "النشرة البريدية",
-    newsletterDesc: "اشترك لتلقي العروض الحصرية والإلهام في الطهي.",
-    emailPlaceholder: "البريد الإلكتروني",
-    allRights: "صول الذهبية. جميع الحقوق محفوظة.",
-    phoneLabel: "رقم الجوال",
-    contactPhoneLabel: "الجوال",
-    contactLocationLabel: "الموقع",
-    support: "البريد الإلكتروني",
-    shopAll: "تسوق الكل",
-    aboutUs: "من نحن",
-    trackOrder: "تتبع الطلب",
-    checkoutTitle: "إتمام الطلب",
-    nameLabel: "الاسم الكامل",
-    addressLabel: "العنوان",
-    placeOrder: "تأكيد الطلب",
-    cancel: "إلغاء",
-    emptyCart: "السلة فارغة",
-    noProducts: "لا توجد منتجات حالياً",
-    newsletterSuccess: "شكراً! تم الاشتراك بنجاح.",
-    companyRegTitle: "السجل التجاري",
-    crLabel: "رقم السجل",
-    searchHint: "تصفح منتجاتنا الحصرية أدناه",
-    heroScroll: "اكتشف المجموعة",
-    heroEditorial: "مجموعة ٢٠٢٦"
+    topBar: '✨ توصيل مجاني للطلبات فوق ٢٠٠ ريال | منتجات طازجة يومياً | صول الذهبية ✨',
+    brandTitle: 'صول',
+    brandSubtitle: 'الذهبية',
+    home: 'الرئيسية',
+    shop: 'تسوق',
+    whyUs: 'لماذا نحن',
+    soulPlus: 'Soul Plus',
+    language: 'English',
+    discover: 'تسوق حسب الفئة',
+    discoverDesc: 'اكتشف تشكيلتنا من المنتجات الطازجة والمجمدة والمعلبات.',
+    bestSelling: 'الأكثر مبيعاً',
+    weeklyDeals: 'عروض الأسبوع',
+    premiumPantry: 'مستلزمات المطبخ الطازجة',
+    giftBaskets: 'سلال وهدايا فاخرة',
+    allProducts: 'كل المنتجات',
+    footerDesc: 'ذكاء يعزز الفخامة وجودة تُلهم الحواس. ذهب المائدة السعودية.',
+    quickLinks: 'روابط سريعة',
+    contactUs: 'اتصل بنا',
+    newsletter: 'النشرة البريدية',
+    newsletterDesc: 'اشترك لتلقي العروض الحصرية والإلهام في الطهي.',
+    emailPlaceholder: 'البريد الإلكتروني',
+    allRights: 'صول الذهبية. جميع الحقوق محفوظة.',
+    contactPhoneLabel: 'الجوال',
+    contactLocationLabel: 'الموقع',
+    support: 'البريد الإلكتروني',
+    shopAll: 'تسوق الكل',
+    aboutUs: 'من نحن',
+    trackOrder: 'تتبع الطلب',
+    emptyCart: 'السلة فارغة',
+    newsletterSuccess: 'شكراً! تم الاشتراك بنجاح.',
+    searchHint: 'تصفح منتجاتنا الحصرية أدناه',
+    companyRegTitle: 'السجل التجاري',
+    crLabel: 'رقم السجل',
+    promoTitle: 'منتجات طازجة تصل إلى بابك',
+    promoSubtitle: 'صول الذهبية — جودة مزرعية يومياً في جميع أنحاء المملكة',
   },
   en: {
-    topBar: "✨ Free Delivery over 200 SAR | Discover our Organic Selection | Join the Exclusive Loyalty Program ✨",
-    brandTitle: "Soul",
-    brandSubtitle: "Gold",
-    home: "Home",
-    shop: "Shop",
-    whyUs: "Why Us",
-    soulPlus: "Soul Plus",
-    language: "العربية",
-    heroBadge: "The Gold of the Saudi Table",
-    heroTitle1: "Quality that ",
-    heroTitle2: "touches ",
-    heroTitle3: "the heart",
-    heroDesc: "Premium Intelligence & Inspiring Quality. Elevate your culinary experience with our luxury organic selection, curated for the refined palate.",
-    shopNow: "Shop Now",
-    tryAi: "Try AI Consultant",
-    trust1: "SFDA Approved",
-    trust2: "100% Healthy & Natural",
-    trust3: "Over 100k Satisfied",
-    trust4: "24-hour Delivery",
-    discover: "Discover the Collections",
-    discoverDesc: "Immerse yourself in authentic flavors picked beautifully for your health and vitality.",
-    exclusive: "Exclusive Arrivals",
-    filterAll: "All",
-    filterTuna: "Tuna",
-    filterSauces: "Sauces",
-    filterGhee: "Ghee",
-    filterOrganics: "Organics",
-    aiBadge: "Introducing Soul Plus AI",
-    aiTitle1: "Your Personal ",
-    aiTitle2: "Culinary Consultant",
-    aiDesc: "Experience next-level dining. Our AI assistant analyzes your dietary needs to recommend the perfect luxury ingredients and generate instant, tailored recipes.",
-    aiFeature1: "Instant Recipes",
-    aiFeature1Desc: "Turn our organic ingredients into Michelin-star meals in seconds.",
-    aiFeature2: "Calorie Analysis",
-    aiFeature2Desc: "Detailed breakdown of macros to fit your health and dietary goals.",
-    aiFeature3: "Custom Suggestions",
-    aiFeature3Desc: "Perfect flavor pairings generated specifically for your taste palette.",
-    aiChatName: "Soul Plus Consultant",
-    aiChatStatus: "Always Online",
-    aiChatInput: "Ask for recipe ideas...",
-    aiChatWelcome: "Welcome to Soul Plus! I am your AI Consultant. Are you looking for healthy recipes or specialized products today?",
-    aiChatResponse: "Thank you for your message! Our system is evaluating the best options for your culinary needs. Premium suggestions are on the way!",
-    qualityTitle: "The Soul Standard",
-    qualityDesc: "Unyielding commitment to excellence at every step of the journey.",
-    quality1: "Halal & Safe",
-    quality1Desc: "Certified sourcing processes ensuring every product meets the highest standards of safety, ethics, and Halal integrity.",
-    quality2: "Best Ingredients",
-    quality2Desc: "We travel the world to source organic, raw elements in their purest forms. Uncompromised quality you can taste.",
-    quality3: "Sustainable Packaging",
-    quality3Desc: "Eco-conscious materials designed to preserve the freshness of our foods while protecting the future of our planet.",
-    footerDesc: "Premium Intelligence & Inspiring Quality. The Gold of the Saudi Table.",
-    quickLinks: "Quick Links",
-    contactUs: "Contact Us",
-    newsletter: "Newsletter",
-    newsletterDesc: "Subscribe to receive exclusive offers and culinary inspiration.",
-    emailPlaceholder: "Email address",
-    allRights: "Soul Gold. All rights reserved.",
-    phoneLabel: "Phone Number",
-    contactPhoneLabel: "Phone",
-    contactLocationLabel: "Location",
-    support: "Email",
-    shopAll: "Shop All",
-    aboutUs: "About Us",
-    trackOrder: "Track Order",
-    checkoutTitle: "Checkout",
-    nameLabel: "Full Name",
-    addressLabel: "Delivery Address",
-    placeOrder: "Place Order",
-    cancel: "Cancel",
-    emptyCart: "Your cart is empty",
-    noProducts: "No products available",
-    newsletterSuccess: "Thank you! You are subscribed.",
-    companyRegTitle: "Company Registration",
-    crLabel: "CR Number",
-    searchHint: "Browse our exclusive products below",
-    heroScroll: "Discover the Collection",
-    heroEditorial: "Collection 2026"
-  }
+    topBar: '✨ Free Delivery over 200 SAR | Farm-Fresh Daily | Soul Gold ✨',
+    brandTitle: 'Soul',
+    brandSubtitle: 'Gold',
+    home: 'Home',
+    shop: 'Shop',
+    whyUs: 'About Us',
+    soulPlus: 'Soul Plus',
+    language: 'العربية',
+    discover: 'Shop By Category',
+    discoverDesc: 'Browse our fresh, frozen, and pantry essentials.',
+    bestSelling: 'Best Selling Fresh Produce',
+    weeklyDeals: 'Weekly Fresh Deals',
+    premiumPantry: 'Naturally Fresh Premium Pantry',
+    giftBaskets: 'Premium Fresh Gift Baskets',
+    allProducts: 'ALL PRODUCTS',
+    footerDesc: 'Premium Intelligence & Inspiring Quality. The Gold of the Saudi Table.',
+    quickLinks: 'Quick Links',
+    contactUs: 'Contact Us',
+    newsletter: 'Newsletter',
+    newsletterDesc: 'Subscribe for exclusive offers and culinary inspiration.',
+    emailPlaceholder: 'Email address',
+    allRights: 'Soul Gold. All rights reserved.',
+    contactPhoneLabel: 'Phone',
+    contactLocationLabel: 'Location',
+    support: 'Email',
+    shopAll: 'Shop All',
+    aboutUs: 'About Us',
+    trackOrder: 'Track Order',
+    emptyCart: 'Your cart is empty',
+    newsletterSuccess: 'Thank you! You are subscribed.',
+    searchHint: 'Browse our exclusive products below',
+    companyRegTitle: 'Company Registration',
+    crLabel: 'CR Number',
+    promoTitle: 'Fresh groceries delivered to your door',
+    promoSubtitle: 'Soul Gold — farm-quality produce across Saudi Arabia',
+  },
 } as const;
 
 type Lang = 'ar' | 'en';
@@ -205,51 +100,70 @@ type CartItem = {
   qty: number;
 };
 
-export default function SoulGoldApp() {
+function combineProducts(editorial: ShowcaseProduct[], grid: ShowcaseProduct[]) {
+  const seen = new Set<string>();
+  const combined: ShowcaseProduct[] = [];
+  for (const product of [...editorial, ...grid]) {
+    if (!seen.has(product.id)) {
+      seen.add(product.id);
+      combined.push(product);
+    }
+  }
+  return combined;
+}
+
+function SectionDivider() {
+  return (
+    <div className="max-w-[1400px] mx-auto px-4">
+      <div className="border-t border-gray-100" />
+    </div>
+  );
+}
+
+export default function CitrusStoreApp() {
   return (
     <ToastProvider>
-      <SoulGoldAppContent />
+      <CitrusStoreContent />
     </ToastProvider>
   );
 }
 
-function SoulGoldAppContent() {
+function CitrusStoreContent() {
   const [lang, setLang] = useState<Lang>('en');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [gridProducts, setGridProducts] = useState<ShowcaseProduct[]>([]);
   const [editorialProducts, setEditorialProducts] = useState<ShowcaseProduct[]>([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
-  const [chatInput, setChatInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
+  const [cartBump, setCartBump] = useState(0);
   const productsRef = React.useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
+  const dict = t[lang];
 
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
   const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.qty, 0);
-  type ChatMessage = { role: string; text_ar: string; text_en: string; };
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    { role: 'ai', text_ar: t.ar.aiChatWelcome, text_en: t.en.aiChatWelcome }
-  ]);
 
-  const dict = t[lang];
+  const allProducts = useMemo(
+    () => combineProducts(editorialProducts, gridProducts),
+    [editorialProducts, gridProducts]
+  );
 
-  // Sync html[lang] and html[dir] so all CSS logical properties work correctly
-  // when the user switches language on mobile
+  const bestSelling = allProducts.slice(0, 6);
+  const weeklyDeals = allProducts.slice(6, 12);
+  const premiumPantry = allProducts.slice(12, 18);
+  const giftBaskets = allProducts.slice(18, 24);
+
   useEffect(() => {
-    document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
   }, [lang]);
 
-  // Lock body scroll while mobile drawer is open
-  // SAFE approach: add a class to <html> instead of directly mutating body.style.overflow
-  // body.style.overflow='hidden' on iOS sometimes fails to restore, permanently freezing scroll.
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.documentElement.classList.add('menu-open');
@@ -277,7 +191,7 @@ function SoulGoldAppContent() {
   }, []);
 
   const toggleLanguage = () => {
-    setLang(prev => prev === 'ar' ? 'en' : 'ar');
+    setLang((prev) => (prev === 'ar' ? 'en' : 'ar'));
   };
 
   const handleAddToCart = useCallback((product: CartProduct) => {
@@ -294,6 +208,7 @@ function SoulGoldAppContent() {
     const title = lang === 'ar' ? product.title_ar : product.title_en;
     const msg = lang === 'ar' ? `تم إضافة ${title} إلى السلة` : `Added ${title} to cart`;
     toast(msg, 'success');
+    setCartBump((b) => b + 1);
   }, [lang, toast]);
 
   const handleShowcaseAddToCart = useCallback((p: ShowcaseProduct) => {
@@ -359,45 +274,23 @@ function SoulGoldAppContent() {
     productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!chatInput.trim()) return;
-    
-    const userMessage = chatInput.trim();
-    setChatMessages(prev => [
-      ...prev,
-      { role: 'user', text_ar: userMessage, text_en: userMessage }
-    ]);
-    setChatInput('');
-    setIsTyping(true);
-
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, lang }),
-      });
-      const data = await res.json();
-
-      setChatMessages(prev => [
-        ...prev,
-        { role: 'ai', text_ar: data.response || "عذراً، حدث خطأ", text_en: data.response || "Sorry, an error occurred." }
-      ]);
-    } catch (error) {
-      console.error("Chat error:", error);
-    } finally {
-      setIsTyping(false);
-    }
-  };
-
   return (
-    <div className="min-h-screen relative font-sans overflow-x-hidden px-safe">
-      {/* ---------- Top Promo Bar ---------- */}
-      <div className="bg-primary-gold text-white text-xs md:text-sm py-2.5 px-4 text-center font-medium">
-        <span>{dict.topBar}</span>
+    <div className="min-h-[100dvh] mobile-shell bg-[#f9fafb] overflow-x-hidden app-scroll">
+      {/* Top announcement bar */}
+      <div className="bg-[#1a3c34] text-white text-[11px] md:text-xs py-2 px-4">
+        <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center">
+          <span className="inline-flex items-center gap-1 bg-white/15 rounded-full px-2.5 py-0.5 font-semibold">
+            🌿 {lang === 'ar' ? 'طازج من المزرعة' : 'FARM FRESH'}
+          </span>
+          <span className="inline-flex items-center gap-1 bg-[#f47c2b] rounded-full px-2.5 py-0.5 font-semibold">
+            🔥 {lang === 'ar' ? 'خصم حتى ٤٠٪' : 'UP TO 40% OFF'}
+          </span>
+          <span className="hidden md:inline">{lang === 'ar' ? 'عروض أسبوعية وخصومات خاصة' : 'Weekly Offers & Special Discounts'}</span>
+          <span className="hidden sm:inline">|</span>
+          <span className="hidden sm:inline">{lang === 'ar' ? 'اطلب قبل 2pm للتوصيل اليوم' : 'Order by 2pm for Same Day Delivery'}</span>
+        </div>
       </div>
 
-      {/* ---------- Scroll-Aware Header ---------- */}
       <LuxuryHeader
         lang={lang}
         dict={dict}
@@ -407,312 +300,172 @@ function SoulGoldAppContent() {
         onOpenCheckout={openCheckout}
         onToggleLanguage={toggleLanguage}
         onScrollToProducts={scrollToProducts}
-        onToggleMobileMenu={() => setIsMobileMenuOpen(prev => !prev)}
+        onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
+        cartBump={cartBump}
       />
 
-      {/* ---------- Hero Section — Soul Gold Cinematic Hero (DESIGN.md) ---------- */}
-      <SoulGoldHero lang={lang} onShopClick={scrollToProducts} />
+      <main className="bg-white app-scroll">
+        {/* Dual promotional hero banners */}
+        <FadeInSection as="section" id="hero" className="px-4 py-6 md:py-8 max-w-[1400px] mx-auto">
+          <div className="grid md:grid-cols-2 gap-4 md:gap-5">
+            <div
+              className="premium-ease premium-card-hover relative rounded-2xl overflow-hidden min-h-[220px] md:min-h-[260px] flex items-end p-6 md:p-8 bg-cover bg-center shadow-sm hover:shadow-md"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.15) 100%), url(https://images.unsplash.com/photo-1610839335344-87b7971414a6?auto=format&fit=crop&w=900&q=80)',
+              }}
+            >
+              <div>
+                <span className="inline-block bg-[#f47c2b] text-white text-[10px] font-bold px-3 py-1 rounded-full mb-3">
+                  {lang === 'ar' ? 'للطلبات مع التوصيل' : 'For orders with delivery'}
+                </span>
+                <h2 className="premium-heading text-white text-xl md:text-2xl font-bold tracking-tight mb-1">
+                  {lang === 'ar' ? 'فواكه طازجة توصل في المملكة' : 'Fresh Fruits Delivered in Saudi Arabia'}
+                </h2>
+                <p className="text-white font-bold mb-1">{lang === 'ar' ? 'خصم حتى - 10%' : 'Up to - 10%'}</p>
+                <div className="w-12 h-0.5 bg-[#9ccc65] mb-4" />
+                <button
+                  type="button"
+                  onClick={scrollToProducts}
+                  className="premium-ease touch-press min-h-[44px] inline-flex items-center bg-[#287233] hover:bg-[#1a3c34] text-white text-xs font-bold px-6 py-2.5 rounded-full uppercase tracking-wide"
+                >
+                  {lang === 'ar' ? 'تسوق الآن' : 'SHOP NOW'}
+                </button>
+              </div>
+            </div>
 
-      {/* Legacy hero kept below for reference — hidden in prod */}
-      {/* <LuxuryHero lang={lang} dict={dict} onShopNow={scrollToProducts} /> */}
+            <div
+              className="premium-ease premium-card-hover relative rounded-2xl overflow-hidden min-h-[220px] md:min-h-[260px] flex items-end p-6 md:p-8 bg-cover bg-center shadow-sm hover:shadow-md"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.15) 100%), url(https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80)',
+              }}
+            >
+              <div>
+                <span className="inline-block bg-[#e57373] text-white text-[10px] font-bold px-3 py-1 rounded-full mb-3">
+                  {lang === 'ar' ? 'خصم -60%' : 'Off -60%'}
+                </span>
+                <h2 className="premium-heading text-white text-xl md:text-2xl font-bold tracking-tight mb-1">
+                  {lang === 'ar' ? 'خضروات طازجة توصل في المملكة' : 'Fresh Vegetables Delivered in Saudi Arabia'}
+                </h2>
+                <p className="text-white font-bold mb-1">{lang === 'ar' ? 'خصم حتى - 30%' : 'Up to - 30%'}</p>
+                <div className="w-12 h-0.5 bg-[#9ccc65] mb-4" />
+                <button
+                  type="button"
+                  onClick={scrollToProducts}
+                  className="premium-ease touch-press min-h-[44px] inline-flex items-center bg-[#287233] hover:bg-[#1a3c34] text-white text-xs font-bold px-6 py-2.5 rounded-full uppercase tracking-wide"
+                >
+                  {lang === 'ar' ? 'تسوق الآن' : 'SHOP NOW'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </FadeInSection>
 
-      {/* ---------- Trust Indicators ---------- */}
-      <TrustBar lang={lang} />
+        <CitrusFeaturesBar lang={lang} />
 
-      {/* ---------- Bento Categories ---------- */}
-      <BentoCategories lang={lang} dict={dict} />
-      
-      {/* ---------- Storytelling / Editorial Sections ---------- */}
-      <EditorialPullQuote lang={lang} />
-      <HeroLifestyle lang={lang} />
-      <OriginStory lang={lang} />
-      <IngredientMap lang={lang} />
+        <RecentlyViewed lang={lang} products={allProducts} />
 
-      {/* ---------- Soul Gold Showcase (Bento + Grid) ---------- */}
-      <div ref={productsRef}>
-        <SoulGoldShowcase
+        <SectionDivider />
+
+        <BentoCategories lang={lang} dict={dict} />
+
+        <SectionDivider />
+
+        <div ref={productsRef}>
+          <ProductSection
+            id="best-selling"
+            title={dict.bestSelling}
+            products={bestSelling}
+            lang={lang}
+            isLoading={isLoadingProducts}
+            onAddToCart={handleShowcaseAddToCart}
+            allProductsLabel={dict.allProducts}
+          />
+        </div>
+
+        <SectionDivider />
+
+        <ProductSection
+          title={dict.weeklyDeals}
+          products={weeklyDeals}
           lang={lang}
-          editorialProducts={editorialProducts}
-          gridProducts={gridProducts}
           isLoading={isLoadingProducts}
           onAddToCart={handleShowcaseAddToCart}
+          allProductsLabel={dict.allProducts}
         />
-      </div>
-      
-      {/* ---------- Chef Pairings & Press Wall ---------- */}
-      <ChefPairings lang={lang} />
-      <PressWall lang={lang} />
 
-      {/* ---------- AI Consultant — Sticky Split-Screen ---------- */}
-      <section id="ai-consultant" className="bg-white relative overflow-hidden">
-        {/* Atmospheric blobs */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-          <div className="absolute -start-48 top-1/4 w-[400px] h-[400px] rounded-full bg-primary-gold/5 blur-[100px]" />
-          <div className="absolute -end-32 bottom-1/4 w-[320px] h-[320px] rounded-full bg-terracotta/5 blur-[80px]" />
-        </div>
+        <SectionDivider />
 
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          {/* On desktop: items-start so sticky side doesn't stretch to match scrollable side */}
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start py-24">
+        <ProductSection
+          title={dict.premiumPantry}
+          products={premiumPantry}
+          lang={lang}
+          isLoading={isLoadingProducts}
+          onAddToCart={handleShowcaseAddToCart}
+          allProductsLabel={dict.allProducts}
+        />
 
-            {/* ── LEFT — Scrollable feature narrative ── */}
-            <div className="flex flex-col">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-cream text-terracotta px-4 py-2 rounded-full font-bold text-sm mb-8 border border-terracotta/10 self-start">
-                <Bot size={16} />
-                <span>{dict.aiBadge}</span>
-              </div>
+        <SectionDivider />
 
-              {/* Headline */}
-              <h2 className="text-fluid-h3 md:text-5xl font-medium text-[var(--sg-on-surface)] mb-6 leading-tight" style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)', letterSpacing: '-0.01em' }}>
-                {dict.aiTitle1}
-                <br />
-                <span className="text-[#C9A03D]">{dict.aiTitle2}</span>
-              </h2>
+        <ProductSection
+          id="all-products"
+          title={dict.giftBaskets}
+          showIcon={false}
+          titleSerif
+          products={giftBaskets.length > 0 ? giftBaskets : allProducts.slice(18)}
+          lang={lang}
+          isLoading={isLoadingProducts}
+          onAddToCart={handleShowcaseAddToCart}
+          allProductsLabel={dict.allProducts}
+        />
 
-              <p className="text-lg text-[var(--sg-on-surface-var)] mb-12 leading-relaxed max-w-lg" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
-                {dict.aiDesc}
-              </p>
+        <SectionDivider />
 
-              {/* Feature list — staggered */}
-              <div className="flex flex-col gap-8">
-                {[
-                  { icon: <ChefHat size={22} />, color: 'bg-primary-gold/10 text-primary-gold', title: dict.aiFeature1, desc: dict.aiFeature1Desc },
-                  { icon: <ActivityIcon />,       color: 'bg-terracotta/10 text-terracotta',     title: dict.aiFeature2, desc: dict.aiFeature2Desc },
-                  { icon: <StarsIcon />,          color: 'bg-blue-50 text-blue-500',             title: dict.aiFeature3, desc: dict.aiFeature3Desc },
-                ].map((f, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: lang === 'ar' ? 24 : -24 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    transition={{ delay: i * 0.12, duration: 0.65, ease: [0.22, 1, 0.36, 1] as const }}
-                    className="flex gap-5 items-start group"
-                  >
-                    <div className={`w-12 h-12 rounded flex items-center justify-center shrink-0 smooth-transition ${f.color}`}>
-                      {f.icon}
-                    </div>
-                    <div className="pt-1">
-                      <h3 className="text-lg font-semibold text-[var(--sg-on-surface)] mb-1" style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}>{f.title}</h3>
-                      <p className="text-[var(--sg-on-surface-var)] leading-relaxed" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>{f.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+        <SeoText lang={lang} />
+      </main>
 
-              {/* Extra scroll space so the right side sticks while scrolling */}
-              <div className="hidden md:block h-16" />
-            </div>
-
-            {/* ── RIGHT — Sticky chat interface ── */}
-            <div className="md:sticky md:top-28">
-              <div className="bg-[#FEF7ED]/80 backdrop-blur-xl border border-[var(--sg-outline-variant)] rounded p-2 md:p-3 luxury-shadow relative flex flex-col hardware-accelerated"
-                   style={{ height: 'min(580px, 80svh)' }}>
-
-                {/* Chat header */}
-                <div className="bg-[#FEF7ED] backdrop-blur-md rounded px-5 py-4 flex items-center gap-4 shrink-0 border-b border-[var(--sg-outline-variant)]">
-                  <div className="relative shrink-0">
-                    <div className="w-11 h-11 rounded-full bg-[#1A1612] flex items-center justify-center text-[#FEF7ED] shadow-md">
-                      <Bot size={22} />
-                    </div>
-                    <div className="absolute bottom-0 end-0 w-3 h-3 bg-green-400 border-2 border-[#FEF7ED] rounded-full" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[var(--sg-on-surface)] text-sm" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>{dict.aiChatName}</h4>
-                    <p className="text-xs text-green-600 font-semibold" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>{dict.aiChatStatus}</p>
-                  </div>
-                  {/* Decorative typing dots in header */}
-                  <div className="ms-auto flex gap-1.5">
-                    {[0, 1, 2].map((d) => (
-                      <div key={d} className="w-1.5 h-1.5 rounded-full bg-primary-gold/30"
-                           style={{ animationDelay: `${d * 0.2}s` }} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {chatMessages.map((msg, i) => (
-                    <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      {msg.role === 'ai' && (
-                        <div className="w-7 h-7 rounded-full bg-[#1A1612] flex items-center justify-center text-[#FEF7ED] shrink-0 me-2 mt-1">
-                          <Bot size={14} />
-                        </div>
-                      )}
-                      <div className={`max-w-[78%] px-4 py-3 rounded text-sm leading-relaxed ${
-                        msg.role === 'user'
-                          ? 'bg-[#1A1612] text-[#FEF7ED] rounded-ee-none'
-                          : 'bg-[#FEF7ED] text-[var(--sg-on-surface)] shadow-sm border border-[var(--sg-outline-variant)] rounded-es-none'
-                      }`} style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
-                        {lang === 'ar' ? msg.text_ar : msg.text_en}
-                      </div>
-                    </div>
-                  ))}
-                  {isTyping && (
-                    <div className="flex justify-start">
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-gold to-terracotta flex items-center justify-center text-white shrink-0 me-2">
-                        <Bot size={14} />
-                      </div>
-                      <div className="bg-white rounded-[20px] rounded-es-none px-5 py-4 shadow-sm border border-[rgba(201,160,61,0.1)] flex gap-1.5 items-center">
-                        {[0, 0.18, 0.36].map((d, i) => (
-                          <span key={i} className="w-2 h-2 bg-primary-gold rounded-full animate-bounce"
-                                style={{ animationDelay: `${d}s` }} />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Input */}
-                <div className="p-3 rounded shrink-0 border-t border-[var(--sg-outline-variant)] bg-[#FEF7ED]">
-                  <form onSubmit={handleSendMessage} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      disabled={isTyping}
-                      placeholder={dict.aiChatInput}
-                      className="flex-1 bg-white rounded px-5 py-3 outline-none border border-[var(--sg-outline-variant)] text-sm placeholder:text-[var(--sg-outline)] font-medium text-[var(--sg-on-surface)] smooth-transition disabled:opacity-50"
-                      style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}
-                    />
-                    <button
-                      type="submit"
-                      disabled={!chatInput.trim() || isTyping}
-                      aria-label={lang === 'ar' ? 'إرسال رسالة' : 'Send message'}
-                      className={`min-w-[48px] min-h-[48px] rounded bg-[#1A1612] text-[#FEF7ED] flex items-center justify-center hover:bg-[#2C2520] smooth-transition active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-md touch-manipulation ${lang === 'ar' ? 'rotate-180' : ''}`}
-                    >
-                      <Send size={17} />
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- Quality (Why Us) ---------- */}
-      <section id="quality" className="py-24 px-4 bg-[#1A1612] text-[#FEF7ED] smooth-transition hardware-accelerated">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-fluid-h2 md:text-5xl font-medium mb-4 text-[#FEF7ED] smooth-transition" style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)', letterSpacing: '-0.01em' }}>{dict.qualityTitle}</h2>
-            <p className="text-[#FEF7ED]/70 max-w-xl mx-auto text-lg hover:text-[#FEF7ED]/90 smooth-transition uppercase-none" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>{dict.qualityDesc}</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="border border-[#FEF7ED]/10 rounded p-8 hover:bg-[#FEF7ED]/5 smooth-transition group">
-              <div className="w-16 h-16 rounded bg-[#C9A03D]/20 flex items-center justify-center text-[#C9A03D] mb-6 group-hover:bg-[#C9A03D] group-hover:text-[#1A1612] smooth-transition">
-                <Heart size={32} />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 smooth-transition text-[#FEF7ED]" style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}>{dict.quality1}</h3>
-              <p className="text-[#FEF7ED]/70 leading-relaxed group-hover:text-[#FEF7ED]/90 smooth-transition" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
-                {dict.quality1Desc}
-              </p>
-            </div>
-            
-            <div className="border border-[#FEF7ED]/10 rounded p-8 hover:bg-[#FEF7ED]/5 smooth-transition group">
-              <div className="w-16 h-16 rounded bg-[#C9A03D]/20 flex items-center justify-center text-[#C9A03D] mb-6 group-hover:bg-[#C9A03D] group-hover:text-[#1A1612] smooth-transition">
-                <Droplets size={32} />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 smooth-transition text-[#FEF7ED]" style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}>{dict.quality2}</h3>
-              <p className="text-[#FEF7ED]/70 leading-relaxed group-hover:text-[#FEF7ED]/90 smooth-transition" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
-                {dict.quality2Desc}
-              </p>
-            </div>
-            
-            <div className="border border-[#FEF7ED]/10 rounded p-8 hover:bg-[#FEF7ED]/5 smooth-transition group">
-              <div className="w-16 h-16 rounded bg-[#C9A03D]/20 flex items-center justify-center text-[#C9A03D] mb-6 group-hover:bg-[#C9A03D] group-hover:text-[#1A1612] smooth-transition">
-                <Leaf size={32} />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 smooth-transition text-[#FEF7ED]" style={{ fontFamily: 'var(--font-eb-garamond, Georgia, serif)' }}>{dict.quality3}</h3>
-              <p className="text-[#FEF7ED]/70 leading-relaxed group-hover:text-[#FEF7ED]/90 smooth-transition" style={{ fontFamily: 'var(--font-hanken, sans-serif)' }}>
-                {dict.quality3Desc}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- Statement Footer ---------- */}
       <StatementFooter lang={lang} dict={dict} />
 
-      {/* ---------- Checkout Modal ---------- */}
-      {/* Replaced by SideCartDrawer, but kept here if direct checkout is needed */}
       <SideCartDrawer
         lang={lang}
         isOpen={isCheckoutOpen}
         cart={cart}
         onClose={() => setIsCheckoutOpen(false)}
         onUpdateQty={(id, delta) => {
-          setCart(prev => prev.map(item => {
-            if (item.product.id === id) {
-              const newQty = item.qty + delta;
-              return newQty > 0 ? { ...item, qty: newQty } : item;
-            }
-            return item;
-          }).filter(item => item.qty > 0));
+          setCart((prev) =>
+            prev
+              .map((item) => {
+                if (item.product.id === id) {
+                  const newQty = item.qty + delta;
+                  return newQty > 0 ? { ...item, qty: newQty } : item;
+                }
+                return item;
+              })
+              .filter((item) => item.qty > 0)
+          );
         }}
         onRemove={(id) => {
-          setCart(prev => prev.filter(item => item.product.id !== id));
+          setCart((prev) => prev.filter((item) => item.product.id !== id));
         }}
         onCheckout={() => {
-          // This would typically go to a real checkout page
-          // For now, simulate checkout
-          handleCheckout({ preventDefault: () => {} } as any);
+          handleCheckout({ preventDefault: () => {} } as React.FormEvent);
         }}
       />
-      
-      {/* ---------- Toast Notifications ---------- */}
+
       <ToastStack />
 
-      {/* ---------- Sticky Product Bar (Mobile) ---------- */}
-      <StickyProductBar
-        lang={lang}
-        isVisible={!isCheckoutOpen}
-        onAddToCart={() => {
-          handleAddToCart({
-            id: 999 as any,
-            title_en: 'Signature Collection',
-            title_ar: 'المجموعة المميزة',
-            desc_en: '', desc_ar: '', price: 200, image: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=900&q=80',
-            weight_en: '', weight_ar: '', categoryKey: 'showcase', badge_en: '', badge_ar: '', bgColor: 'bg-cream'
-          });
-        }}
-      />
-
-      {/* ---------- Floating WhatsApp Button — brand Obsidian + Gold ---------- */}
-      <a 
-        href={COMPANY.whatsappUrl} 
+      <a
+        href={COMPANY.whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={lang === 'ar' ? 'تواصل عبر واتساب' : 'Contact us on WhatsApp'}
-        className="fixed bottom-safe end-6 min-w-[48px] min-h-[48px] w-14 h-14 bg-[#1A1612] text-[#C9A03D] rounded-full border border-[#C9A03D]/30 shadow-[0_10px_30px_rgba(26,22,18,0.35)] flex items-center justify-center smooth-transition z-50 hover:border-[#C9A03D]/65 hover:shadow-[0_14px_36px_rgba(201,160,61,0.22)] hover:scale-105 touch-manipulation touch-premium sg-touch-fast hardware-accelerated"
+        className="fixed bottom-safe end-6 min-w-[48px] min-h-[48px] w-14 h-14 bg-[#1A1612] text-[#C9A03D] rounded-full border border-[#C9A03D]/30 shadow-[0_10px_30px_rgba(26,22,18,0.35)] flex items-center justify-center smooth-transition z-50 hover:border-[#C9A03D]/65 hover:shadow-[0_14px_36px_rgba(201,160,61,0.22)] hover:scale-105 touch-manipulation"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
         </svg>
       </a>
     </div>
-  );
-}
-
-// Small inline icons for AI Features
-function ActivityIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-    </svg>
-  );
-}
-
-function StarsIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-      <path d="M5 3v4" />
-      <path d="M19 17v4" />
-      <path d="M3 5h4" />
-      <path d="M17 19h4" />
-    </svg>
   );
 }

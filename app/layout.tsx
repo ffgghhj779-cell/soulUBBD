@@ -59,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preload brand logo — LCP-critical header asset */}
         <link rel="preload" as="image" href={BRAND_LOGO_SRC} fetchPriority="high" />
       </head>
-      <body suppressHydrationWarning>{children}</body>
+      <body className={`${tajawal.className} premium-body antialiased`} suppressHydrationWarning>{children}</body>
     </html>
   );
 }
