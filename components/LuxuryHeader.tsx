@@ -76,16 +76,16 @@ export default function LuxuryHeader({
   return (
     <>
       <header
-        className={`glass-header mobile-header-shell border-b border-gray-100/90 sticky top-0 z-50 pt-safe shadow-sm gpu-animate ${
+        className={`glass-header mobile-header-shell border-b border-gray-100/90 sticky top-0 z-50 pt-safe shadow-sm gpu-animate overflow-visible ${
           isCompact ? 'is-compact' : ''
         }`}
       >
         <div
-          className={`max-w-[1400px] mx-auto px-4 md:px-6 flex items-center gap-3 md:gap-6 premium-ease ${
+          className={`max-w-[1400px] mx-auto px-3 sm:px-4 md:px-6 flex items-center gap-2 sm:gap-3 md:gap-6 premium-ease overflow-visible ${
             isCompact ? 'py-2' : 'py-3'
           }`}
         >
-          <a href="#hero" className="flex-shrink-0 min-w-0 max-w-[200px] sm:max-w-none touch-press rounded-lg" aria-label={`${dict.brandTitle} ${dict.brandSubtitle}`}>
+          <a href="#hero" className="shrink min-w-0 max-w-[128px] sm:max-w-[150px] md:max-w-[200px] touch-press rounded-lg" aria-label={`${dict.brandTitle} ${dict.brandSubtitle}`}>
             <BrandLockup
               lang={lang}
               brandTitle={dict.brandTitle}
@@ -111,7 +111,7 @@ export default function LuxuryHeader({
           </form>
 
           {/* Nav Actions */}
-          <div className="flex items-center gap-3 md:gap-5 flex-shrink-0 ms-auto">
+          <div className="mobile-header-actions flex items-center gap-1.5 sm:gap-2 md:gap-5 flex-shrink-0 ms-auto overflow-visible">
             <button
               type="button"
               onClick={onToggleLanguage}
@@ -205,7 +205,7 @@ export default function LuxuryHeader({
 
             <button
               type="button"
-              className="lg:hidden touch-target touch-press flex items-center justify-center text-gray-700 hover:text-[#2e7d32] rounded-full"
+              className="lg:hidden touch-target touch-press relative z-10 flex size-11 shrink-0 items-center justify-center rounded-xl text-[#1b5e20] hover:bg-[#ecfdf5] hover:text-[#2e7d32]"
               onClick={onToggleMobileMenu}
               aria-label={
                 isMobileMenuOpen
@@ -222,8 +222,9 @@ export default function LuxuryHeader({
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.15 }}
+                    className="flex items-center justify-center"
                   >
-                    <X size={24} />
+                    <X size={26} strokeWidth={2.25} />
                   </motion.span>
                 ) : (
                   <motion.span
@@ -232,8 +233,9 @@ export default function LuxuryHeader({
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.15 }}
+                    className="flex items-center justify-center"
                   >
-                    <Menu size={24} />
+                    <Menu size={26} strokeWidth={2.25} />
                   </motion.span>
                 )}
               </AnimatePresence>

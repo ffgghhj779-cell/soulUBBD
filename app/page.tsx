@@ -13,6 +13,7 @@ import type { ShowcaseProduct, CartProduct } from '@/lib/productTypes';
 import { toCartProduct } from '@/lib/showcaseCatalog';
 import { COMPANY } from '@/lib/company';
 import SideCartDrawer from '@/components/SideCartDrawer';
+import WhatsAppCheckout from '@/components/WhatsAppCheckout';
 import { ToastProvider, useToast } from '@/lib/useToast';
 import ToastStack from '@/components/ToastStack';
 
@@ -135,11 +136,8 @@ function CitrusStoreContent() {
   const [gridProducts, setGridProducts] = useState<ShowcaseProduct[]>([]);
   const [editorialProducts, setEditorialProducts] = useState<ShowcaseProduct[]>([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [customerAddress, setCustomerAddress] = useState('');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutFormOpen, setIsCheckoutFormOpen] = useState(false);
   const [cartBump, setCartBump] = useState(0);
   const productsRef = React.useRef<HTMLDivElement>(null);
 
@@ -147,7 +145,6 @@ function CitrusStoreContent() {
   const dict = t[lang];
 
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
-  const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.qty, 0);
 
   const allProducts = useMemo(
     () => combineProducts(editorialProducts, gridProducts),
@@ -165,12 +162,12 @@ function CitrusStoreContent() {
   }, [lang]);
 
   useEffect(() => {
-    const locked = isMobileMenuOpen || isCheckoutOpen;
+    const locked = isMobileMenuOpen || isCartOpen || isCheckoutFormOpen;
     document.documentElement.classList.toggle('scroll-locked', locked);
     return () => {
       document.documentElement.classList.remove('scroll-locked');
     };
-  }, [isMobileMenuOpen, isCheckoutOpen]);
+  }, [isMobileMenuOpen, isCartOpen, isCheckoutFormOpen]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -214,59 +211,33 @@ function CitrusStoreContent() {
     handleAddToCart(toCartProduct(p));
   }, [handleAddToCart]);
 
-  const openCheckout = () => {
+  const openCart = () => {
     if (cartCount === 0) {
       alert(dict.emptyCart);
       return;
     }
-    setIsCheckoutOpen(true);
+    setIsCartOpen(true);
   };
 
-  const handleCheckout = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (cartCount === 0) return;
-
-    setIsCheckingOut(true);
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: customerName,
-          phone: customerPhone,
-          address: customerAddress,
-          items: cart.map((item) => ({
-            id: item.product.id,
-            name_ar: item.product.title_ar,
-            name_en: item.product.title_en,
-            qty: item.qty,
-            price: item.product.price,
-          })),
-          total: cartTotal,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast(
-          lang === 'ar'
-            ? 'تم تأكيد الطلب بنجاح! رقم الطلب: ' + data.orderId
-            : 'Order placed successfully! Order ID: ' + data.orderId,
-          'success'
-        );
-        setCart([]);
-        setIsCheckoutOpen(false);
-        setCustomerName('');
-        setCustomerPhone('');
-        setCustomerAddress('');
-      } else {
-        toast(data.message || (lang === 'ar' ? 'فشل الطلب' : 'Order failed'), 'error');
-      }
-    } catch (error) {
-      console.error('Checkout failed:', error);
-      toast(lang === 'ar' ? 'فشل إتمام الطلب' : 'Checkout failed', 'error');
-    } finally {
-      setIsCheckingOut(false);
+  const openCheckoutForm = () => {
+    if (cartCount === 0) {
+      alert(dict.emptyCart);
+      return;
     }
+    setIsCartOpen(false);
+    setIsCheckoutFormOpen(true);
+  };
+
+  const handleWhatsAppCheckoutSuccess = () => {
+    setCart([]);
+    setIsCheckoutFormOpen(false);
+    setIsCartOpen(false);
+    toast(
+      lang === 'ar'
+        ? 'شكراً! جاري تحويلك إلى واتساب لإتمام طلبك...'
+        : 'Thank you! Redirecting to WhatsApp to complete your order...',
+      'success'
+    );
   };
 
   const scrollToProducts = () => {
@@ -294,9 +265,9 @@ function CitrusStoreContent() {
         lang={lang}
         dict={dict}
         cartCount={cartCount}
-        isCheckingOut={isCheckingOut}
+        isCheckingOut={false}
         isMobileMenuOpen={isMobileMenuOpen}
-        onOpenCheckout={openCheckout}
+        onOpenCheckout={openCart}
         onToggleLanguage={toggleLanguage}
         onScrollToProducts={scrollToProducts}
         onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
@@ -428,9 +399,9 @@ function CitrusStoreContent() {
 
       <SideCartDrawer
         lang={lang}
-        isOpen={isCheckoutOpen}
+        isOpen={isCartOpen}
         cart={cart}
-        onClose={() => setIsCheckoutOpen(false)}
+        onClose={() => setIsCartOpen(false)}
         onUpdateQty={(id, delta) => {
           setCart((prev) =>
             prev
@@ -447,9 +418,15 @@ function CitrusStoreContent() {
         onRemove={(id) => {
           setCart((prev) => prev.filter((item) => item.product.id !== id));
         }}
-        onCheckout={() => {
-          handleCheckout({ preventDefault: () => {} } as React.FormEvent);
-        }}
+        onCheckout={openCheckoutForm}
+      />
+
+      <WhatsAppCheckout
+        lang={lang}
+        isOpen={isCheckoutFormOpen}
+        cart={cart}
+        onClose={() => setIsCheckoutFormOpen(false)}
+        onSuccess={handleWhatsAppCheckoutSuccess}
       />
 
       <ToastStack />

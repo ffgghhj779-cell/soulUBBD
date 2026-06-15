@@ -154,9 +154,9 @@ export default function SideCartDrawer({ lang, isOpen, cart, onClose, onUpdateQt
                 </div>
                 <div className="flex flex-col gap-2.5">
                   <button onClick={onCheckout}
-                    className="w-full min-h-[52px] rounded-[8px] bg-[#1A1612] text-[#FEF7ED] font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#2C2520] smooth-transition active:scale-[0.98] touch-manipulation shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
+                    className="w-full min-h-[52px] rounded-2xl bg-[#2e7d32] text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#1b5e20] smooth-transition active:scale-[0.98] touch-manipulation shadow-sm"
                     style={{ fontFamily: 'var(--font-hanken)' }}>
-                    {isRtl ? 'إتمام الطلب' : 'Secure Checkout'}
+                    {isRtl ? 'إتمام الطلب عبر واتساب' : 'Checkout via WhatsApp'}
                     <ArrowRight size={16} className={isRtl ? 'rotate-180' : ''} />
                   </button>
                   <button onClick={onClose}
