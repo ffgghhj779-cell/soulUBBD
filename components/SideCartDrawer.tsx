@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
@@ -28,12 +28,6 @@ export default function SideCartDrawer({ lang, isOpen, cart, onClose, onUpdateQt
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
   const progressPct = Math.min((cartTotal / FREE_THRESHOLD) * 100, 100);
   const remaining = Math.max(FREE_THRESHOLD - cartTotal, 0);
-
-  useEffect(() => {
-    if (isOpen) document.documentElement.classList.add('menu-open');
-    else document.documentElement.classList.remove('menu-open');
-    return () => document.documentElement.classList.remove('menu-open');
-  }, [isOpen]);
 
   return (
     <AnimatePresence>

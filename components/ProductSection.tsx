@@ -50,7 +50,7 @@ export default function ProductSection({
   const rtl = lang === 'ar';
 
   return (
-    <FadeInSection as="section" id={id} className="py-6 md:py-8 px-4 max-w-[1400px] mx-auto app-scroll">
+    <FadeInSection as="section" id={id} className="py-6 md:py-8 px-4 max-w-[1400px] mx-auto">
       <div className="flex items-center justify-between mb-1 gap-4">
         <div className="flex items-center gap-2 min-w-0">
           {showIcon && (

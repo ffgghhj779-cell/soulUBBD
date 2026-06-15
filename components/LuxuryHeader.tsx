@@ -281,7 +281,7 @@ export default function LuxuryHeader({
               animate={{ x: '0%' }}
               exit={{ x: lang === 'ar' ? '-100%' : '100%' }}
               transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-              className="mobile-drawer-panel fixed top-0 bottom-0 end-0 z-50 lg:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe bg-white/98 backdrop-blur-xl shadow-2xl overflow-y-auto overscroll-contain app-scroll"
+              className="mobile-drawer-panel fixed top-0 bottom-0 end-0 z-50 lg:hidden w-[min(100vw,340px)] h-[100dvh] flex flex-col pt-safe pb-safe bg-white/98 backdrop-blur-xl shadow-2xl overflow-y-auto overscroll-contain drawer-scroll"
             >
               <div className="h-1 w-full bg-[#2e7d32]" />
 

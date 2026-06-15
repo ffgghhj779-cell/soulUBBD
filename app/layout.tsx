@@ -48,7 +48,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={`${cairo.variable} ${tajawal.variable} ${playfair.variable} ${roboto.variable}`}>
+    <html lang="ar" dir="rtl" suppressHydrationWarning className={`${cairo.variable} ${tajawal.variable} ${playfair.variable} ${roboto.variable}`}>
       <head>
         {/* Preconnect to font CDNs */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

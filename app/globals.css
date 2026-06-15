@@ -108,12 +108,9 @@ html {
   text-size-adjust: 100%;
 }
 
-/* Safe drawer scroll lock — targets html, not body.style.overflow
-   body.style.overflow='hidden' on iOS can permanently freeze scroll
-   if the cleanup effect doesn't fire (e.g. fast navigation).         */
-html.menu-open body {
+/* Scroll lock only while a drawer/menu overlay is open */
+html.scroll-locked body {
   overflow: hidden;
-  /* Prevent the page jumping when scrollbar disappears on desktop */
   padding-right: 0;
 }
 
@@ -1205,18 +1202,14 @@ html[lang='ar'] .premium-heading {
 }
 
 /* ── Mobile app-like experience ─────────────────────────────────── */
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
-
 .mobile-shell {
   min-height: 100dvh;
 }
 
-.app-scroll {
+/* Internal drawer/panel scrolling only — never apply to page shell */
+.drawer-scroll {
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
+  overscroll-behavior: contain;
 }
 
 .gpu-animate {

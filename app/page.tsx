@@ -129,7 +129,7 @@ export default function CitrusStoreApp() {
 }
 
 function CitrusStoreContent() {
-  const [lang, setLang] = useState<Lang>('en');
+  const [lang, setLang] = useState<Lang>('ar');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [gridProducts, setGridProducts] = useState<ShowcaseProduct[]>([]);
@@ -165,13 +165,12 @@ function CitrusStoreContent() {
   }, [lang]);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.documentElement.classList.add('menu-open');
-    } else {
-      document.documentElement.classList.remove('menu-open');
-    }
-    return () => { document.documentElement.classList.remove('menu-open'); };
-  }, [isMobileMenuOpen]);
+    const locked = isMobileMenuOpen || isCheckoutOpen;
+    document.documentElement.classList.toggle('scroll-locked', locked);
+    return () => {
+      document.documentElement.classList.remove('scroll-locked');
+    };
+  }, [isMobileMenuOpen, isCheckoutOpen]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -275,7 +274,7 @@ function CitrusStoreContent() {
   };
 
   return (
-    <div className="min-h-[100dvh] mobile-shell bg-[#f9fafb] overflow-x-hidden app-scroll">
+    <div className="min-h-[100dvh] mobile-shell bg-[#f9fafb] overflow-x-hidden">
       {/* Top announcement bar */}
       <div className="bg-[#1b5e20] text-white text-[11px] md:text-xs py-2 px-4">
         <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center">
@@ -304,7 +303,7 @@ function CitrusStoreContent() {
         cartBump={cartBump}
       />
 
-      <main className="bg-white app-scroll">
+      <main className="bg-white">
         {/* Dual promotional hero banners */}
         <FadeInSection as="section" id="hero" className="px-4 py-6 md:py-8 max-w-[1400px] mx-auto">
           <div className="grid md:grid-cols-2 gap-4 md:gap-5">
